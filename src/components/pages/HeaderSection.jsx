@@ -145,13 +145,13 @@ const HeaderSection = () => {
           {}
           <div className="hidden lg:flex items-center gap-2 text-[#0e55a1] font-medium">
             <a
-              href="tel:+918886077754"
+              href="tel:+918886077745"
               className="border border-[#0e55a1] rounded-full px-4 py-1.5 bg-[#f0f9ff] flex items-center gap-2 hover:underline cursor-pointer"
             >
               <motion.div animate={wobbleAnimation}>
                 <Phone className="w-4 h-4 text-[#0e55a1]" />
               </motion.div>
-              +91 88860 77754
+              +91 88860 77745
             </a>
           </div>
           {}
