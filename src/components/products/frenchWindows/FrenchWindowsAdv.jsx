@@ -1,12 +1,14 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Zap, Volume2, Shield, Leaf, Sun, Bug, Wrench } from "lucide-react";
-import verification from "../../../assets/images/verification.png";
-import mute from "../../../assets/images/mute.png";
-import quality from "../../../assets/images/quality.png";
-import eco from "../../../assets/images/eco.jpg";
-import uvHouse from "../../../assets/images/uv-house.jpeg";
-import fungal from "../../../assets/images/fungal.jpg";
-import maintanence from "../../../assets/images/maintanence.jpg";
+import verification from "../../../../public/assets/images/verification.png";
+import mute from "../../../../public/assets/images/mute.png";
+import quality from "../../../../public/assets/images/quality.png";
+import eco from "../../../../public/assets/images/eco.jpg";
+import uvHouse from "../../../../public/assets/images/uv-house.jpeg";
+import fungal from "../../../../public/assets/images/fungal.jpg";
+console.log("fungal",fungal)
+import maintanence from "../../../../public/assets/images/maintanence.jpg";
 
 const advantages = [
   {
@@ -178,7 +180,7 @@ const AdvCard = ({ adv }) => {
       {/* Image Container with Modern Glow */}
       <div className="relative overflow-hidden rounded-xl mb-5 h-40 flex items-center justify-center bg-gradient-to-br from-gray-50 to-cyan-50/50 shadow-inner">
         <img
-          src={adv.image}
+          src={adv.image?.src}
           alt={adv.title}
           className="w-32 h-32 object-contain transition-transform duration-500 ease-out group-hover:scale-115 group-hover:rotate-2 filter drop-shadow-md"
         />

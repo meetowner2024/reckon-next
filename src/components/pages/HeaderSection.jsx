@@ -10,7 +10,6 @@ const navItems = [
   { name: "Profile", path: "/profile" },
   {
     name: "Products",
-    path: "/products",
     submenu: [
       { name: "Casement Doors", path: "/products/casement-doors" },
       { name: "Sliding Doors", path: "/products/sliding-doors" },

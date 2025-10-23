@@ -51,22 +51,22 @@ const AboutSlidingDoors = () => {
     {
       title: "Garden",
       desc: "Terrace Views",
-      img: "/src/assets/images/Ourproducts-CasementWindows.jpg",
+      img: "/assets/images/Ourproducts-CasementWindows.jpg",
     },
     {
       title: "Terrace",
       desc: "Outdoor Living",
-      img: "/src/assets/images/SlidingDoors1.jpg",
+      img: "/assets/images/SlidingDoors1.jpg",
     },
     {
       title: "Main Entrance",
       desc: "Grand Welcome",
-      img: "/src/assets/images/SlidingWindows1.jpg",
+      img: "/assets/images/SlidingWindows1.jpg",
     },
     {
       title: "Balcony",
       desc: "Space Saving",
-      img: "/src/assets/images/FrenchWindows1.jpg",
+      img: "/assets/images/FrenchWindows1.jpg",
     },
   ];
 
@@ -138,7 +138,7 @@ const AboutSlidingDoors = () => {
           <FadeUp delay={200}>
             <motion.div whileHover={{ scale: 1.02 }} className="relative">
               <img
-                src="/src/assets/images/doors.jpg"
+                src="/assets/images/doors.jpg"
                 alt="Reckon Sliding Doors"
                 className="w-full h-[280px] lg:h-[320px] rounded-2xl object-cover shadow-lg"
                 loading="lazy"

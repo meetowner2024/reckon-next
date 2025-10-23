@@ -23,11 +23,27 @@ const ContactSection = dynamic(() =>
   import("@/components/pages/ContactSection")
 );
 const Footer = dynamic(() => import("@/components/pages/Footer"));
+"use client";
+
+import { motion } from "framer-motion";
+
+export default function Spinner() {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white to-[#f0f6ff]">
+      <motion.div
+        className="w-16 h-16 border-4 border-[#0e55a1] border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 0.9, ease: "easeInOut" }}
+      />
+    </div>
+  );
+}
+
 const Home = () => {
   return (
     <Suspense
       fallback={
-        <div className="text-center py-10 text-gray-600">Loading...</div>
+        <Spinner />
       }
     >
       <HeaderSection />
