@@ -14,11 +14,26 @@ const TestimonialsSection = lazy(() =>
 const FAQSection = lazy(() => import("../components/FAQSection"));
 const ContactSection = lazy(() => import("../components/ContactSection"));
 const WhyChooseuSection = lazy(() => import("../components/WhyChooseuSection"));
+"use client";
+
+import { motion } from "framer-motion";
+
+export  function Spinner() {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-white to-[#f0f6ff]">
+      <motion.div
+        className="w-16 h-16 border-4 border-[#0e55a1] border-t-transparent rounded-full"
+        animate={{ rotate: 360 }}
+        transition={{ repeat: Infinity, duration: 0.9, ease: "easeInOut" }}
+      />
+    </div>
+  );
+}
 
 const Home = () => {
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
+  <Suspense fallback={<Spinner />}>
         <HeaderSection />
         <HeroSection />
         <AdvantagesSection />

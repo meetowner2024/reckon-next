@@ -125,7 +125,7 @@ const AboutCasementWindow = () => {
                 style={{ minHeight: 320 }}
               >
                 <img
-                  src="/src/assets/images/doors.jpg"
+                  src="/assets/images/doors.jpg"
                   alt="Reckon casement Windows"
                   className="w-full h-80 object-cover"
                   loading="lazy"
@@ -155,7 +155,7 @@ const AboutCasementWindow = () => {
                   className="w-36 h-20 rounded-lg overflow-hidden shadow-md border border-white/30"
                 >
                   <img
-                    src="/src/assets/images/doors.jpg"
+                    src="/assets/images/doors.jpg"
                     alt="thumb1"
                     className="w-full h-full object-cover"
                     loading="lazy"
@@ -166,7 +166,7 @@ const AboutCasementWindow = () => {
                   className="w-36 h-20 rounded-lg overflow-hidden shadow-md border border-white/30 bg-white"
                 >
                   <img
-                    src="/src/assets/images/doors.jpg"
+                    src="/assets/images/doors.jpg"
                     alt="thumb2"
                     className="w-full h-full object-cover"
                     loading="lazy"

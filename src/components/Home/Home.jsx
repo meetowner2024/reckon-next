@@ -23,6 +23,7 @@ const ContactSection = dynamic(() =>
   import("@/components/pages/ContactSection")
 );
 const Footer = dynamic(() => import("@/components/pages/Footer"));
+
 const Home = () => {
   return (
     <Suspense

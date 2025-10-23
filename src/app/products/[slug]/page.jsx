@@ -1,60 +1,53 @@
 "use client";
 
-import PageBanner from "@/components/PageBanner";
-import Footer from "@/components/pages/Footer";
-import HeaderSection from "@/components/pages/HeaderSection";
-import AboutCasementDoor from "@/components/products/Casement/AboutCasementDoor";
-import AdvantagesDoors from "@/components/products/Casement/AdvantagesDoors";
-import DoorsFAQ from "@/components/products/Casement/DoorsFAQ";
-import AboutSlidingDoors from "@/components/products/slidingDoors/AboutSlidingDoors";
-import SlidingDoorAdv from "@/components/products/slidingDoors/SlidingDoorAdv";
-import SlidingDoorsFaq from "@/components/products/slidingDoors/SlidingDoorsFaq";
-import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
+import HeaderSection from "@/components/pages/HeaderSection";
+import Footer from "@/components/pages/Footer";
+import PageBanner from "@/components/PageBanner";
+import DoorsPage from "@/components/products/Casement/DoorsPage";
+import SlidingDoors from "@/components/products/slidingDoors/SlidingDoors";
+import SFDoors from "@/components/products/slideAndFoldDoors/SFDoors";
+import CasementWindow from "@/components/products/casementWindow/CasementWindow";
+import SlidingWindows from "@/components/products/slidingWindows/SlidingWindows";
+import FrenchWindows from "@/components/products/frenchWindows/FrenchWindows";
 
 
-// Dynamically import components (so only relevant ones load)
-// const AboutCasementDoor = dynamic(() => import("@/components/products/casement-doors/AboutCasementDoor"));
-// const AdvantagesDoors = dynamic(() => import("@/components/products/casement-doors/AdvantagesDoors"));
-// const DoorsFAQ = dynamic(() => import("@/components/products/casement-doors/DoorsFAQ"));
-
-// const AboutSlidingDoors = dynamic(() => import("@/components/products/sliding-doors/AboutSlidingDoors"));
-// const SlidingDoorAdv = dynamic(() => import("@/components/products/sliding-doors/SlidingDoorAdv"));
-// const SlidingDoorsFaq = dynamic(() => import("@/components/products/sliding-doors/SlidingDoorsFaq"));
-
-// Add imports for others as needed (slide-fold, casement windows, etc.)
 
 export default function ProductPage() {
   const { slug } = useParams();
 
-  // map each slug to its content config
+  // Map each slug to the correct product component
   const productConfig = {
     "casement-doors": {
       title: "Casement Doors",
       subtitle: "Leading the industry with innovation and quality",
-      content: (
-        <>
-          <AboutCasementDoor />
-          <AdvantagesDoors />
-          <DoorsFAQ />
-        </>
-      ),
+      content: <DoorsPage />,
     },
     "sliding-doors": {
       title: "Sliding Doors",
       subtitle: "Leading the industry with innovation and quality",
-      content: (
-        <>
-          <AboutSlidingDoors />
-          <SlidingDoorAdv />
-          <SlidingDoorsFaq />
-        </>
-      ),
+      content: <SlidingDoors />,
     },
-    
-
-
-    
+    "slide-fold-doors": {
+      title: "Slide & Fold Doors",
+      subtitle: "Leading the industry with innovation and quality",
+      content: <SFDoors />,
+    },
+    "casement-windows": {
+      title: "Casement Windows",
+      subtitle: "Leading the industry with innovation and quality",
+      content: <CasementWindow />,
+    },
+    "sliding-windows": {
+      title: "Sliding Windows",
+      subtitle: "Leading the industry with innovation and quality",
+      content: <SlidingWindows />,
+    },
+    "french-windows": {
+      title: "French Windows",
+      subtitle: "Leading the industry with innovation and quality",
+      content: <FrenchWindows />,
+    },
   };
 
   const product = productConfig[slug];
