@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
@@ -24,11 +24,31 @@ const navItems = [
   { name: "Contact", path: "/contact" },
 ];
 const HeaderSection = () => {
+  const [logo, setLogo] = useState("/assets/images/Reckonext-logo.png");
+  console.log("logo: ", logo);
+  const [phone, setPhone] = useState("+91 88860 77745");
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const closeTimeoutRef = useRef(null);
+  useEffect(() => {
+    async function fetchHeader() {
+      try {
+        const res = await fetch("/api/users/header/getHeader");
+        const data = await res.json();
+        console.log("data: ", data.logo);
+        setLogo(
+          `/api/uploads?file=${data.logo}` ||
+            "/assets/images/Reckonext-logo.png"
+        );
+        setPhone(data.phone || "+91 88860 77745");
+      } catch (err) {
+        console.error("Failed to fetch header", err);
+      }
+    }
+    fetchHeader();
+  }, []);
   const handleNavigation = (path) => {
     router.push(path);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -40,25 +60,17 @@ const HeaderSection = () => {
     setOpenSubmenu(itemName);
   };
   const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setOpenSubmenu(null);
-    }, 300);
+    closeTimeoutRef.current = setTimeout(() => setOpenSubmenu(null), 300);
   };
   const handleMainItemClick = (item) => {
     if (item.submenu) {
       if (openSubmenu === item.name) handleNavigation(item.path);
       else setOpenSubmenu(item.name);
-    } else {
-      handleNavigation(item.path);
-    }
+    } else handleNavigation(item.path);
   };
   const wobbleAnimation = {
     rotate: [0, -10, 10, -10, 10, 0],
-    transition: {
-      duration: 1.2,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
+    transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
   };
   return (
     <motion.header
@@ -75,12 +87,12 @@ const HeaderSection = () => {
             onClick={() => handleNavigation("/")}
           >
             <Image
-              src="/assets/images/Reckonext-logo.png"
+              src={logo}
               alt="Reckonext Logo"
               className="h-10 w-auto"
               width={1000}
               height={40}
-              priority
+              unoptimized
             />
           </div>
           {}
@@ -145,13 +157,13 @@ const HeaderSection = () => {
           {}
           <div className="hidden lg:flex items-center gap-2 text-[#0e55a1] font-medium">
             <a
-              href="tel:+918886077745"
+              href={`tel:${phone}`}
               className="border border-[#0e55a1] rounded-full px-4 py-1.5 bg-[#f0f9ff] flex items-center gap-2 hover:underline cursor-pointer"
             >
               <motion.div animate={wobbleAnimation}>
                 <Phone className="w-4 h-4 text-[#0e55a1]" />
               </motion.div>
-              +91 88860 77745
+              {phone}
             </a>
           </div>
           {}
@@ -184,9 +196,7 @@ const HeaderSection = () => {
                       transition={{ duration: 0.2 }}
                       onClick={() => handleMainItemClick(item)}
                       className={`w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-left ${
-                        item.name === "Home"
-                          ? "bg-[#0e55a1]/5 text-[#0e55a1] border-l-4 border-[#0e55a1]"
-                          : pathname === item.path
+                        pathname === item.path
                           ? "text-[#0e55a1] bg-[#0e55a1]/5"
                           : "text-[#111827] hover:text-[#0e55a1] hover:bg-[#0e55a1]/5"
                       }`}
@@ -226,13 +236,13 @@ const HeaderSection = () => {
                 {}
                 <div className="mt-4 w-full border-t pt-3">
                   <a
-                    href="tel:+918886077754"
+                    href={`tel:${phone}`}
                     className="flex items-center gap-2 px-3 py-2 text-[#0e55a1] font-semibold hover:bg-[#0e55a1]/5 rounded-md"
                   >
                     <motion.div animate={wobbleAnimation}>
                       <Phone className="w-5 h-5 text-[#0e55a1]" />
                     </motion.div>
-                    +91 88860 77754
+                    {phone}
                   </a>
                 </div>
               </div>
