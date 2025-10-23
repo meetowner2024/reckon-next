@@ -103,7 +103,6 @@ export const Career = () => {
 
     // Simulate API call
     try {
-      console.log("Form Data Submitted:", formData);
       setMessage("Application submitted successfully!");
       setFormData({});
       e.target.reset();

@@ -1,69 +1,77 @@
-import Image from "next/image";
-
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  Factory,
+  Wrench,
+  Timer,
+  Users,
+  Star,
+  Cog,
+  Settings,
+  Construction,
+  Cpu,
+  Rocket,
+  CheckCircle,
+} from "lucide-react";
 const WhyChooseuSection = () => {
-  const features = [
-    {
-      id: "fabrication",
-      title: "Fabrication",
-      description:
-        "Buy directly from Reckonext and experience assured quality at every stage.",
-      gif: "/assets/images/fabricationGif.gif",
-    },
-    {
-      id: "consultative",
-      title: "Consultative Approach",
-      description:
-        "Our trained experts provide tailored, technical solutions for your needs.",
-      gif: "/assets/images/consultativeGif.gif",
-    },
-    {
-      id: "leadTimes",
-      title: "Fastest Lead Delivery",
-      description:
-        "We deliver and install within 10 days of order confirmation, ensuring quick turnaround.",
-      gif: "/assets/images/leadTimesGif.gif",
-    },
-    {
-      id: "installation",
-      title: "In-house Installation",
-      description:
-        "Our skilled in-house team ensures precise, high-quality installation every time.",
-      gif: "/assets/images/installationGif.gif",
-    },
+  const [features, setFeatures] = useState([]);
+  const icons = [
+    Factory,
+    Wrench,
+    Timer,
+    Users,
+    Star,
+    Cog,
+    Settings,
+    Construction,
+    Cpu,
+    Rocket,
+    CheckCircle,
   ];
+  useEffect(() => {
+    const fetchFeatures = async () => {
+      try {
+        const res = await fetch("/api/users/whychooseus");
+        const data = await res.json();
+        setFeatures(data);
+      } catch (err) {
+        console.error("Error fetching Why Choose Us:", err);
+      }
+    };
+    fetchFeatures();
+  }, []);
   return (
     <section className="py-12 px-6 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {}
         <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-[#000000] mb-10">
           Why Choose Us
         </h2>
-        {}
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature) => (
-            <div
-              key={feature.id}
-              className="flex flex-col items-center text-center group"
-            >
-              {}
-              <div className="w-20 h-20 flex items-center justify-center mb-6 rounded-2xl overflow-hidden shadow-sm bg-gray-50 group-hover:shadow-md transition-shadow duration-300">
-                <Image
-                  src={feature.gif}
-                  alt={feature.title}
-                  className="w-full h-full object-contain p-3 transition-transform duration-300 group-hover:scale-105"
-                  width={80}
-                  height={80}
-                />
-              </div>
-              {}
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 text-sm leading-relaxed max-w-xs">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+          {features.length > 0 ? (
+            features.map((feature, index) => {
+              const Icon =
+                icons[index % icons.length] ||
+                icons[Math.floor(Math.random() * icons.length)];
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col items-center text-center group"
+                >
+                  <div className="w-20 h-20 flex items-center justify-center mb-6 rounded-2xl bg-gray-50 shadow-sm group-hover:shadow-md transition-shadow duration-300">
+                    <Icon className="h-10 w-10 text-[#0e55a1] transition-transform duration-300 group-hover:scale-110" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed max-w-xs">
+                    {feature.description}
+                  </p>
+                </div>
+              );
+            })
+          ) : (
+            <p className="text-gray-500 text-sm">No features added yet.</p>
+          )}
         </div>
       </div>
     </section>

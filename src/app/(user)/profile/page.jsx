@@ -8,7 +8,6 @@ import React, { useState } from "react";
 
 
 const ProfileSection = ({ title, diagrams }) => {
-    console.log("diagrams ",diagrams )
   const [selectedDiagram, setSelectedDiagram] = useState(null);
 
   return (

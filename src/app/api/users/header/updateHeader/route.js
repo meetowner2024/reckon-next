@@ -31,7 +31,6 @@ export async function POST(req) {
         if (fs.existsSync(oldFilePath)) {
           try {
             fs.unlinkSync(oldFilePath);
-            console.log("Deleted old logo:", oldFilePath);
           } catch (delErr) {
             console.error("Failed to delete old logo:", delErr);
           }

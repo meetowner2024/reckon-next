@@ -24,7 +24,6 @@ const navItems = [
 ];
 const HeaderSection = () => {
   const [logo, setLogo] = useState("/assets/images/Reckonext-logo.png");
-  console.log("logo: ", logo);
   const [phone, setPhone] = useState("+91 88860 77745");
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -36,7 +35,6 @@ const HeaderSection = () => {
       try {
         const res = await fetch("/api/users/header/getHeader");
         const data = await res.json();
-        console.log("data: ", data.logo);
         setLogo(
           `/api/uploads?file=${data.logo}` ||
             "/assets/images/Reckonext-logo.png"

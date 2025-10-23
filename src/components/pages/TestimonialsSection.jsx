@@ -2,68 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Star, Quote } from "lucide-react";
 import FadeUp from "./FadeUp";
 import Image from "next/image";
-const testimonials = [
-  {
-    id: 1,
-    name: "Sarah Johnson",
-    role: "Homeowner",
-    content:
-      "The quality of uPVC windows exceeded our expectations. The installation was smooth and professional. Highly recommend!",
-    rating: 5,
-    image:
-      "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150",
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    role: "Property Developer",
-    content:
-      "We have used their products in multiple projects. The durability and energy efficiency are outstanding.",
-    rating: 5,
-    image:
-      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150",
-  },
-  {
-    id: 3,
-    name: "Emma Williams",
-    role: "Interior Designer",
-    content:
-      "Perfect blend of aesthetics and functionality. My clients love the modern look and feel of these uPVC products.",
-    rating: 5,
-    image:
-      "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150",
-  },
-  {
-    id: 4,
-    name: "David Rodriguez",
-    role: "Architect",
-    content:
-      "Exceptional craftsmanship and attention to detail. These uPVC solutions have transformed our building projects.",
-    rating: 5,
-    image:
-      "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=150",
-  },
-  {
-    id: 5,
-    name: "Lisa Thompson",
-    role: "Real Estate Agent",
-    content:
-      "The modern design and energy efficiency make these windows a selling point for any property.",
-    rating: 5,
-    image:
-      "https://images.pexels.com/photos/773471/pexels-photo-773471.jpeg?auto=compress&cs=tinysrgb&w=150",
-  },
-  {
-    id: 6,
-    name: "James Patel",
-    role: "Contractor",
-    content:
-      "Reliable products with excellent customer support. Installation teams are professional and efficient.",
-    rating: 5,
-    image:
-      "https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150",
-  },
-];
+
 const TestimonialsSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
@@ -72,6 +11,22 @@ const TestimonialsSection = () => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const res = await fetch("/api/users/testimonials", {
+          cache: "no-store",
+        });
+        const data = await res.json();
+        setTestimonials(data);
+      } catch (error) {
+        console.error("Error fetching testimonials:", error);
+      }
+    };
+    fetchTestimonials();
+  }, []);
   const intervalRef = useRef(null);
   const containerRef = useRef(null);
   const extendedTestimonials = [
