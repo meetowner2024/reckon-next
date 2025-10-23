@@ -1,5 +1,4 @@
 import { getDB } from "@/lib/server/mongo";
-
 export async function GET(req) {
   try {
     const db = await getDB();
@@ -8,12 +7,21 @@ export async function GET(req) {
       .find({})
       .sort({ id: 1 })
       .toArray();
-    return new Response(JSON.stringify(slides), { status: 200 });
+    return new Response(JSON.stringify(slides), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=60, stale-while-revalidate=30",
+      },
+    });
   } catch (err) {
     console.error("GET /api/hero error", err);
     return new Response(
       JSON.stringify({ message: "Failed to fetch hero slides" }),
-      { status: 500 }
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 }
