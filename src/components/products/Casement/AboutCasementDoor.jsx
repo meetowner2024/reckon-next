@@ -15,10 +15,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import FadeUp from "@/components/pages/FadeUp";
 import Image from "next/image";
 
-
 const AboutCasementDoor = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const [sliderIndex, setSliderIndex] = useState(0); 
+  const [sliderIndex, setSliderIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,25 +50,25 @@ const AboutCasementDoor = () => {
   ];
 
   const useCases = [
-    { 
-      title: "Garden", 
-      desc: "Terrace Views", 
-      img: "/assets/images/Ourproducts-CasementWindows.jpg"
+    {
+      title: "Garden",
+      desc: "Terrace Views",
+      img: "/assets/images/Ourproducts-CasementWindows.jpg",
     },
-    { 
-      title: "Terrace", 
-      desc: "Outdoor Living", 
-      img: "/assets/images/SlidingDoors1.jpg"
+    {
+      title: "Terrace",
+      desc: "Outdoor Living",
+      img: "/assets/images/SlidingDoors1.jpg",
     },
-    { 
-      title: "Main Entrance", 
-      desc: "Grand Welcome", 
-      img: "/assets/images/SlidingWindows1.jpg"
+    {
+      title: "Main Entrance",
+      desc: "Grand Welcome",
+      img: "/assets/images/SlidingWindows1.jpg",
     },
-    { 
-      title: "Balcony", 
-      desc: "Space Saving", 
-      img: "/assets/images/FrenchWindows1.jpg"
+    {
+      title: "Balcony",
+      desc: "Space Saving",
+      img: "/assets/images/FrenchWindows1.jpg",
     },
   ];
 
@@ -141,8 +140,8 @@ const AboutCasementDoor = () => {
           <FadeUp delay={200}>
             <motion.div whileHover={{ scale: 1.02 }} className="relative">
               <Image
-              width={600}
-              height={400}
+                width={600}
+                height={400}
                 src="/assets/images/doors.jpg"
                 alt="Reckon Casement Doors"
                 className="w-full h-[280px] lg:h-[320px] rounded-2xl object-cover shadow-lg"
@@ -224,9 +223,9 @@ const AboutCasementDoor = () => {
                     whileHover={{ scale: 1.05 }}
                     onClick={() => setSliderIndex(i)}
                     className={`relative rounded-xl overflow-hidden shadow-lg cursor-pointer border-2 transition-all duration-300 ${
-                      sliderIndex === i 
-                        ? 'border-[#0e55a1] ring-2 ring-[#0e55a1]/30' 
-                        : 'border-transparent'
+                      sliderIndex === i
+                        ? "border-[#0e55a1] ring-2 ring-[#0e55a1]/30"
+                        : "border-transparent"
                     }`}
                   >
                     <img
@@ -258,21 +257,21 @@ const AboutCasementDoor = () => {
                     key={i}
                     whileHover={{ y: -2 }}
                     className={`text-center p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                      activeStyle 
-                        ? 'bg-gradient-to-r from-[#0e55a1] to-[#0c4a8e] text-white shadow-lg' 
-                        : 'bg-white/60 border-gray-200 text-[#1f2e4a]'
+                      activeStyle
+                        ? "bg-gradient-to-r from-[#0e55a1] to-[#0c4a8e] text-white shadow-lg"
+                        : "bg-white/60 border-gray-200 text-[#1f2e4a]"
                     }`}
                   >
                     <p
                       className={`text-xs font-bold mb-1 ${
-                        activeStyle ? 'drop-shadow-sm' : ''
+                        activeStyle ? "drop-shadow-sm" : ""
                       }`}
                     >
                       {useCase.title}
                     </p>
                     <p
                       className={`text-[10px] ${
-                        activeStyle ? 'drop-shadow-sm' : 'text-[#0c4a8e]/70'
+                        activeStyle ? "drop-shadow-sm" : "text-[#0c4a8e]/70"
                       }`}
                     >
                       {useCase.desc}
@@ -289,8 +288,8 @@ const AboutCasementDoor = () => {
                   key={i}
                   onClick={() => setSliderIndex(i)}
                   className={`w-2 h-2 rounded-full cursor-pointer transition-all ${
-                    sliderIndex === i 
-                      ? "bg-[#0e55a1] scale-125 shadow-sm" 
+                    sliderIndex === i
+                      ? "bg-[#0e55a1] scale-125 shadow-sm"
                       : "bg-gray-300"
                   }`}
                   whileHover={{ scale: 1.5 }}

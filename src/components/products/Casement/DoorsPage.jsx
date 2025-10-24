@@ -1,11 +1,10 @@
-import PageBanner from "@/components/PageBanner";
-import HeaderSection from "@/components/pages/HeaderSection";
-import React from "react";
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
 import AboutCasementDoor from "./AboutCasementDoor";
 import DoorsFAQ from "./DoorsFAQ";
-import Footer from "@/components/pages/Footer";
 import AdvantagesDoors from "./AdvantagesDoors";
-
 
 const DoorsPage = () => {
   return (
@@ -13,7 +12,6 @@ const DoorsPage = () => {
       <AboutCasementDoor />
       <AdvantagesDoors />
       <DoorsFAQ />
-
     </div>
   );
 };

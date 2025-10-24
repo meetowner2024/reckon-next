@@ -15,23 +15,28 @@ const DoorsFAQ = () => {
     },
     {
       question: 'How does a uPVC openable door differ from traditional doors in performance and efficiency?',
-      answer: "uPVC doors offer 75% better insulation, zero maintenance, and 25-year lifespan vs wood's 5-7 years. They save ₹15K/year on AC bills and never warp, rot, or need painting."
+      answer:
+       "uPVC doors offer 75% better insulation, zero maintenance, and 25-year lifespan vs wood's 5-7 years. They save ₹15K/year on AC bills and never warp, rot, or need painting."
     },
     {
       question: 'Can you tell me more about "Rosandan" and its significance in casement door design?',
-      answer: "Rosandan is our patented 16-point RC2 security lock system. It engages at top, bottom, and sides for burglar-proof protection. Certified by European standards - unique to Reckon doors."
+      answer:
+       "Rosandan is our patented 16-point RC2 security lock system. It engages at top, bottom, and sides for burglar-proof protection. Certified by European standards - unique to Reckon doors."
     },
     {
       question: 'Are casement doors suitable for both residential and commercial applications?',
-      answer: "Absolutely! Installed in 50K+ homes for elegance and 2K+ offices for soundproofing. Perfect for balconies, patios, showrooms, and apartments - adapts to any space."
+      answer:
+       "Absolutely! Installed in 50K+ homes for elegance and 2K+ offices for soundproofing. Perfect for balconies, patios, showrooms, and apartments - adapts to any space."
     },
     {
       question: 'What are the advantages of choosing casement door uPVC for my home or business?',
-      answer: "Weatherproof, soundproof (40dB reduction), UV-resistant, termite-proof, easy maintenance. Energy-efficient design cuts AC bills by 30% annually. Lifetime warranty included."
+      answer:
+       "Weatherproof, soundproof (40dB reduction), UV-resistant, termite-proof, easy maintenance. Energy-efficient design cuts AC bills by 30% annually. Lifetime warranty included."
     },
     {
       question: 'Can I customise the design and features of a casement door to match my specific preferences?',
-      answer: "Yes! 200+ RAL colors, custom sizes up to 10ft, smart lock integration, double-glazing options. Design your dream door in 3D with our experts - free consultation."
+      answer: 
+      "Yes! 200+ RAL colors, custom sizes up to 10ft, smart lock integration, double-glazing options. Design your dream door in 3D with our experts - free consultation."
     },
   ];
 
