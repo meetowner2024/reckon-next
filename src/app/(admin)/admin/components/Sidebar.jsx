@@ -21,8 +21,6 @@ export default function Sidebar() {
     },
     { href: '/admin/advantages', label: 'Reckonext Advantages' },
     { href: '/admin/products', label: 'Products' },
-    { href: '/admin/choose-us', label: 'Why Choose Us' },
-    { href: '/admin/testimonial', label: 'Testimonial' },
     { href: '/admin/faqs', label: 'Frequently Asked Questions' },
     { href: '/admin/contact-us', label: 'Contact Us' },
     { href: '/admin/footer', label: 'Footer' },

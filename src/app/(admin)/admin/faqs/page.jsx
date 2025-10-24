@@ -8,49 +8,35 @@ export default function FAQManager() {
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingFAQ, setEditingFAQ] = useState(null);
-  const [products, setProducts] = useState([]);
 
   const [form, setForm] = useState({
     question: "",
     answer: "",
-    product: "",
-    display: "All Pages",
   });
 
-  // Load FAQs + Products
+  /* ---------- FETCH ---------- */
   useEffect(() => {
-    Promise.all([fetchFAQs(), fetchProducts()]);
+    fetchFAQs();
   }, []);
 
   const fetchFAQs = async () => {
     try {
-      const res = await fetch("/api/users/faqs");
+      const res = await fetch("/api/users/faqs"); // <-- same endpoint for GET
       const data = await res.json();
       setFaqs(data);
-    } catch (err) {
+    } catch {
       alert("Failed to load FAQs");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchProducts = async () => {
-    try {
-      const res = await fetch("/api/users/productsDropdown");
-      const data = await res.json();
-      setProducts(data);
-    } catch (err) {
-      console.error("Products load error");
-    }
-  };
-
+  /* ---------- MODAL ---------- */
   const openModal = (faq = null) => {
     setEditingFAQ(faq);
     setForm({
-      question: faq?.question || "",
-      answer: faq?.answer || "",
-      product: faq?.product || "",
-      display: faq?.display || "All Pages",
+      question: faq?.question ?? "",
+      answer: faq?.answer ?? "",
     });
     setModalOpen(true);
   };
@@ -60,34 +46,48 @@ export default function FAQManager() {
     setEditingFAQ(null);
   };
 
+  /* ---------- SAVE (POST / PUT) ---------- */
   const saveFAQ = async () => {
-    const formData = new FormData();
-    if (editingFAQ) formData.append("_id", editingFAQ._id);
-    formData.append("question", form.question);
-    formData.append("answer", form.answer);
-    formData.append("product", form.product);
-    formData.append("display", form.display);
+    if (!form.question.trim() || !form.answer.trim()) {
+      alert("Both fields are required");
+      return;
+    }
 
-    const res = await fetch("/api/faqs", {
-      method: editingFAQ ? "PUT" : "POST",
-      body: formData,
+    const payload = {
+      ...(editingFAQ ? { _id: editingFAQ._id } : {}),
+      question: form.question.trim(),
+      answer: form.answer.trim(),
+    };
+
+    const res = await fetch("/api/users/faqs", {
+      method: editingFAQ ? "PUT" : "PUT", // both go to PUT (create if no _id)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
 
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.message);
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message ?? "Save failed");
+    }
 
     alert(editingFAQ ? "Updated!" : "Added!");
     closeModal();
     fetchFAQs();
   };
 
+  /* ---------- DELETE ---------- */
   const deleteFAQ = async (id) => {
     if (!confirm("Delete this FAQ?")) return;
-    const res = await fetch(`/api/faqs?_id=${id}`, { method: "DELETE" });
-    if (res.ok) fetchFAQs();
-    else alert("Delete failed");
+
+    const res = await fetch(`/api/users/faqs?_id=${id}`, { method: "DELETE" });
+    if (res.ok) {
+      fetchFAQs();
+    } else {
+      alert("Delete failed");
+    }
   };
 
+  /* ---------- RENDER ---------- */
   if (loading) return <p className="text-center py-10">Loading...</p>;
 
   return (
@@ -104,20 +104,14 @@ export default function FAQManager() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {faqs.map((faq) => (
-          <div key={faq._id} className="border rounded-xl p-5 bg-white shadow hover:shadow-lg transition">
+          <div
+            key={faq._id}
+            className="border rounded-xl p-5 bg-white shadow hover:shadow-lg transition"
+          >
             <h3 className="font-bold text-lg text-gray-800">{faq.question}</h3>
-            <p className="text-sm text-gray-600 mt-1 line-clamp-2">{faq.answer}</p>
-
-            <div className="flex gap-2 mt-3 text-xs">
-              {faq.product && (
-                <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-                  {faq.product}
-                </span>
-              )}
-              <span className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full">
-                {faq.display === "homepage" ? "Home Page" : faq.display}
-              </span>
-            </div>
+            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+              {faq.answer}
+            </p>
 
             <div className="flex gap-2 mt-4">
               <button
@@ -137,9 +131,9 @@ export default function FAQManager() {
         ))}
       </div>
 
-      {/* Modal */}
+      {/* ---------- MODAL ---------- */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <h2 className="text-2xl font-bold mb-5 text-teal-600">
               {editingFAQ ? "Edit FAQ" : "Add New FAQ"}
@@ -151,7 +145,9 @@ export default function FAQManager() {
                 <input
                   type="text"
                   value={form.question}
-                  onChange={(e) => setForm({ ...form, question: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, question: e.target.value })
+                  }
                   className="w-full p-2 border rounded focus:ring-2 focus:ring-teal-500"
                   placeholder="e.g. What are the benefits..."
                 />
@@ -161,43 +157,12 @@ export default function FAQManager() {
                 <label className="block font-medium mb-1">Answer *</label>
                 <textarea
                   value={form.answer}
-                  onChange={(e) => setForm({ ...form, answer: e.target.value })}
+                  onChange={(e) =>
+                    setForm({ ...form, answer: e.target.value })
+                  }
                   rows={4}
                   className="w-full p-2 border rounded resize-y focus:ring-2 focus:ring-teal-500"
                 />
-              </div>
-
-              <div>
-                <label className="block font-medium mb-1">Product</label>
-                <select
-                  value={form.product}
-                  onChange={(e) => setForm({ ...form, product: e.target.value })}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-teal-500"
-                >
-                  <option value="">-- None --</option>
-                  {products
-                    .filter(p => p._id !== "homepage")
-                    .map(p => (
-                      <option key={p._id} value={p._id}>
-                        {p.title}
-                      </option>
-                    ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block font-medium mb-1">Display On</label>
-                <select
-                  value={form.display}
-                  onChange={(e) => setForm({ ...form, display: e.target.value })}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-teal-500"
-                >
-                  {products.map(p => (
-                    <option key={p._id} value={p._id}>
-                      {p.title}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
 

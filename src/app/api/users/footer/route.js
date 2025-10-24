@@ -22,7 +22,7 @@ export async function POST(req) {
     const body = await req.json();
     const db = await getDB();
     if (body.logoBase64) {
-      const uploadsDir = path.join(process.cwd(), "src/uploads");
+  const uploadsDir = path.join(process.cwd(), "public", "uploads");
       if (!fs.existsSync(uploadsDir))
         fs.mkdirSync(uploadsDir, { recursive: true });
       const base64Data = body.logoBase64.replace(
