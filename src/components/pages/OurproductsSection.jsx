@@ -33,15 +33,6 @@ const items = [
     ],
   },
   {
-    id: 4,
-    name: "Slide & Fold Doors",
-    imgQuery: "/products/slide-fold-doors",
-    images: [
-      "/assets/images/SlideFoldDoors1.jpg",
-      "/assets/images/SlideFoldDoors2.jpg",
-    ],
-  },
-  {
     id: 5,
     name: "Sliding Windows",
     imgQuery: "/products/sliding-windows",

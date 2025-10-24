@@ -1,5 +1,4 @@
 "use client";
-
 import { useParams } from "next/navigation";
 import HeaderSection from "@/components/pages/HeaderSection";
 import Footer from "@/components/pages/Footer";
@@ -10,13 +9,8 @@ import SFDoors from "@/components/products/slideAndFoldDoors/SFDoors";
 import CasementWindow from "@/components/products/casementWindow/CasementWindow";
 import SlidingWindows from "@/components/products/slidingWindows/SlidingWindows";
 import FrenchWindows from "@/components/products/frenchWindows/FrenchWindows";
-
-
-
 export default function ProductPage() {
   const { slug } = useParams();
-
-  // Map each slug to the correct product component
   const productConfig = {
     "casement-doors": {
       title: "Casement Doors",
@@ -27,11 +21,6 @@ export default function ProductPage() {
       title: "Sliding Doors",
       subtitle: "Leading the industry with innovation and quality",
       content: <SlidingDoors />,
-    },
-    "slide-fold-doors": {
-      title: "Slide & Fold Doors",
-      subtitle: "Leading the industry with innovation and quality",
-      content: <SFDoors />,
     },
     "casement-windows": {
       title: "Casement Windows",
@@ -49,9 +38,7 @@ export default function ProductPage() {
       content: <FrenchWindows />,
     },
   };
-
   const product = productConfig[slug];
-
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center">
@@ -61,7 +48,6 @@ export default function ProductPage() {
       </div>
     );
   }
-
   return (
     <div>
       <HeaderSection />
