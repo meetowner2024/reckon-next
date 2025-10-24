@@ -14,6 +14,7 @@ export default function ProductPage() {
       try {
         const res = await fetch(`/api/users/products?slug=${slug}`);
         const data = await res.json();
+
         if (data.length > 0) setProduct(data[0]);
       } catch (err) {
         console.error(err);

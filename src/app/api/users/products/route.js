@@ -6,7 +6,7 @@ export async function GET(req) {
     const db = await getDB();
     const { searchParams } = new URL(req.url);
     const slug = searchParams.get("slug");
-    const query = slug ? { slug } : {};
+    const query = slug ? { title: slug } : {};
     const products = await db.collection("products").find(query).toArray();
     return new Response(JSON.stringify(products), {
       status: 200,
