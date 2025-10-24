@@ -7,6 +7,7 @@ import Link from "next/link";
 const Footer = () => {
   const [footer, setFooter] = useState(null);
   const [projects, setProjects] = useState([]);
+  console.log("project",projects)
 
   useEffect(() => {
     fetchFooter();
@@ -137,7 +138,8 @@ const Footer = () => {
                     <Link
                       href={`/products/${project.title
                         .toLowerCase()
-                        .replace(/\s+/g, "-")}`}
+                        .replace(/\s+/g, "-")}/${project?.id}
+`}
                     >
                       {project.title}
                     </Link>

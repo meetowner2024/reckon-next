@@ -87,7 +87,7 @@ const AdvantagesSection = () => {
               >
                 <Icon className="h-4 w-4 sm:h-5 sm:w-5 text-[#0e55a1]" />
                 <span className="text-gray-700 font-medium text-xs sm:text-sm md:text-base">
-                  {item.adv}
+                  {item.title}
                 </span>
               </div>
             );

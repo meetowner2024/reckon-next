@@ -4,71 +4,88 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-const navItems = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
-  { name: "Profile", path: "/profile" },
-  {
-    name: "Products",
-    submenu: [
-      { name: "Casement Doors", path: "/products/casement-doors" },
-      { name: "Sliding Doors", path: "/products/sliding-doors" },
-      { name: "Slide & Fold Doors", path: "/products/slide-fold-doors" },
-      { name: "Casement Windows", path: "/products/casement-windows" },
-      { name: "Sliding Windows", path: "/products/sliding-windows" },
-      { name: "French Windows", path: "/products/french-windows" },
-    ],
-  },
-  { name: "Careers", path: "/careers" },
-  { name: "Contact", path: "/contact" },
-];
+
 const HeaderSection = () => {
   const [logo, setLogo] = useState("/assets/images/Reckonext-logo.png");
   const [phone, setPhone] = useState("+91 88860 77745");
+  const [projects, setProjects] = useState([]); // Dynamic projects
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const closeTimeoutRef = useRef(null);
+
   useEffect(() => {
-    async function fetchHeader() {
-      try {
-        const res = await fetch("/api/users/header/getHeader");
-        const data = await res.json();
-        setLogo(
-          `/api/uploads?file=${data.logo}` ||
-            "/assets/images/Reckonext-logo.png"
-        );
-        setPhone(data.phone || "+91 88860 77745");
-      } catch (err) {
-        console.error("Failed to fetch header", err);
-      }
-    }
     fetchHeader();
+    fetchProjects();
   }, []);
+
+  const fetchHeader = async () => {
+    try {
+      const res = await fetch("/api/users/header/getHeader");
+      const data = await res.json();
+      setLogo(`/api/uploads?file=${data.logo}` || "/assets/images/Reckonext-logo.png");
+      setPhone(data.phone || "+91 88860 77745");
+    } catch (err) {
+      console.error("Failed to fetch header", err);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch("/api/users/productsDropdown");
+      const data = await res.json();
+      setProjects(data);
+    } catch (error) {
+      console.error("Error fetching projects", error);
+    }
+  };
+
   const handleNavigation = (path) => {
     router.push(path);
     window.scrollTo({ top: 0, behavior: "smooth" });
     setOpenSubmenu(null);
     setMobileMenuOpen(false);
   };
+
   const handleMouseEnter = (itemName) => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setOpenSubmenu(itemName);
   };
+
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => setOpenSubmenu(null), 300);
   };
+
   const handleMainItemClick = (item) => {
     if (item.submenu) {
       if (openSubmenu === item.name) handleNavigation(item.path);
       else setOpenSubmenu(item.name);
     } else handleNavigation(item.path);
   };
+
   const wobbleAnimation = {
     rotate: [0, -10, 10, -10, 10, 0],
     transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
   };
+
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Profile", path: "/profile" },
+    {
+      name: "Products",
+      submenu: projects.map((project) => ({
+        name: project.title,
+        path: `/products/${project.title
+          .toLowerCase()
+          .replace(/\s+/g, "-")}/${project.id}`,
+      })),
+    },
+    { name: "Careers", path: "/careers" },
+    { name: "Contact", path: "/contact" },
+  ];
+
   return (
     <motion.header
       initial={{ y: -50, opacity: 0 }}
@@ -78,7 +95,6 @@ const HeaderSection = () => {
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 relative">
-          {}
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => handleNavigation("/")}
@@ -92,7 +108,7 @@ const HeaderSection = () => {
               unoptimized
             />
           </div>
-          {}
+
           <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 items-center space-x-8">
             {navItems.map((item) => (
               <div
@@ -112,7 +128,7 @@ const HeaderSection = () => {
                   }`}
                 >
                   {item.name}
-                  {item.submenu && (
+                  {item.submenu && item.submenu.length > 0 && (
                     <ChevronDown
                       className={`w-4 h-4 transition-transform duration-200 ${
                         openSubmenu === item.name ? "rotate-180" : ""
@@ -120,23 +136,21 @@ const HeaderSection = () => {
                     />
                   )}
                 </motion.button>
+
                 <AnimatePresence>
-                  {item.submenu && openSubmenu === item.name && (
+                  {item.submenu && item.submenu.length > 0 && openSubmenu === item.name && (
                     <motion.div
                       initial={{ opacity: 0, y: -15 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -15 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="absolute left-0 mt-2 bg-white rounded-lg shadow-md py-2 min-w-[180px] border border-gray-100"
-                      onMouseEnter={() =>
-                        closeTimeoutRef.current &&
-                        clearTimeout(closeTimeoutRef.current)
-                      }
+                      className="absolute left-0 mt-2 bg-white rounded-lg shadow-md py-2 min-w-[200px] border border-gray-100"
+                      onMouseEnter={() => closeTimeoutRef.current && clearTimeout(closeTimeoutRef.current)}
                       onMouseLeave={handleMouseLeave}
                     >
                       {item.submenu.map((subItem) => (
                         <motion.button
-                          key={subItem.name}
+                          key={subItem.path}
                           whileHover={{ scale: 1.02, x: 2 }}
                           transition={{ duration: 0.15 }}
                           onClick={() => handleNavigation(subItem.path)}
@@ -151,7 +165,7 @@ const HeaderSection = () => {
               </div>
             ))}
           </div>
-          {}
+
           <div className="hidden lg:flex items-center gap-2 text-[#0e55a1] font-medium">
             <a
               href={`tel:${phone}`}
@@ -163,19 +177,15 @@ const HeaderSection = () => {
               {phone}
             </a>
           </div>
-          {}
+
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 rounded-md text-[#7c7978] hover:text-[#0e55a1] hover:bg-gray-100 transition-colors duration-200"
           >
-            {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-        {}
+
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -199,7 +209,7 @@ const HeaderSection = () => {
                       }`}
                     >
                       {item.name}
-                      {item.submenu && (
+                      {item.submenu && item.submenu.length > 0 && (
                         <ChevronDown
                           className={`w-4 h-4 transition-transform duration-200 ${
                             openSubmenu === item.name ? "rotate-180" : ""
@@ -207,7 +217,8 @@ const HeaderSection = () => {
                         />
                       )}
                     </motion.button>
-                    {item.submenu && openSubmenu === item.name && (
+
+                    {item.submenu && item.submenu.length > 0 && openSubmenu === item.name && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
@@ -217,7 +228,7 @@ const HeaderSection = () => {
                       >
                         {item.submenu.map((subItem) => (
                           <motion.button
-                            key={subItem.name}
+                            key={subItem.path}
                             whileHover={{ x: 2, scale: 1.02 }}
                             transition={{ duration: 0.15 }}
                             onClick={() => handleNavigation(subItem.path)}
@@ -230,7 +241,7 @@ const HeaderSection = () => {
                     )}
                   </div>
                 ))}
-                {}
+
                 <div className="mt-4 w-full border-t pt-3">
                   <a
                     href={`tel:${phone}`}
@@ -250,4 +261,5 @@ const HeaderSection = () => {
     </motion.header>
   );
 };
+
 export default HeaderSection;
