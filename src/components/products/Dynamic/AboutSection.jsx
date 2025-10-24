@@ -21,10 +21,13 @@ const AboutSection = ({ product }) => {
   const mainImage = product?.banner?.[0] || "/assets/images/placeholder.jpg";
   const title = product?.title || "Product";
   const subtitle = product?.subtitle || "Premium quality for modern living.";
+  const aboutTitle = about.title || `About ${title}`;
   const description =
     about.description ||
     `Discover the elegance and durability of our ${title}.`;
   const paragraphs = description.split("\n\n").filter((p) => p.trim());
+  const firstParagraph = paragraphs[0] || "";
+  const restParagraphs = paragraphs.slice(1);
   const pillars = [
     { icon: Shield, title: "Certified", desc: "ISO 9001 • CE • GreenPro" },
     { icon: Cog, title: "Innovative", desc: "Multi-Sash • 7-Chamber" },
@@ -38,11 +41,9 @@ const AboutSection = ({ product }) => {
   ];
   return (
     <section className="relative overflow-hidden bg-linear-to-br from-gray-50 via-white to-blue-50/30 py-16 lg:py-24">
-      {}
       <div className="absolute inset-0 bg-linear-to-t from-blue-100/20 to-transparent pointer-events-none" />
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center mb-12 lg:mb-16">
-          {}
           <FadeUp delay={0}>
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -53,13 +54,11 @@ const AboutSection = ({ product }) => {
               India's Premium {title}
             </motion.div>
           </FadeUp>
-          {}
           <FadeUp delay={100}>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-gray-900 mb-4 leading-tight">
-              {about.title || `Reckon ${title}`}
+              {aboutTitle}
             </h1>
           </FadeUp>
-          {}
           <FadeUp delay={150}>
             <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto font-light">
               {subtitle}
@@ -95,7 +94,6 @@ const AboutSection = ({ product }) => {
                 })()}
               </motion.div>
             </AnimatePresence>
-            {}
             <div className="flex gap-2">
               {[0, 1, 2].map((i) => (
                 <motion.button
@@ -126,8 +124,7 @@ const AboutSection = ({ product }) => {
                 />
                 <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               </div>
-              {}
-              <div className="absolute top-4 left-4 flex flex-col gap-2">
+              <div className="absolute top-4 left-4 hidden md:flex flex-col gap-2">
                 {["ISO Certified", "25Yr Warranty", "200+ Colors"].map(
                   (badge, i) => (
                     <motion.div
@@ -143,13 +140,43 @@ const AboutSection = ({ product }) => {
                   )
                 )}
               </div>
+              <FadeUp delay={400}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+                  {specs.map((spec, i) => (
+                    <motion.div
+                      key={i}
+                      whileHover={{ y: -4, scale: 1.05 }}
+                      className="text-center p-4 bg-white/80 backdrop-blur rounded-xl border border-gray-100 shadow-sm"
+                    >
+                      <spec.icon className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                      <p className="text-sm font-bold text-gray-800">
+                        {spec.label}
+                      </p>
+                      <p className="text-xs text-gray-500">{spec.value}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </FadeUp>
             </motion.div>
           </FadeUp>
           {}
           <div className="space-y-6 lg:space-y-8">
             {}
-            {paragraphs.map((para, i) => (
-              <FadeUp key={i} delay={250 + i * 100}>
+            {firstParagraph && (
+              <FadeUp delay={250}>
+                <div className="bg-linear-to-br from-blue-50 to-indigo-50/50 backdrop-blur-sm rounded-2xl p-6 lg:p-8 border border-blue-100 shadow-lg">
+                  <h3 className="text-xl lg:text-2xl font-bold text-blue-900 mb-4">
+                    {aboutTitle}
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+                    {firstParagraph.trim()}
+                  </p>
+                </div>
+              </FadeUp>
+            )}
+            {}
+            {restParagraphs.map((para, i) => (
+              <FadeUp key={i} delay={300 + i * 100}>
                 <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
                   <p className="text-gray-700 leading-relaxed text-sm md:text-base">
                     {para.trim()}
@@ -157,24 +184,6 @@ const AboutSection = ({ product }) => {
                 </div>
               </FadeUp>
             ))}
-            {}
-            <FadeUp delay={400}>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {specs.map((spec, i) => (
-                  <motion.div
-                    key={i}
-                    whileHover={{ y: -4, scale: 1.05 }}
-                    className="text-center p-4 bg-white/80 backdrop-blur rounded-xl border border-gray-100 shadow-sm"
-                  >
-                    <spec.icon className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                    <p className="text-sm font-bold text-gray-800">
-                      {spec.label}
-                    </p>
-                    <p className="text-xs text-gray-500">{spec.value}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </FadeUp>
           </div>
         </div>
         {}

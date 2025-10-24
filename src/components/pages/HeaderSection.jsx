@@ -77,9 +77,9 @@ const HeaderSection = () => {
       name: "Products",
       submenu: projects.map((project) => ({
         name: project.title,
-        path: `/products/${project.title
-          .toLowerCase()
-          .replace(/\s+/g, "-")}/${project.id}`,
+        path: `/products/${project.title.toLowerCase().replace(/\s+/g, "-")}/${
+          project.id
+        }`,
       })),
     },
     { name: "Careers", path: "/careers" },
@@ -138,29 +138,34 @@ const HeaderSection = () => {
                 </motion.button>
 
                 <AnimatePresence>
-                  {item.submenu && item.submenu.length > 0 && openSubmenu === item.name && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -15 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -15 }}
-                      transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="absolute left-0 mt-2 bg-white rounded-lg shadow-md py-2 min-w-[200px] border border-gray-100"
-                      onMouseEnter={() => closeTimeoutRef.current && clearTimeout(closeTimeoutRef.current)}
-                      onMouseLeave={handleMouseLeave}
-                    >
-                      {item.submenu.map((subItem) => (
-                        <motion.button
-                          key={subItem.path}
-                          whileHover={{ scale: 1.02, x: 2 }}
-                          transition={{ duration: 0.15 }}
-                          onClick={() => handleNavigation(subItem.path)}
-                          className="w-full text-left px-4 py-2 text-sm text-[#111827] hover:bg-[#0e55a1]/10 hover:text-[#0e55a1] transition-colors duration-150"
-                        >
-                          {subItem.name}
-                        </motion.button>
-                      ))}
-                    </motion.div>
-                  )}
+                  {item.submenu &&
+                    item.submenu.length > 0 &&
+                    openSubmenu === item.name && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        className="absolute left-0 mt-2 bg-white rounded-lg shadow-md py-2 min-w-[200px] border border-gray-100"
+                        onMouseEnter={() =>
+                          closeTimeoutRef.current &&
+                          clearTimeout(closeTimeoutRef.current)
+                        }
+                        onMouseLeave={handleMouseLeave}
+                      >
+                        {item.submenu.map((subItem) => (
+                          <motion.button
+                            key={subItem.path}
+                            whileHover={{ scale: 1.02, x: 2 }}
+                            transition={{ duration: 0.15 }}
+                            onClick={() => handleNavigation(subItem.path)}
+                            className="w-full text-left px-4 py-2 text-sm text-[#111827] hover:bg-[#0e55a1]/10 hover:text-[#0e55a1] transition-colors duration-150"
+                          >
+                            {subItem.name}
+                          </motion.button>
+                        ))}
+                      </motion.div>
+                    )}
                 </AnimatePresence>
               </div>
             ))}
@@ -182,7 +187,11 @@ const HeaderSection = () => {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 rounded-md text-[#7c7978] hover:text-[#0e55a1] hover:bg-gray-100 transition-colors duration-200"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
 
@@ -218,27 +227,29 @@ const HeaderSection = () => {
                       )}
                     </motion.button>
 
-                    {item.submenu && item.submenu.length > 0 && openSubmenu === item.name && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="ml-4 mt-1 space-y-1"
-                      >
-                        {item.submenu.map((subItem) => (
-                          <motion.button
-                            key={subItem.path}
-                            whileHover={{ x: 2, scale: 1.02 }}
-                            transition={{ duration: 0.15 }}
-                            onClick={() => handleNavigation(subItem.path)}
-                            className="w-full text-left px-3 py-2 text-sm text-[#111827] hover:text-[#0e55a1] hover:bg-[#0e55a1]/5 rounded-md"
-                          >
-                            {subItem.name}
-                          </motion.button>
-                        ))}
-                      </motion.div>
-                    )}
+                    {item.submenu &&
+                      item.submenu.length > 0 &&
+                      openSubmenu === item.name && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25 }}
+                          className="ml-4 mt-1 space-y-1"
+                        >
+                          {item.submenu.map((subItem) => (
+                            <motion.button
+                              key={subItem.path}
+                              whileHover={{ x: 2, scale: 1.02 }}
+                              transition={{ duration: 0.15 }}
+                              onClick={() => handleNavigation(subItem.path)}
+                              className="w-full text-left px-3 py-2 text-sm text-[#111827] hover:text-[#0e55a1] hover:bg-[#0e55a1]/5 rounded-md"
+                            >
+                              {subItem.name}
+                            </motion.button>
+                          ))}
+                        </motion.div>
+                      )}
                   </div>
                 ))}
 

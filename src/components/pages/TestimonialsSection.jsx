@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Star, Quote } from "lucide-react";
 import FadeUp from "./FadeUp";
 import Image from "next/image";
-
 const TestimonialsSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
@@ -12,7 +11,6 @@ const TestimonialsSection = () => {
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
   const [testimonials, setTestimonials] = useState([]);
-
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
