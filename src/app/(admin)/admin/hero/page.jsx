@@ -1,4 +1,3 @@
-// app/hero/add/page.js
 "use client";
 
 import { useState } from "react";
@@ -9,8 +8,6 @@ export default function AddHeroSlide() {
   const [heroImg, setHeroImg] = useState(null);
   const [heroPrev, setHeroPrev] = useState("");
   const [iconKey, setIconKey] = useState("");
-  const [iconImg, setIconImg] = useState(null);
-  const [iconPrev, setIconPrev] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [label, setLabel] = useState("");
@@ -26,17 +23,9 @@ export default function AddHeroSlide() {
     }
   };
 
-  const handleIcon = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setIconImg(file);
-      setIconPrev(URL.createObjectURL(file));
-    }
-  };
-
   const submit = async (e) => {
     e.preventDefault();
-    if (!heroImg || !iconImg || !title || !iconKey) {
+    if (!heroImg || !title || !iconKey) {
       setMsg("All fields are required");
       return;
     }
@@ -44,8 +33,7 @@ export default function AddHeroSlide() {
     setLoading(true);
     const form = new FormData();
     form.append("hero_image", heroImg);
-    form.append("icon_image", iconImg);
-    form.append("icon", iconKey); // <-- icon key
+    form.append("icon", iconKey);
     form.append("title", title);
     form.append("description", desc);
     form.append("label", label || title);
@@ -53,10 +41,9 @@ export default function AddHeroSlide() {
     try {
       const res = await fetch("/api/users/hero/upload", { method: "POST", body: form });
       const data = await res.json();
-
       if (res.ok) {
         setMsg("Slide added successfully!");
-        setTimeout(() => router.push("/hero"), 1200);
+        setTimeout(() => router.push("/admin/hero/all"), 1200);
       } else {
         setMsg(data.message);
       }
@@ -74,13 +61,18 @@ export default function AddHeroSlide() {
       </h2>
 
       <form onSubmit={submit} className="space-y-6">
-
         {/* Hero Image */}
         <div>
           <label className="block font-semibold mb-2">Hero Image *</label>
           {heroPrev && (
             <div className="mb-3 border rounded-lg overflow-hidden">
-              <Image src={heroPrev} alt="Hero" width={600} height={300} className="w-full h-64 object-cover" />
+              <Image
+                src={heroPrev}
+                alt="Hero"
+                width={600}
+                height={300}
+                className="w-full h-64 object-cover"
+              />
             </div>
           )}
           <input
@@ -129,59 +121,22 @@ export default function AddHeroSlide() {
           />
         </div>
 
-        {/* === ICON KEY + IMAGE (COMBINED) === */}
+        {/* Icon Key */}
         <div className="p-5 border-2 border-dashed border-green-500 rounded-xl bg-green-50">
           <label className="block font-bold text-green-800 mb-3">
-            Icon Key & Image *
+            Icon Key *
           </label>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Icon Key */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Icon Key (e.g., DoorOpen)
-              </label>
-              <input
-                type="text"
-                value={iconKey}
-                onChange={(e) => setIconKey(e.target.value)}
-                required
-                placeholder="DoorOpen"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Use camelCase, no spaces
-              </p>
-            </div>
-
-            {/* Icon Image */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Icon Image
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleIcon}
-                required
-                className="w-full file:mr-4 file:py-2 file:px-4 file:rounded file:bg-green-600 file:text-white"
-              />
-            </div>
-          </div>
-
-          {/* Icon Preview */}
-          {iconPrev && (
-            <div className="mt-4 flex justify-center">
-              <div className="relative w-20 h-20 border-2 border-green-600 rounded-lg overflow-hidden">
-                <Image
-                  src={iconPrev}
-                  alt="Icon preview"
-                  fill
-                  className="object-contain p-2"
-                />
-              </div>
-            </div>
-          )}
+          <input
+            type="text"
+            value={iconKey}
+            onChange={(e) => setIconKey(e.target.value)}
+            required
+            placeholder="DoorOpen"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Use camelCase, no spaces
+          </p>
         </div>
 
         {/* Submit */}
@@ -197,7 +152,9 @@ export default function AddHeroSlide() {
       {msg && (
         <div
           className={`mt-6 p-4 rounded-lg text-center font-medium text-sm ${
-            msg.includes("success") ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+            msg.includes("success")
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
           }`}
         >
           {msg}

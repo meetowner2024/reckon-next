@@ -1,4 +1,3 @@
-// app/api/hero/upload/route.js
 import { getDB } from "@/lib/server/mongo";
 import fs from "fs";
 import path from "path";
@@ -6,11 +5,7 @@ import path from "path";
 export const runtime = "nodejs";
 
 const heroDir = path.join(process.cwd(), "public", "uploads", "hero");
-const iconDir = path.join(process.cwd(), "public", "uploads", "icons");
-
-[heroDir, iconDir].forEach(dir => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-});
+if (!fs.existsSync(heroDir)) fs.mkdirSync(heroDir, { recursive: true });
 
 const safeName = (file) => file.name.replace(/[^a-zA-Z0-9.]/g, "_");
 
@@ -19,23 +14,17 @@ export async function POST(req) {
     const formData = await req.formData();
 
     const heroFile = formData.get("hero_image");
-    const iconFile = formData.get("icon_image");
     const iconKey = formData.get("icon")?.toString().trim();
+    const title = formData.get("title")?.toString().trim();
+    const description = formData.get("description")?.toString().trim();
+    const label = formData.get("label")?.toString().trim() || title;
 
     if (!heroFile || !(heroFile instanceof Blob)) {
       return new Response(JSON.stringify({ message: "Hero image required" }), { status: 400 });
     }
-    if (!iconFile || !(iconFile instanceof Blob)) {
-      return new Response(JSON.stringify({ message: "Icon image required" }), { status:  "disappro 400" });
-    }
     if (!iconKey) {
       return new Response(JSON.stringify({ message: "Icon key required" }), { status: 400 });
     }
-
-    const title = formData.get("title")?.toString().trim();
-    const description = formData.get("description")?.toString().trim();
-    const label = (formData.get("label")?.toString().trim()) || title;
-
     if (!title) {
       return new Response(JSON.stringify({ message: "Title required" }), { status: 400 });
     }
@@ -45,11 +34,6 @@ export async function POST(req) {
     const heroFilename = `${Date.now()}-${safeName(heroFile)}`;
     fs.writeFileSync(path.join(heroDir, heroFilename), heroBuffer);
 
-    // Save icon image
-    const iconBuffer = Buffer.from(await iconFile.arrayBuffer());
-    const iconFilename = `${Date.now()}-${safeName(iconFile)}`;
-    fs.writeFileSync(path.join(iconDir, iconFilename), iconBuffer);
-
     // Save to DB
     const db = await getDB();
     const slide = {
@@ -58,7 +42,6 @@ export async function POST(req) {
       label,
       icon: iconKey,
       image: `/uploads/hero/${heroFilename}`,
-      icon_image: `/uploads/icons/${iconFilename}`,
       created_at: new Date(),
       updated_at: new Date(),
     };
@@ -66,7 +49,7 @@ export async function POST(req) {
     const result = await db.collection("hero_slides").insertOne(slide);
 
     return new Response(
-      JSON.stringify({ message: "Slide added", slideId: result.insertedId.toString() }),
+      JSON.stringify({ message: "Slide added successfully", slideId: result.insertedId.toString() }),
       { status: 201 }
     );
   } catch (err) {

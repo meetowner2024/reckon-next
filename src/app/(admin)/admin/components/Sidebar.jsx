@@ -15,15 +15,15 @@ export default function Sidebar() {
       href: '/admin/banner', 
       label: 'Banner',
       submenu: [
-        { href: '/admin/banner/all', label: 'All Banners' },
-        { href: '/admin/banner', label: 'Add Banner' },
+        { href: '/admin/hero/all', label: 'All Banners' },
+        { href: '/admin/hero', label: 'Add Banner' },
       ]
     },
     { href: '/admin/advantages', label: 'Reckonext Advantages' },
     { href: '/admin/products', label: 'Products' },
     { href: '/admin/choose-us', label: 'Why Choose Us' },
     { href: '/admin/testimonial', label: 'Testimonial' },
-    { href: '/admin/frequently-asked-questions', label: 'Frequently Asked Questions' },
+    { href: '/admin/faqs', label: 'Frequently Asked Questions' },
     { href: '/admin/contact-us', label: 'Contact Us' },
     { href: '/admin/footer', label: 'Footer' },
   ];

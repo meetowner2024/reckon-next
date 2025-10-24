@@ -1,101 +1,91 @@
-// app/api/hero/[id]/route.js
 import { getDB } from "@/lib/server/mongo";
-import { unlink, writeFile, mkdir } from "fs/promises";
+import fs from "fs";
 import path from "path";
-import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
-
 const heroDir = path.join(process.cwd(), "public", "uploads", "hero");
-const iconDir = path.join(process.cwd(), "public", "uploads", "icons");
-
-await Promise.all([
-  mkdir(heroDir, { recursive: true }).catch(() => {}),
-  mkdir(iconDir, { recursive: true }).catch(() => {}),
-]);
 
 const safeName = (file) => file.name.replace(/[^a-zA-Z0-9.]/g, "_");
 
-export async function DELETE(request, { params }) {
-  const { id } =await params;
-  if (!ObjectId.isValid(id)) return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
-
+export async function PUT(req, { params }) {
   try {
+    const { id } =await  params;
+
+    if (!ObjectId.isValid(id)) {
+  return new Response(JSON.stringify({ message: "Invalid ID format" }), { status: 400 });
+}
+
+const objectId = new ObjectId(id);
+    const formData = await req.formData();
+
+    const title = formData.get("title")?.toString().trim();
+    const description = formData.get("description")?.toString().trim();
+    const label = formData.get("label")?.toString().trim() || title;
+    const iconKey = formData.get("icon")?.toString().trim();
+    const heroFile = formData.get("hero_image");
+
+    if (!title || !iconKey) {
+      return new Response(JSON.stringify({ message: "Title and icon required" }), { status: 400 });
+    }
+
+    const updateData = {
+      title,
+      description,
+      label,
+      icon: iconKey,
+      updated_at: new Date(),
+    };
+
+    let newImagePath = null;
+
+    if (heroFile && heroFile instanceof Blob) {
+      const buffer = Buffer.from(await heroFile.arrayBuffer());
+      const filename = `${Date.now()}-${safeName(heroFile)}`;
+      fs.writeFileSync(path.join(heroDir, filename), buffer);
+      newImagePath = `/uploads/hero/${filename}`;
+      updateData.image = newImagePath;
+    }
+
     const db = await getDB();
-    const slide = await db.collection("hero_slides").findOne({ _id: new ObjectId(id) });
-    if (!slide) return NextResponse.json({ message: "Not found" }, { status: 404 });
+    const result = await db.collection("hero_slides").updateOne(
+      { _id: objectId},
+      { $set: updateData }
+    );
 
-    const unlinkPromises = [];
-    if (slide.image) unlinkPromises.push(unlink(path.join(process.cwd(), "public", slide.image)).catch(() => {}));
-    if (slide.icon_image) unlinkPromises.push(unlink(path.join(process.cwd(), "public", slide.icon_image)).catch(() => {}));
-    await Promise.all(unlinkPromises);
+    if (result.matchedCount === 0) {
+      return new Response(JSON.stringify({ message: "Slide not found" }), { status: 404 });
+    }
 
-    await db.collection("hero_slides").deleteOne({ _id: new ObjectId(id) });
-    return NextResponse.json({ message: "Deleted" });
+    return new Response(
+      JSON.stringify({ message: "Slide updated", image: newImagePath }),
+      { status: 200 }
+    );
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ message: "Delete failed" }, { status: 500 });
+    console.error("Update error:", err);
+    return new Response(JSON.stringify({ message: "Update failed" }), { status: 500 });
   }
 }
 
-
-export async function PATCH(request, { params }) {
-  const { id } = await params;
-  if (!ObjectId.isValid(id)) return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
-
+export async function DELETE(req, { params }) {
   try {
-    const formData = await request.formData();
-    const heroFile = formData.get("hero_image");
-    const iconFile = formData.get("icon_image");
-    const title = formData.get("title")?.toString().trim();
-    const description = formData.get("description")?.toString().trim();
-    const label = formData.get("label")?.toString().trim();
-    const iconKey = formData.get("icon")?.toString().trim();
+    const { id } =await params;
 
+      if (!ObjectId.isValid(id)) {
+      return new Response(JSON.stringify({ message: "Invalid ID" }), { status: 400 });
+    }
+
+    const objectId = new ObjectId(id);
     const db = await getDB();
-    const existing = await db.collection("hero_slides").findOne({ _id: new ObjectId(id) });
-    if (!existing) return NextResponse.json({ message: "Not found" }, { status: 404 });
-
-    const update = { updated_at: new Date() };
-    let heroPath = existing.image;
-    let iconPath = existing.icon_image;
-
-    // Hero image
-    if (heroFile && heroFile instanceof Blob && heroFile.size > 0) {
-      if (existing.image) await unlink(path.join(process.cwd(), "public", existing.image)).catch(() => {});
-      const buffer = Buffer.from(await heroFile.arrayBuffer());
-      const filename = `${Date.now()}-${safeName(heroFile)}`;
-      await writeFile(path.join(heroDir, filename), buffer);
-      heroPath = `/uploads/hero/${filename}`;
-      update.image = heroPath;
+    const slide = await db.collection("hero_slides").findOne({ _id: objectId });
+    if (slide?.image) {
+      const filePath = path.join(process.cwd(), "public", slide.image);
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
 
-    // Icon image
-    if (iconFile && iconFile instanceof Blob && iconFile.size > 0) {
-      if (existing.icon_image) await unlink(path.join(process.cwd(), "public", existing.icon_image)).catch(() => {});
-      const buffer = Buffer.from(await iconFile.arrayBuffer());
-      const filename = `${Date.now()}-${safeName(iconFile)}`;
-      await writeFile(path.join(iconDir, filename), buffer);
-      iconPath = `/uploads/icons/${filename}`;
-      update.icon_image = iconPath;
-    }
+    await db.collection("hero_slides").deleteOne({ _id: objectId });
 
-    if (title) update.title = title;
-    if (description !== undefined) update.description = description;
-    if (label) update.label = label;
-    if (iconKey) update.icon = iconKey;
-
-    if (Object.keys(update).length === 1) {
-      return NextResponse.json({ message: "No changes" }, { status: 200 });
-    }
-
-    await db.collection("hero_slides").updateOne(
-      { _id: new ObjectId(id) },
-      { $set: update }
-    );
-
-    return NextResponse.json({ message: "Updated" });
+    return new Response(JSON.stringify({ message: "Deleted" }), { status: 200 });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ message: "Update failed" }, { status: 500 });
+    return new Response(JSON.stringify({ message: "Delete failed" }), { status: 500 });
   }
 }

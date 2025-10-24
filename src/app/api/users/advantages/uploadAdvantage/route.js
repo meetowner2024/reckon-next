@@ -7,9 +7,16 @@ export async function POST(req) {
     const body = await req.json();
     const { main_title, advantages } = body;
 
-    if (!main_title || !Array.isArray(advantages)) {
+    // Validate required fields
+    if (
+      !main_title ||
+      !Array.isArray(advantages) ||
+      advantages.some((a) => !a.title || !a.description)
+    ) {
       return new Response(
-        JSON.stringify({ message: "main_title and advantages are required" }),
+        JSON.stringify({
+          message: "Each advantage must include both title and description.",
+        }),
         { status: 400 }
       );
     }
@@ -19,7 +26,10 @@ export async function POST(req) {
 
     const data = {
       main_title,
-      advantages,
+      advantages: advantages.map((a) => ({
+        title: a.title,
+        description: a.description,
+      })),
       updated_at: new Date(),
     };
 
