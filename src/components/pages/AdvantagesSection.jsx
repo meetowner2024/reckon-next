@@ -11,6 +11,7 @@ const AdvantagesSection = () => {
       try {
         const res = await fetch("/api/users/advantages");
         const data = await res.json();
+        console.log("data",data)
         if (data.advantages) {
           setAdvantages(data.advantages);
           setTitle(data.main_title || "Our Advantages");
