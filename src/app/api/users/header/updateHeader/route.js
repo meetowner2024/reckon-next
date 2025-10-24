@@ -2,7 +2,8 @@ import { getDB } from "@/lib/server/mongo";
 import fs from "fs";
 import path from "path";
 export const runtime = "nodejs";
-const uploadDir = path.join(process.cwd(), "src/uploads/header");
+const uploadDir = path.join(process.cwd(), "public", "uploads", "header");
+
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 export async function POST(req) {
   try {
@@ -17,7 +18,7 @@ export async function POST(req) {
       if (existingHeader?.logo) {
         const oldFilePath = path.join(
           process.cwd(),
-          "src/uploads",
+          "public/uploads/header",
           existingHeader.logo
         );
         if (fs.existsSync(oldFilePath)) {

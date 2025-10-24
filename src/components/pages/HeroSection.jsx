@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import FadeUp from "./FadeUp";
-import * as LucideIcons from "lucide-react"; // import all icons
+import * as LucideIcons from "lucide-react";
 
 const HeroSection = () => {
   const [slides, setSlides] = useState([]);
@@ -15,7 +15,7 @@ const HeroSection = () => {
       const data = await res.json();
       const slidesWithApiUrl = data.map((slide) => ({
         ...slide,
-        image: `/api/uploads?file=${slide.image.split("/").pop()}`,
+        image: `/uploads/${slide.image.split("/").pop()}`,
       }));
       setSlides(slidesWithApiUrl);
     }
