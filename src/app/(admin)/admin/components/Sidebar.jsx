@@ -15,8 +15,8 @@ export default function Sidebar() {
       href: "/admin/banner",
       label: "Banner",
       submenu: [
-        { href: "/admin/banner/all", label: "All Banners" },
-        { href: "/admin/banner", label: "Add Banner" },
+        { href: "/admin/hero/all", label: "All Banners" },
+        { href: "/admin/hero", label: "Add Banner" },
       ],
     },
     { href: "/admin/advantages", label: "Reckonext Advantages" },
