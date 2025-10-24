@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 
 const HeaderSection = () => {
-  const [logo, setLogo] = useState("/assets/images/Reckonext-logo.png");
+  const [logo, setLogo] = useState("");
   const [phone, setPhone] = useState("+91 88860 77745");
   const [projects, setProjects] = useState([]); // Dynamic projects
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -24,7 +24,7 @@ const HeaderSection = () => {
     try {
       const res = await fetch("/api/users/header/getHeader");
       const data = await res.json();
-      setLogo(`/api/uploads?file=${data.logo}` || "/assets/images/Reckonext-logo.png");
+      setLogo(`/uploads/${data.logo}` || "/assets/images/Reckonext-logo.png");
       setPhone(data.phone || "+91 88860 77745");
     } catch (err) {
       console.error("Failed to fetch header", err);
