@@ -26,7 +26,6 @@ export default function Sidebar() {
       submenu: [
         { href: "/admin/products/all", label: "All Products" },
         { href: "/admin/products/add", label: "Add Products" },
-        { href: "/admin/products/add-faq", label: "Add FAQ" },
       ],
     },
     { href: "/admin/choose-us", label: "Why Choose Us" },
