@@ -19,14 +19,7 @@ export default function FooterAdmin() {
       try {
         const res = await fetch("/api/users/footer");
         const data = await res.json();
-
-        const baseUrl =
-          process.env.NEXT_PUBLIC_BASE_URL ||
-          (typeof window !== "undefined" ? window.location.origin : "");
-        const absoluteLogo = data.logo
-          ? `${baseUrl}${data.logo.startsWith("/") ? "" : "/"}${data.logo}`
-          : "";
-
+        const absoluteLogo = data?.logo
         setFooter({
           description: data.description || "",
           locations: data.locations || [],
