@@ -55,7 +55,7 @@ const Footer = () => {
               <Image
                 src={
                   footer.logo
-                    ? `${baseUrl}${footer.logo}`
+                    ? `${footer.logo}`
                     : "/assets/images/Reckonext-logo.png"
                 }
                 alt="Reckonext Logo"
