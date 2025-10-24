@@ -6,9 +6,7 @@ import Link from "next/link";
 
 const Footer = () => {
   const [footer, setFooter] = useState(null);
-  console.log("footer: ", footer);
   const [projects, setProjects] = useState([]);
-  console.log("project",projects)
 
   useEffect(() => {
     fetchFooter();
