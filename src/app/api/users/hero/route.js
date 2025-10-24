@@ -1,27 +1,34 @@
+// app/api/hero/route.js
 import { getDB } from "@/lib/server/mongo";
-export async function GET(req) {
+
+export const runtime = "nodejs";
+
+export async function GET() {
   try {
     const db = await getDB();
     const slides = await db
       .collection("hero_slides")
       .find({})
-      .sort({ id: 1 })
+      .sort({ created_at: -1 })
       .toArray();
-    return new Response(JSON.stringify(slides), {
+
+    const serialized = slides.map(s => ({
+      ...s,
+      _id: s._id.toString(),
+    }));
+
+    return new Response(JSON.stringify(serialized), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, max-age=60, stale-while-revalidate=30",
+      
       },
     });
   } catch (err) {
-    console.error("GET /api/hero error", err);
+    console.error("GET /api/hero error:", err);
     return new Response(
-      JSON.stringify({ message: "Failed to fetch hero slides" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
+      JSON.stringify({ message: "Failed to fetch slides" }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
     );
   }
 }

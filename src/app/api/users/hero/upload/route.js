@@ -1,46 +1,76 @@
+// app/api/hero/upload/route.js
 import { getDB } from "@/lib/server/mongo";
 import fs from "fs";
 import path from "path";
+
 export const runtime = "nodejs";
-const uploadDir = path.join(process.cwd(), "src/uploads");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+
+const heroDir = path.join(process.cwd(), "public", "uploads", "hero");
+const iconDir = path.join(process.cwd(), "public", "uploads", "icons");
+
+[heroDir, iconDir].forEach(dir => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+});
+
+const safeName = (file) => file.name.replace(/[^a-zA-Z0-9.]/g, "_");
+
 export async function POST(req) {
   try {
     const formData = await req.formData();
-    const imageFile = formData.get("image");
-    if (!imageFile || !(imageFile instanceof Blob)) {
-      return new Response(JSON.stringify({ message: "Image file required" }), {
-        status: 400,
-      });
+
+    const heroFile = formData.get("hero_image");
+    const iconFile = formData.get("icon_image");
+    const iconKey = formData.get("icon")?.toString().trim();
+
+    if (!heroFile || !(heroFile instanceof Blob)) {
+      return new Response(JSON.stringify({ message: "Hero image required" }), { status: 400 });
     }
-    const title = formData.get("title")?.toString();
-    const description = formData.get("description")?.toString();
-    const label = formData.get("label")?.toString() || title;
-    const icon = formData.get("icon")?.toString() || "DoorClosed";
-    const arrayBuffer = await imageFile.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    const filename = `${Date.now()}-${imageFile.name}`;
-    const filePath = path.join(uploadDir, filename);
-    fs.writeFileSync(filePath, buffer);
+    if (!iconFile || !(iconFile instanceof Blob)) {
+      return new Response(JSON.stringify({ message: "Icon image required" }), { status:  "disappro 400" });
+    }
+    if (!iconKey) {
+      return new Response(JSON.stringify({ message: "Icon key required" }), { status: 400 });
+    }
+
+    const title = formData.get("title")?.toString().trim();
+    const description = formData.get("description")?.toString().trim();
+    const label = (formData.get("label")?.toString().trim()) || title;
+
+    if (!title) {
+      return new Response(JSON.stringify({ message: "Title required" }), { status: 400 });
+    }
+
+    // Save hero image
+    const heroBuffer = Buffer.from(await heroFile.arrayBuffer());
+    const heroFilename = `${Date.now()}-${safeName(heroFile)}`;
+    fs.writeFileSync(path.join(heroDir, heroFilename), heroBuffer);
+
+    // Save icon image
+    const iconBuffer = Buffer.from(await iconFile.arrayBuffer());
+    const iconFilename = `${Date.now()}-${safeName(iconFile)}`;
+    fs.writeFileSync(path.join(iconDir, iconFilename), iconBuffer);
+
+    // Save to DB
     const db = await getDB();
     const slide = {
       title,
       description,
       label,
-      icon,
-      image: `/uploads/${filename}`,
+      icon: iconKey,
+      image: `/uploads/hero/${heroFilename}`,
+      icon_image: `/uploads/icons/${iconFilename}`,
       created_at: new Date(),
       updated_at: new Date(),
     };
+
     const result = await db.collection("hero_slides").insertOne(slide);
+
     return new Response(
-      JSON.stringify({ message: "Slide added", slideId: result.insertedId }),
+      JSON.stringify({ message: "Slide added", slideId: result.insertedId.toString() }),
       { status: 201 }
     );
   } catch (err) {
     console.error("Upload error:", err);
-    return new Response(JSON.stringify({ message: "File upload failed" }), {
-      status: 500,
-    });
+    return new Response(JSON.stringify({ message: "Upload failed" }), { status: 500 });
   }
 }

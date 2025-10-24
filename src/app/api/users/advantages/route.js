@@ -16,9 +16,9 @@ export async function GET() {
 
     return new Response(JSON.stringify(data), {
       status: 200,
-      headers: {
-        "Cache-Control": "public, max-age=3600, stale-while-revalidate",
-      },
+      // headers: {
+      //   "Cache-Control": "public, max-age=3600, stale-while-revalidate",
+      // },
     });
   } catch (err) {
     console.error("Error fetching advantages:", err);
