@@ -1,7 +1,5 @@
 import { getDB } from "@/lib/server/mongo";
-
 export const runtime = "nodejs";
-
 export async function GET() {
   try {
     const db = await getDB();

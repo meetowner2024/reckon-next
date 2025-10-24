@@ -1,9 +1,14 @@
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 export const runtime = "nodejs";
+async function ensureUploadDir() {
+  const dir = path.join(process.cwd(), "public", "uploads", "products");
+  await mkdir(dir, { recursive: true });
+}
 export async function POST(req) {
   try {
+    await ensureUploadDir();
     const formData = await req.formData();
     const file = formData.get("file");
     if (!file) {
@@ -14,10 +19,15 @@ export async function POST(req) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const ext = path.extname(file.name);
     const filename = `${uuidv4()}${ext}`;
-    const uploadDir = path.join(process.cwd(), "src", "uploads/products");
-    const filePath = path.join(uploadDir, filename);
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "uploads",
+      "products",
+      filename
+    );
     await writeFile(filePath, buffer);
-    const imageUrl = `/products/${filename}`;
+    const imageUrl = `/uploads/products/${filename}`;
     return new Response(JSON.stringify({ url: imageUrl }), {
       status: 200,
       headers: { "Content-Type": "application/json" },

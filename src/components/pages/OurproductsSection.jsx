@@ -1,60 +1,7 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-const items = [
-  {
-    id: 1,
-    name: "Casement Doors",
-    imgQuery: "/products/casement-doors",
-    images: [
-      "/assets/images/CasementDoors1.jpg",
-      "/assets/images/CasementDoors2.jpg",
-      "/assets/images/CasementDoors3.jpg",
-    ],
-  },
-  {
-    id: 2,
-    name: "Casement Windows",
-    imgQuery: "/products/casement-windows",
-    images: [
-      "/assets/images/CasementWindows1.jpg",
-      "/assets/images/CasementWindows2.jpg",
-      "/assets/images/CasementWindows3.jpg",
-    ],
-  },
-  {
-    id: 3,
-    name: "Sliding Doors",
-    imgQuery: "/products/sliding-doors",
-    images: [
-      "/assets/images/SlidingDoors1.jpg",
-      "/assets/images/SlidingDoors2.jpg",
-      "/assets/images/SlidingDoors3.jpg",
-    ],
-  },
-  {
-    id: 5,
-    name: "Sliding Windows",
-    imgQuery: "/products/sliding-windows",
-    images: [
-      "/assets/images/SlidingWindows3.jpg",
-      "/assets/images/SlidingWindows1.jpg",
-      "/assets/images/SlidingWindows2.jpg",
-      "/assets/images/SlidingWindows4.jpg",
-    ],
-  },
-  {
-    id: 6,
-    name: "French Windows",
-    imgQuery: "/products/french-windows",
-    images: [
-      "/assets/images/FrenchWindows2.jpg",
-      "/assets/images/FrenchWindows1.jpg",
-      "/assets/images/FrenchWindows3.jpg",
-      "/assets/images/FrenchWindows4.jpg",
-    ],
-  },
-];
 const ImageCarousel = ({ images, currentIndex, onDotClick, onScroll }) => {
   const carouselRef = useRef(null);
   useEffect(() => {
@@ -67,6 +14,13 @@ const ImageCarousel = ({ images, currentIndex, onDotClick, onScroll }) => {
     el.addEventListener("wheel", handleWheel, { passive: false });
     return () => el.removeEventListener("wheel", handleWheel);
   }, [onScroll]);
+  if (!images || images.length === 0) {
+    return (
+      <div className="h-55 bg-gray-200 flex items-center justify-center rounded-t-2xl">
+        <span className="text-gray-500">No images</span>
+      </div>
+    );
+  }
   return (
     <div className="relative" ref={carouselRef}>
       <div className="overflow-hidden rounded-t-2xl">
@@ -78,7 +32,7 @@ const ImageCarousel = ({ images, currentIndex, onDotClick, onScroll }) => {
             <div key={index} className="w-full flex-shrink-0">
               <Image
                 src={image}
-                alt={`${images[0].name} - ${index + 1}`}
+                alt={`Product image ${index + 1}`}
                 className="w-full h-55 object-cover"
                 loading="lazy"
                 width={500}
@@ -88,7 +42,6 @@ const ImageCarousel = ({ images, currentIndex, onDotClick, onScroll }) => {
           ))}
         </div>
       </div>
-      {}
       {images.length > 1 && (
         <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2 pointer-events-none">
           {images.map((_, index) => (
@@ -109,25 +62,91 @@ const ImageCarousel = ({ images, currentIndex, onDotClick, onScroll }) => {
   );
 };
 export default function DoorsAndWindowsGallery() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [activeIndexes, setActiveIndexes] = useState({});
-  const handleDotClick = (itemId, index) => {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const res = await fetch("/api/users/products");
+        if (!res.ok) throw new Error("Failed to load products");
+        const data = await res.json();
+        const sorted = data.sort((a, b) => a.title.localeCompare(b.title));
+        setProducts(sorted);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load products. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+  const handleDotClick = (productId, index) => {
     setActiveIndexes((prev) => ({
       ...prev,
-      [itemId]: index,
+      [productId]: index,
     }));
   };
-  const handleScroll = (itemId, deltaY, totalImages) => {
+  const handleScroll = (productId, deltaY, totalImages) => {
     setActiveIndexes((prev) => {
-      const current = prev[itemId] || 0;
+      const current = prev[productId] || 0;
       let newIndex = current;
       if (deltaY > 0) {
         newIndex = current + 1 >= totalImages ? 0 : current + 1;
       } else {
         newIndex = current - 1 < 0 ? totalImages - 1 : current - 1;
       }
-      return { ...prev, [itemId]: newIndex };
+      return { ...prev, [productId]: newIndex };
     });
   };
+  const generateSlug = (title) => {
+    return (
+      "/" +
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "")
+    );
+  };
+  if (loading) {
+    return (
+      <section className="px-6 py-12 bg-gray-50 min-h-screen">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-300 rounded w-64 mx-auto mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded w-96 mx-auto"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse"
+              >
+                <div className="h-55 bg-gray-200"></div>
+                <div className="p-4">
+                  <div className="h-5 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-full"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+  if (error) {
+    return (
+      <section className="px-6 py-12 bg-gray-50 min-h-screen">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-red-600 font-medium">{error}</p>
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="px-6 md:pt-8 sm:pt-6 pt-4 md:pb-12 sm:pb-8 pb-4 bg-gray-50 min-h-screen">
       <div className="max-w-6xl mx-auto">
@@ -137,54 +156,56 @@ export default function DoorsAndWindowsGallery() {
         <p className="text-gray-600 text-center text-lg md:text-lg font-200 mb-8">
           Scroll or click dots to navigate images. Hover to reveal view button.
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item) => {
-            const currentIndex = activeIndexes[item.id] || 0;
-            return (
-              <article
-                key={item.id}
-                className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
-              >
-                {}
-                <div className="relative">
-                  <ImageCarousel
-                    images={item.images}
-                    currentIndex={currentIndex}
-                    onDotClick={(index) => handleDotClick(item.id, index)}
-                    onScroll={(deltaY) =>
-                      handleScroll(item.id, deltaY, item.images.length)
-                    }
-                  />
-                  {}
-                  <div className="absolute inset-0 flex items-end justify-center p-4 pointer-events-none">
-                    <Link
-                      href={item.imgQuery}
-                      className="pointer-events-auto mb-2 opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out"
-                      aria-label={`Open ${item.name} page`}
-                    >
-                      <button className="bg-[#f0f9ff]/75 text-[#044182] backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                        View {item.name}
-                      </button>
-                    </Link>
+        {products.length === 0 ? (
+          <p className="text-center text-gray-500 col-span-full">
+            No products available.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {products.map((product) => {
+              const currentIndex = activeIndexes[product._id] || 0;
+              const images = product.banner || [];
+              const slug = generateSlug(product.title);
+              return (
+                <article
+                  key={product._id}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+                >
+                  <div className="relative">
+                    <ImageCarousel
+                      images={images}
+                      currentIndex={currentIndex}
+                      onDotClick={(index) => handleDotClick(product._id, index)}
+                      onScroll={(deltaY) =>
+                        handleScroll(product._id, deltaY, images.length)
+                      }
+                    />
+                    <div className="absolute inset-0 flex items-end justify-center p-4 pointer-events-none">
+                      <Link
+                        href={`/products/${slug}/${product._id}`}
+                        className="pointer-events-auto mb-2 opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out"
+                        aria-label={`Open ${product.title} page`}
+                      >
+                        <button className="bg-[#f0f9ff]/75 text-[#044182] backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                          View {product.title}
+                        </button>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-                {}
-                <div className="p-4">
-                  <p className="text-xs text-gray-400 italic mb-1">
-                    Images: {item.images.length} - {item.name}
-                  </p>
-                  <h3 className="text-lg font-semibold text-gray-800">
-                    {item.name}
-                  </h3>
-                  <p className="text-gray-600 mt-2 text-sm">
-                    A brief description can go here. Replace with real content
-                    as needed.
-                  </p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {product.title}
+                    </h3>
+                    <p className="text-gray-600 mt-2 text-sm line-clamp-2">
+                      {product.subtitle ||
+                        "Premium quality product with modern design and durability."}
+                    </p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );
