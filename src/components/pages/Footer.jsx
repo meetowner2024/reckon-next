@@ -6,6 +6,7 @@ import Link from "next/link";
 
 const Footer = () => {
   const [footer, setFooter] = useState(null);
+  console.log("footer: ", footer);
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
@@ -51,14 +52,20 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="w-auto h-auto flex items-center justify-left p-2">
               <Image
-                src={footer.logo ? `${baseUrl}${footer.logo}` : "/assets/images/Reckonext-logo.png"}
+                src={
+                  footer.logo
+                    ? `${baseUrl}${footer.logo}`
+                    : "/assets/images/Reckonext-logo.png"
+                }
                 alt="Reckonext Logo"
                 className="w-auto h-auto object-contain"
                 width={1000}
                 height={40}
               />
             </div>
-            <p className="text-sm leading-relaxed text-[#213147]">{footer.description}</p>
+            <p className="text-sm leading-relaxed text-[#213147]">
+              {footer.description}
+            </p>
             <div className="flex space-x-4">
               {footer.socialLinks?.facebook && (
                 <a
@@ -153,7 +160,10 @@ const Footer = () => {
             </h4>
             {footer.locations?.map((loc, idx) => (
               <div key={idx} className="flex items-start space-x-3">
-                <MapPin size={20} className="mt-1 flex-shrink-0 text-[#044182]" />
+                <MapPin
+                  size={20}
+                  className="mt-1 flex-shrink-0 text-[#044182]"
+                />
                 <div className="text-sm text-[#213147]">
                   <strong className="text-[#213147]">{loc.type}</strong>
                   <br />
@@ -170,7 +180,8 @@ const Footer = () => {
         </div>
         <div className="border-t border-[#213147] pt-6 text-center text-sm">
           <p className="text-[#213147]">
-            © 2024 Reckon. All rights reserved. | Designed by Creative Ethics Pvt Ltd
+            © 2024 Reckon. All rights reserved. | Designed by Creative Ethics
+            Pvt Ltd
           </p>
         </div>
       </div>

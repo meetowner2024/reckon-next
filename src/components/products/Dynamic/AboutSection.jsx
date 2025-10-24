@@ -1,324 +1,201 @@
-import React, { useEffect, useState } from "react";
+"use client";
+import React, { useState } from "react";
 import {
-  CheckCircle,
+  Shield,
   Cog,
   Home,
   ArrowRight,
   Star,
-  Shield,
   Palette,
   Lock,
   Wind,
   Droplets,
+  CheckCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import FadeUp from "@/components/pages/FadeUp";
 import Image from "next/image";
-
-const AboutCasementDoor = () => {
+const AboutSection = ({ product }) => {
   const [activeTab, setActiveTab] = useState(0);
-  const [sliderIndex, setSliderIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTab((prev) => (prev + 1) % 3);
-    }, 4000);
-    const sliderInterval = setInterval(() => {
-      setSliderIndex((prev) => (prev + 1) % useCases.length);
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-      clearInterval(sliderInterval);
-    };
-  }, []);
-
+  const about = product?.about?.[0] || {};
+  const mainImage = product?.banner?.[0] || "/assets/images/placeholder.jpg";
+  const title = product?.title || "Product";
+  const subtitle = product?.subtitle || "Premium quality for modern living.";
+  const description =
+    about.description ||
+    `Discover the elegance and durability of our ${title}.`;
+  const paragraphs = description.split("\n\n").filter((p) => p.trim());
   const pillars = [
     { icon: Shield, title: "Certified", desc: "ISO 9001 • CE • GreenPro" },
     { icon: Cog, title: "Innovative", desc: "Multi-Sash • 7-Chamber" },
-    { icon: Home, title: "Experienced", desc: "25+ Years • 50K Homes" },
+    { icon: Home, title: "Experienced", desc: "25+ Years • 50K+ Homes" },
   ];
-
-  const mainText = `Nothing looks & functions better than Reckon's casement doors for gardens, terraces, or main entrances. New-generation uPVC with unique multi-sash mechanism by our expert team.`;
-
-  const manufacturerText = `India's best manufacturer offering 200+ colors, premium materials, secure insulation. Enhances home aesthetics at unbeatable value.`;
-
   const specs = [
     { icon: Palette, label: "200+ Colors", value: "RAL Shades" },
     { icon: Lock, label: "16-Point Lock", value: "RC2 Security" },
     { icon: Wind, label: "200km/h", value: "Wind Resistance" },
     { icon: Droplets, label: "IP68", value: "Waterproof" },
   ];
-
-  const useCases = [
-    {
-      title: "Garden",
-      desc: "Terrace Views",
-      img: "/assets/images/Ourproducts-CasementWindows.jpg",
-    },
-    {
-      title: "Terrace",
-      desc: "Outdoor Living",
-      img: "/assets/images/SlidingDoors1.jpg",
-    },
-    {
-      title: "Main Entrance",
-      desc: "Grand Welcome",
-      img: "/assets/images/SlidingWindows1.jpg",
-    },
-    {
-      title: "Balcony",
-      desc: "Space Saving",
-      img: "/assets/images/FrenchWindows1.jpg",
-    },
-  ];
-
   return (
-    <section className="relative py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white via-[#f8fbff]/50 to-[#e6f0ff]/50">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ staggerChildren: 0.1, delayChildren: 0.2 }}
-        className="max-w-5xl mx-auto"
-      >
-        <div className="text-center mb-8">
+    <section className="relative overflow-hidden bg-linear-to-br from-gray-50 via-white to-blue-50/30 py-16 lg:py-24">
+      {}
+      <div className="absolute inset-0 bg-linear-to-t from-blue-100/20 to-transparent pointer-events-none" />
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="text-center mb-12 lg:mb-16">
+          {}
           <FadeUp delay={0}>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#0e55a1] to-[#0c4a8e] text-white rounded-full text-xs font-bold mb-4">
-              <Star className="w-3 h-3" />
-              India's Premium Casement
-            </div>
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-blue-600 to-indigo-700 text-white rounded-full text-sm font-bold shadow-lg mb-6"
+            >
+              <Star className="w-4 h-4" />
+              India's Premium {title}
+            </motion.div>
           </FadeUp>
-
+          {}
           <FadeUp delay={100}>
-            <h1 className="text-3xl lg:text-4xl font-light text-[#1f2e4a] mb-3">
-              Reckon Casement Doors
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extralight text-gray-900 mb-4 leading-tight">
+              {about.title || `Reckon ${title}`}
             </h1>
           </FadeUp>
-
           {}
-          <div className="flex justify-center gap-4 mb-6">
+          <FadeUp delay={150}>
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto font-light">
+              {subtitle}
+            </p>
+          </FadeUp>
+          {}
+          <div className="flex justify-center items-center gap-6 mt-10 flex-wrap">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur rounded-full shadow-sm border border-white/50 text-xs"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex items-center gap-3 px-5 py-3 bg-white rounded-full shadow-md border border-gray-100"
               >
                 {(() => {
-                  const ActivePillarIcon = pillars[activeTab].icon;
+                  const Icon = pillars[activeTab].icon;
                   return (
                     <>
-                      <ActivePillarIcon className="w-4 h-4 text-[#0e55a1]" />
-                      <span className="font-medium text-[#1f2e4a]">
-                        {pillars[activeTab].title}
-                      </span>
-                      <span className="text-[#0c4a8e]/70">
-                        {pillars[activeTab].desc}
-                      </span>
+                      <div className="p-2 bg-blue-100 rounded-full">
+                        <Icon className="w-5 h-5 text-blue-700" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-gray-900">
+                          {pillars[activeTab].title}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {pillars[activeTab].desc}
+                        </p>
+                      </div>
                     </>
                   );
                 })()}
               </motion.div>
             </AnimatePresence>
-            <div className="flex gap-2 self-center">
+            {}
+            <div className="flex gap-2">
               {[0, 1, 2].map((i) => (
-                <motion.div
+                <motion.button
                   key={i}
                   onClick={() => setActiveTab(i)}
-                  className={`w-1.5 h-1.5 rounded-full cursor-pointer ${
-                    activeTab === i ? "bg-[#0e55a1]" : "bg-gray-300"
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    activeTab === i ? "bg-blue-600 w-8" : "bg-gray-300"
                   }`}
-                  whileHover={{ scale: 1.5 }}
+                  whileHover={{ scale: 1.3 }}
+                  whileTap={{ scale: 0.9 }}
                 />
               ))}
             </div>
           </div>
         </div>
-
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12">
+        {}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {}
           <FadeUp delay={200}>
-            <motion.div whileHover={{ scale: 1.02 }} className="relative">
-              <Image
-                width={600}
-                height={400}
-                src="/assets/images/doors.jpg"
-                alt="Reckon Casement Doors"
-                className="w-full h-[280px] lg:h-[320px] rounded-2xl object-cover shadow-lg"
-              />
-              <div className="absolute top-3 left-3 space-y-1">
-                {["ISO", "25Yr", "200+"].map((t, i) => (
-                  <div
-                    key={i}
-                    className="px-2 py-1 bg-white/90 text-xs font-bold text-[#0e55a1] rounded shadow-sm"
-                  >
-                    {t}
-                  </div>
-                ))}
+            <motion.div whileHover={{ scale: 1.02 }} className="relative group">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                <Image
+                  src={mainImage}
+                  alt={`${title} - Premium View`}
+                  width={800}
+                  height={600}
+                  className="w-full h-auto object-cover aspect-video lg:aspect-auto lg:h-[500px]"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              </div>
+              {}
+              <div className="absolute top-4 left-4 flex flex-col gap-2">
+                {["ISO Certified", "25Yr Warranty", "200+ Colors"].map(
+                  (badge, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.3 + i * 0.1 }}
+                      className="px-3 py-1.5 bg-white/95 backdrop-blur-sm text-xs font-bold text-blue-700 rounded-full shadow-md flex items-center gap-1"
+                    >
+                      <CheckCircle className="w-3 h-3" />
+                      {badge}
+                    </motion.div>
+                  )
+                )}
               </div>
             </motion.div>
           </FadeUp>
-
-          <div className="space-y-4">
-            <FadeUp delay={250}>
-              <div className="bg-white/70 backdrop-blur rounded-xl p-4 border border-white/50">
-                <h3 className="text-sm font-bold text-[#0e55a1] mb-2 flex items-center gap-2">
-                  <Star className="w-4 h-4" />
-                  About Casement Doors
-                </h3>
-                <p className="text-xs leading-relaxed text-[#1f2e4a]/80">
-                  {mainText}
-                </p>
-              </div>
-            </FadeUp>
-
-            <FadeUp delay={300}>
-              <div className="bg-white/70 backdrop-blur rounded-xl p-4 border border-white/50">
-                <h3 className="text-sm font-bold text-[#0c4a8e] mb-2 flex items-center gap-2">
-                  <Shield className="w-4 h-4" />
-                  Why Reckon?
-                </h3>
-                <p className="text-xs leading-relaxed text-[#1f2e4a]/80">
-                  {manufacturerText}
-                </p>
+          {}
+          <div className="space-y-6 lg:space-y-8">
+            {}
+            {paragraphs.map((para, i) => (
+              <FadeUp key={i} delay={250 + i * 100}>
+                <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-gray-100 shadow-sm">
+                  <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+                    {para.trim()}
+                  </p>
+                </div>
+              </FadeUp>
+            ))}
+            {}
+            <FadeUp delay={400}>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {specs.map((spec, i) => (
+                  <motion.div
+                    key={i}
+                    whileHover={{ y: -4, scale: 1.05 }}
+                    className="text-center p-4 bg-white/80 backdrop-blur rounded-xl border border-gray-100 shadow-sm"
+                  >
+                    <spec.icon className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                    <p className="text-sm font-bold text-gray-800">
+                      {spec.label}
+                    </p>
+                    <p className="text-xs text-gray-500">{spec.value}</p>
+                  </motion.div>
+                ))}
               </div>
             </FadeUp>
           </div>
         </div>
-
-        <FadeUp delay={350}>
-          <div className="flex justify-center gap-4 mb-8">
-            {specs.map((spec, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -2 }}
-                className="flex flex-col items-center gap-1 p-3 bg-white/60 backdrop-blur rounded-lg border border-white/50 text-center"
-              >
-                <spec.icon className="w-5 h-5 text-[#0e55a1]" />
-                <p className="text-xs font-bold text-[#1f2e4a]">{spec.label}</p>
-                <p className="text-[10px] text-[#0c4a8e]">{spec.value}</p>
-              </motion.div>
-            ))}
+        {}
+        <FadeUp delay={500}>
+          <div className="text-center mt-16">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-700 text-white font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300"
+            >
+              Get Free Quote
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
+            <p className="text-sm text-gray-600 mt-3">
+              <span className="font-medium">7 Days Installation</span> • EMI
+              Available • Free Consultation
+            </p>
           </div>
         </FadeUp>
-
-        {}
-        <FadeUp delay={400}>
-          <div className="mb-8">
-            <h3 className="text-center text-sm font-bold text-[#0e55a1] mb-6 flex items-center justify-center gap-2">
-              <Star className="w-4 h-4" />
-              See in Your Space
-            </h3>
-
-            {}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <AnimatePresence mode="wait">
-                {useCases.map((useCase, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: i * 0.1 }}
-                    whileHover={{ scale: 1.05 }}
-                    onClick={() => setSliderIndex(i)}
-                    className={`relative rounded-xl overflow-hidden shadow-lg cursor-pointer border-2 transition-all duration-300 ${
-                      sliderIndex === i
-                        ? "border-[#0e55a1] ring-2 ring-[#0e55a1]/30"
-                        : "border-transparent"
-                    }`}
-                  >
-                    <img
-                      src={useCase.img}
-                      alt={`${useCase.title} Door`}
-                      className="w-full h-32 md:h-40 object-cover"
-                      loading="lazy"
-                    />
-                    {}
-                    {sliderIndex === i && (
-                      <motion.div
-                        className="absolute top-2 right-2 w-4 h-4 bg-[#0e55a1] rounded-full"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.2 }}
-                      />
-                    )}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-
-            {}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {useCases.map((useCase, i) => {
-                const activeStyle = sliderIndex === i;
-                return (
-                  <motion.div
-                    key={i}
-                    whileHover={{ y: -2 }}
-                    className={`text-center p-3 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
-                      activeStyle
-                        ? "bg-gradient-to-r from-[#0e55a1] to-[#0c4a8e] text-white shadow-lg"
-                        : "bg-white/60 border-gray-200 text-[#1f2e4a]"
-                    }`}
-                  >
-                    <p
-                      className={`text-xs font-bold mb-1 ${
-                        activeStyle ? "drop-shadow-sm" : ""
-                      }`}
-                    >
-                      {useCase.title}
-                    </p>
-                    <p
-                      className={`text-[10px] ${
-                        activeStyle ? "drop-shadow-sm" : "text-[#0c4a8e]/70"
-                      }`}
-                    >
-                      {useCase.desc}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
-
-            {}
-            <div className="flex justify-center gap-2 mt-6">
-              {useCases.map((_, i) => (
-                <motion.div
-                  key={i}
-                  onClick={() => setSliderIndex(i)}
-                  className={`w-2 h-2 rounded-full cursor-pointer transition-all ${
-                    sliderIndex === i
-                      ? "bg-[#0e55a1] scale-125 shadow-sm"
-                      : "bg-gray-300"
-                  }`}
-                  whileHover={{ scale: 1.5 }}
-                />
-              ))}
-            </div>
-          </div>
-        </FadeUp>
-
-        {}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            className="px-6 py-2.5 bg-gradient-to-r from-[#0e55a1] to-[#0c4a8e] text-white font-medium text-sm rounded-full shadow-lg flex items-center gap-2 mx-auto"
-          >
-            Get Free Quote
-            <ArrowRight className="w-4 h-4" />
-          </motion.button>
-          <p className="text-[10px] text-[#1f2e4a]/60 mt-2">
-            7 Days Install | EMI Available
-          </p>
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };
-
-export default AboutCasementDoor;
+export default AboutSection;

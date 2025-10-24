@@ -35,10 +35,8 @@ const HeaderSection = () => {
       try {
         const res = await fetch("/api/users/header/getHeader");
         const data = await res.json();
-        setLogo(
-          `/api/uploads?file=${data.logo}` ||
-            "/assets/images/Reckonext-logo.png"
-        );
+        console.log("data: ", data.logo);
+        setLogo(`uploads/${data.logo}` || "/assets/images/Reckonext-logo.png");
         setPhone(data.phone || "+91 88860 77745");
       } catch (err) {
         console.error("Failed to fetch header", err);
