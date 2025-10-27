@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
@@ -138,7 +137,7 @@ export default function HeaderForm() {
               <button
                 type="button"
                 onClick={removeLogo}
-                className="absolute -top-3 -right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold shadow-md hover:bg-red-600 transition"
+                className="absolute -top-3 cursor-pointer -right-3 bg-red-500 text-white rounded-full w-7 h-7 flex items-center justify-center font-bold shadow-md hover:bg-red-600 transition"
               >
                 ×
               </button>
@@ -163,7 +162,7 @@ export default function HeaderForm() {
             type="file"
             accept="image/*"
             onChange={handleFileChange}
-            className="w-full border-2 border-white rounded-md p-2 text-black bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white file:text-[#48ADB9] hover:file:bg-gray-100"
+            className="w-full border-2 cursor-pointer border-white rounded-md p-2 text-black bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white file:text-[#48ADB9] hover:file:bg-gray-100"
           />
         </div>
         <div>
@@ -185,7 +184,7 @@ export default function HeaderForm() {
         <button
           type="submit"
           disabled={loading || phoneError}
-          className="w-full bg-white text-[#48ADB9] p-3 rounded-md font-bold hover:bg-gray-100 disabled:opacity-60 transition"
+          className="w-full bg-white cursor-pointer text-[#48ADB9] p-3 rounded-md font-bold hover:bg-gray-100 disabled:opacity-60 transition"
         >
           {loading ? "Updating..." : "Update Header"}
         </button>

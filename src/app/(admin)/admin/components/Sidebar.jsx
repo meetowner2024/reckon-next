@@ -79,7 +79,7 @@ export default function Sidebar() {
   return (
     <>
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#48ADB9] text-white rounded shadow-lg hover:bg-[#3d8f99] transition"
+        className="lg:hidden cursor-pointer  fixed top-4 left-4 z-50 p-2 bg-[#48ADB9] text-white rounded shadow-lg hover:bg-[#3d8f99] transition"
         onClick={() => setIsOpen(!isOpen)}
       >
         <svg
@@ -111,7 +111,7 @@ export default function Sidebar() {
                   <>
                     <button
                       onClick={() => toggleSubmenu(item.submenuKey)}
-                      className={`w-full text-left p-2 rounded flex justify-between items-center transition-all duration-200 ${
+                      className={`w-full text-left cursor-pointer  p-2 rounded flex justify-between items-center transition-all duration-200 ${
                         pathname.startsWith(item.href)
                           ? "bg-white text-[#48ADB9] font-semibold"
                           : "hover:bg-[#3d8f99]"

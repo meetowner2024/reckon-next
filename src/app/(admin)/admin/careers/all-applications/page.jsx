@@ -88,7 +88,7 @@ export default function CareersSubmissionsPage() {
         <p className="text-lg font-medium text-red-800">{error}</p>
         <button
           onClick={fetchApplications}
-          className="mt-4 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+          className="mt-4 cursor-pointer   px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
         >
           Retry
         </button>
@@ -121,7 +121,7 @@ export default function CareersSubmissionsPage() {
           </div>
           <button
             onClick={fetchApplications}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-sm font-medium text-[#0e55a1] rounded-lg hover:bg-[#0e55a1]/5 hover:border-[#0e55a1] transition-all ml-auto"
+            className="flex cursor-pointer  items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-sm font-medium text-[#0e55a1] rounded-lg hover:bg-[#0e55a1]/5 hover:border-[#0e55a1] transition-all ml-auto"
           >
             <RefreshCw className="w-4 h-4" />
             Refresh
@@ -249,7 +249,7 @@ export default function CareersSubmissionsPage() {
                         <button
                           onClick={() => handleDelete(app._id)}
                           disabled={deletingId === app._id}
-                          className="p-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm disabled:opacity-50"
+                          className="p-2.5 cursor-pointer  bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-all shadow-sm disabled:opacity-50"
                           title="Delete"
                         >
                           {deletingId === app._id ? (
@@ -286,7 +286,7 @@ export default function CareersSubmissionsPage() {
                   <button
                     onClick={() => handleDelete(app._id)}
                     disabled={deletingId === app._id}
-                    className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition disabled:opacity-50"
+                    className="p-2 cursor-pointer  bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition disabled:opacity-50"
                   >
                     {deletingId === app._id ? (
                       <Loader2 className="w-4 h-4 animate-spin" />

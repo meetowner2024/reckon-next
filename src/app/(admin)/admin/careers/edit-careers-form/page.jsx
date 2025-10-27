@@ -200,7 +200,7 @@ export default function CareersAdmin() {
           <button
             onClick={saveConfig}
             disabled={saving}
-            className="flex items-center gap-2 bg-[#0e55a1] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0d4a8a] transition disabled:opacity-60"
+            className="flex cursor-pointer  items-center gap-2 bg-[#0e55a1] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0d4a8a] transition disabled:opacity-60"
           >
             {saving ? (
               <>
@@ -236,7 +236,7 @@ export default function CareersAdmin() {
             </h2>
             <button
               onClick={addField}
-              className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-green-700 transition"
+              className="flex cursor-pointer  items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-green-700 transition"
             >
               <Plus className="w-5 h-5" />
               Add Field
@@ -270,7 +270,7 @@ export default function CareersAdmin() {
                     </div>
                     <button
                       onClick={() => removeField(index)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition"
+                      className="text-red-600 cursor-pointer  hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -386,7 +386,7 @@ export default function CareersAdmin() {
             </h2>
             <button
               onClick={addBenefit}
-              className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition"
+              className="flex cursor-pointer  items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition"
             >
               <Plus className="w-5 h-5" />
               Add Benefit
@@ -400,7 +400,7 @@ export default function CareersAdmin() {
                 </span>
                 <button
                   onClick={() => removeBenefit(i)}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition"
+                  className="text-red-600 cursor-pointer  hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition"
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
@@ -445,7 +445,7 @@ export default function CareersAdmin() {
           <button
             onClick={saveConfig}
             disabled={saving}
-            className="w-full flex items-center justify-center gap-2 bg-[#0e55a1] text-white py-3 rounded-lg font-bold hover:bg-[#0d4a8a] transition disabled:opacity-60"
+            className="w-full cursor-pointer  flex items-center justify-center gap-2 bg-[#0e55a1] text-white py-3 rounded-lg font-bold hover:bg-[#0d4a8a] transition disabled:opacity-60"
           >
             {saving ? (
               <>
@@ -465,7 +465,7 @@ export default function CareersAdmin() {
       <button
         onClick={scrollToTop}
         className={`
-          fixed bottom-24 right-6 bg-[#0e55a1] text-white p-4 rounded-full shadow-2xl
+          fixed bottom-24 cursor-pointer  right-6 bg-[#0e55a1] text-white p-4 rounded-full shadow-2xl
           hover:bg-[#0d4a8a] transition-all duration-300 z-[9999] flex items-center justify-center
           ${
             showScrollTop
