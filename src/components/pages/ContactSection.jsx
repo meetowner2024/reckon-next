@@ -11,6 +11,8 @@ import {
   Clock,
 } from "lucide-react";
 const iconMap = { User, Phone, Mail, MessageSquare };
+import { v4 as uuidv4 } from "uuid";
+
 const DynamicContactForm = () => {
   const [formConfig, setFormConfig] = useState(null);
   const [formData, setFormData] = useState({});
@@ -22,22 +24,54 @@ const DynamicContactForm = () => {
     fetch("/api/users/contactus/form-config")
       .then((res) => res.json())
       .then((data) => {
-        setFormConfig(data);
+        // Ensure unique IDs for each field
+        const fieldsWithId = data.formFields.map((field, index) => {
+          if (!field.id) {
+            const baseId = field.label
+              .toLowerCase()
+              .replace(/\s+/g, "-")
+              .replace(/[^a-z0-9-]/g, "");
+            return { ...field, id: `${baseId}-${uuidv4().slice(0, 8)}` };
+          }
+          // Ensure no duplicate IDs
+          return { ...field, id: `${field.id}-${uuidv4().slice(0, 8)}` };
+        });
+
+        const updatedConfig = { ...data, formFields: fieldsWithId };
+        setFormConfig(updatedConfig);
+
         const initialData = {};
-        data.formFields.forEach((f) => (initialData[f.id] = ""));
+        fieldsWithId.forEach((f) => (initialData[f.id] = ""));
         setFormData(initialData);
       })
-      .catch(console.error);
+      .catch((err) => console.error("❌ Failed to fetch form config:", err));
   }, []);
-  if (!formConfig) return <p>Loading...</p>;
 
+  if (!formConfig) return <p>Loading...</p>;
   const handleChange = (e, field) => {
-    const { name, value } = e.target;
-    let val = value;
-    if (field.transform === "numeric")
-      val = value.replace(/\D/g, "").slice(0, field.maxLength || 10);
-    setFormData((prev) => ({ ...prev, [name]: val }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+    const value = e.target.value;
+    const id = field.id; // Now guaranteed to exist
+
+    let processedValue = value;
+
+    // Only for mobile fields
+    if (id.includes("mobile") || id.includes("phone")) {
+      processedValue = value.replace(/\D/g, "").slice(0, field.maxLength || 10);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [id]: processedValue,
+    }));
+
+    // Clear error
+    if (errors[id]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[id];
+        return newErrors;
+      });
+    }
   };
   const validateField = (field, value) => {
     for (const v of field.validations || []) {
@@ -75,14 +109,25 @@ const DynamicContactForm = () => {
     e.preventDefault();
     if (!validateForm()) return;
     setIsSubmitting(true);
+
     try {
+      const submissionPayload = {
+        form_id: uuidv4(),
+        ...formData,
+      };
+
       const res = await fetch("/api/users/contactus/contact-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(submissionPayload),
       });
+
       if (!res.ok) throw new Error("Submit failed");
+      const result = await res.json();
+
       setSubmitSuccess(true);
+      console.log("✅ Submitted form ID:", result.form_id);
+
       setSuccessTimer(formConfig.formSettings?.successTimer || 5);
       setFormData(
         Object.fromEntries(formConfig.formFields.map((f) => [f.id, ""]))
@@ -232,7 +277,7 @@ const DynamicContactForm = () => {
                       Message Sent!
                     </h3>
                     <p className="text-green-700 text-xs">
-                      {formConfig.formSettings.successMessage}
+                      {formConfig?.formSettings?.successMessage}
                     </p>
                   </div>
                 </div>
@@ -270,12 +315,12 @@ const DynamicContactForm = () => {
                     transition={{ duration: 1, repeat: Infinity }}
                     className="h-4 w-4 border-b-2 border-white rounded-full"
                   />
-                  <span>{formConfig.formSettings.submittingText}</span>
+                  <span>{formConfig?.formSettings?.submittingText}</span>
                 </>
               ) : (
                 <>
                   <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-                  <span>{formConfig.formSettings.submitButtonText}</span>
+                  <span>{formConfig?.formSettings?.submitButtonText}</span>
                 </>
               )}
             </span>

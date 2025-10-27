@@ -1,42 +1,31 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { ChevronRight, ChevronDown } from "lucide-react"; // Import icons
-
+import { ChevronRight, ChevronDown } from "lucide-react";
 export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-
-  // Track open state of each submenu
   const [openSubmenus, setOpenSubmenus] = useState({
     hero: false,
     products: false,
   });
-
-  // Toggle specific submenu
   const toggleSubmenu = (key) => {
     setOpenSubmenus((prev) => ({
       ...prev,
       [key]: !prev[key],
     }));
   };
-
-  // Auto-open submenu if current path is inside it
   useEffect(() => {
     const updated = { ...openSubmenus };
-
     if (pathname.startsWith("/admin/hero") && !updated.hero) {
       updated.hero = true;
     }
     if (pathname.startsWith("/admin/products") && !updated.products) {
       updated.products = true;
     }
-
     setOpenSubmenus(updated);
   }, [pathname]);
-
   const navItems = [
     { href: "/admin", label: "Dashboard" },
     { href: "/admin/header", label: "Header" },
@@ -60,23 +49,57 @@ export default function Sidebar() {
       ],
     },
     { href: "/admin/faqs", label: "Frequently Asked Questions" },
-    { href: "/admin/contact-us", label: "Contact Us" },
+
+    {
+      href: "/admin/contact-us",
+      label: "Contact Us",
+      submenu: [
+        { href: "/admin/contact-us/all-contacted", label: "All Contacted" },
+        { href: "/admin/contact-us", label: "Edit Contact Page" },
+        {
+          href: "/admin/contact-us/edit-contact-form",
+          label: "Edit Contact Form",
+        },
+      ],
+    },
+    {
+      href: "/admin/careers",
+      label: "Careers",
+      submenu: [
+        {
+          href: "/admin/careers/all-applications",
+          label: "All Careers Applications",
+        },
+        {
+          href: "/admin/careers/edit-careers-form",
+          label: "Edit Careers Form",
+        },
+      ],
+    },
     { href: "/admin/footer", label: "Footer" },
   ];
-
   return (
     <>
-      {/* Mobile Menu Toggle */}
+      {}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#48ADB9] text-white rounded shadow-lg hover:bg-[#3d8f99] transition"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16m-7 6h7"
+          />
         </svg>
       </button>
-
-      {/* Sidebar */}
+      {}
       <div
         className={`w-64 bg-[#48ADB9] text-white h-screen fixed transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -89,7 +112,7 @@ export default function Sidebar() {
               <li key={item.href}>
                 {item.submenu ? (
                   <>
-                    {/* Parent Menu Item with Toggle */}
+                    {}
                     <button
                       onClick={() => toggleSubmenu(item.submenuKey)}
                       className={`w-full text-left p-2 rounded flex justify-between items-center transition-all duration-200 ${
@@ -105,8 +128,7 @@ export default function Sidebar() {
                         <ChevronRight className="w-4 h-4 transition-transform" />
                       )}
                     </button>
-
-                    {/* Submenu */}
+                    {}
                     {openSubmenus[item.submenuKey] && (
                       <ul className="p-1 mt-1 space-y-1 bg-gray-800 rounded-md overflow-hidden">
                         {item.submenu.map((sub) => (
@@ -128,7 +150,6 @@ export default function Sidebar() {
                     )}
                   </>
                 ) : (
-                  /* Regular Menu Item */
                   <Link
                     href={item.href}
                     className={`block p-2 rounded transition-colors ${
@@ -146,8 +167,7 @@ export default function Sidebar() {
           </ul>
         </div>
       </div>
-
-      {/* Mobile Overlay */}
+      {}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"

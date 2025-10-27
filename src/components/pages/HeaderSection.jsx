@@ -4,22 +4,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-
 const HeaderSection = () => {
-  const [logo, setLogo] = useState("");
+  const [logo, setLogo] = useState("/assets/images/Reckonext-logo.png");
   const [phone, setPhone] = useState("+91 88860 77745");
-  const [projects, setProjects] = useState([]); // Dynamic projects
+  const [projects, setProjects] = useState([]);
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const closeTimeoutRef = useRef(null);
-
   useEffect(() => {
     fetchHeader();
     fetchProjects();
   }, []);
-
   const fetchHeader = async () => {
     try {
       const res = await fetch("/api/users/header/getHeader");
@@ -30,7 +27,6 @@ const HeaderSection = () => {
       console.error("Failed to fetch header", err);
     }
   };
-
   const fetchProjects = async () => {
     try {
       const res = await fetch("/api/users/productsDropdown");
@@ -40,35 +36,29 @@ const HeaderSection = () => {
       console.error("Error fetching projects", error);
     }
   };
-
   const handleNavigation = (path) => {
     router.push(path);
     window.scrollTo({ top: 0, behavior: "smooth" });
     setOpenSubmenu(null);
     setMobileMenuOpen(false);
   };
-
   const handleMouseEnter = (itemName) => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setOpenSubmenu(itemName);
   };
-
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => setOpenSubmenu(null), 300);
   };
-
   const handleMainItemClick = (item) => {
     if (item.submenu) {
       if (openSubmenu === item.name) handleNavigation(item.path);
       else setOpenSubmenu(item.name);
     } else handleNavigation(item.path);
   };
-
   const wobbleAnimation = {
     rotate: [0, -10, 10, -10, 10, 0],
     transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
   };
-
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -85,7 +75,6 @@ const HeaderSection = () => {
     { name: "Careers", path: "/careers" },
     { name: "Contact", path: "/contact" },
   ];
-
   return (
     <motion.header
       initial={{ y: -50, opacity: 0 }}
@@ -108,7 +97,6 @@ const HeaderSection = () => {
               unoptimized
             />
           </div>
-
           <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 items-center space-x-8">
             {navItems.map((item) => (
               <div
@@ -136,7 +124,6 @@ const HeaderSection = () => {
                     />
                   )}
                 </motion.button>
-
                 <AnimatePresence>
                   {item.submenu &&
                     item.submenu.length > 0 &&
@@ -170,7 +157,6 @@ const HeaderSection = () => {
               </div>
             ))}
           </div>
-
           <div className="hidden lg:flex items-center gap-2 text-[#0e55a1] font-medium">
             <a
               href={`tel:${phone}`}
@@ -182,7 +168,6 @@ const HeaderSection = () => {
               {phone}
             </a>
           </div>
-
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 rounded-md text-[#7c7978] hover:text-[#0e55a1] hover:bg-gray-100 transition-colors duration-200"
@@ -194,7 +179,6 @@ const HeaderSection = () => {
             )}
           </button>
         </div>
-
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -226,7 +210,6 @@ const HeaderSection = () => {
                         />
                       )}
                     </motion.button>
-
                     {item.submenu &&
                       item.submenu.length > 0 &&
                       openSubmenu === item.name && (
@@ -252,7 +235,6 @@ const HeaderSection = () => {
                       )}
                   </div>
                 ))}
-
                 <div className="mt-4 w-full border-t pt-3">
                   <a
                     href={`tel:${phone}`}
@@ -272,5 +254,4 @@ const HeaderSection = () => {
     </motion.header>
   );
 };
-
 export default HeaderSection;
