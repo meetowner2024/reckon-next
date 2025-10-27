@@ -49,10 +49,27 @@ export default function AdvantagesAdmin() {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
+const removeAdvantage = async (index) => {
+  if (!confirm("Are you sure you want to delete this advantage?")) return;
 
-  const removeAdvantage = (index) => {
-    setAdvantages(advantages.filter((_, i) => i !== index));
-  };
+  try {
+    const res = await fetch("/api/users/advantages/deleteAdvantage", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ index }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Delete failed");
+
+    alert("Advantage deleted successfully!");
+    fetchAdvantages(); // refresh list from DB
+  } catch (err) {
+    console.error(err);
+    alert("Failed to delete advantage");
+  }
+};
+
 
   const saveAdvantages = async () => {
     if (!mainTitle.trim()) {
