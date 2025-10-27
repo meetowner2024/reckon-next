@@ -46,6 +46,7 @@ export default function Sidebar() {
     },
     { href: "/admin/faqs", label: "Frequently Asked Questions" },
     { href: "/admin/profile", label: "Profile" },
+     { href: "/admin/about", label: "About" },
     {
       href: "/admin/contact-us",
       label: "Contact Us",
