@@ -45,10 +45,10 @@ export default function Sidebar() {
       ],
     },
     { href: "/admin/faqs", label: "Frequently Asked Questions" },
-
     {
       href: "/admin/contact-us",
       label: "Contact Us",
+      submenuKey: "contact",
       submenu: [
         { href: "/admin/contact-us/all-contacted", label: "All Contacted" },
         { href: "/admin/contact-us", label: "Edit Contact Page" },
@@ -61,6 +61,7 @@ export default function Sidebar() {
     {
       href: "/admin/careers",
       label: "Careers",
+      submenuKey: "careers",
       submenu: [
         {
           href: "/admin/careers/all-applications",
