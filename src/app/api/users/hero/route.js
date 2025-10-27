@@ -1,4 +1,4 @@
-// app/api/hero/route.js
+
 import { getDB } from "@/lib/server/mongo";
 
 export const runtime = "nodejs";

@@ -99,14 +99,18 @@ const HeaderSection = () => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => handleNavigation("/")}
           >
-            <Image
-              src={logo}
-              alt="Reckonext Logo"
-              className="h-10 w-auto"
-              width={1000}
-              height={40}
-              unoptimized
-            />
+            {logo ? (
+              <Image
+                src={logo}
+                alt="Reckonext Logo"
+                className="h-10 w-auto"
+                width={1000}
+                height={40}
+                unoptimized
+              />
+            ) : (
+              <div className="h-10 w-auto bg-gray-200 rounded" />
+            )}
           </div>
 
           <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 items-center space-x-8">

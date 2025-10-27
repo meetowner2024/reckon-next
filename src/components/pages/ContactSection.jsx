@@ -121,7 +121,7 @@ const DynamicContactForm = () => {
     } ${getMobileInputClass()}`;
     return (
       <motion.div
-        key={field.id}
+        key={field.id || index}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
@@ -275,7 +275,7 @@ const DynamicContactForm = () => {
               ) : (
                 <>
                   <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform flex-shrink-0" />
-                  <span>{formConfig.formSettings.submitButtonText}</span>
+                  <span>{formConfig?.formSettings?.submitButtonText}</span>
                 </>
               )}
             </span>
