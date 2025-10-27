@@ -1,51 +1,109 @@
-"use client";
-import { useEffect, useState } from "react";
 import Home from "@/components/Home/Home";
-export default function HomePage() {
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    async function preload() {
-      try {
-        const cachedHeader = localStorage.getItem("headerData");
-        const cachedHero = localStorage.getItem("heroData");
-        const cacheTimestamp = localStorage.getItem("cacheTimestamp");
-        const isCacheValid =
-          cacheTimestamp &&
-          Date.now() - Number(cacheTimestamp) < 1000 * 60 * 60;
-        if (cachedHeader && cachedHero && isCacheValid) {
-          setData({
-            header: JSON.parse(cachedHeader),
-            heroSlides: JSON.parse(cachedHero),
-          });
-          return;
-        }
-        const [headerRes, heroRes] = await Promise.all([
-          fetch("/api/users/header/getHeader", {
-            cache: "force-cache",
-            next: { revalidate: 3600 },
-          }).then((r) => r.json()),
-          fetch("/api/users/hero", {
-            cache: "force-cache",
-            next: { revalidate: 3600 },
-          }).then((r) => r.json()),
-        ]);
-        setData({
-          header: headerRes,
-          heroSlides: heroRes,
-        });
-        localStorage.setItem("headerData", JSON.stringify(headerRes));
-        localStorage.setItem("heroData", JSON.stringify(heroRes));
-        localStorage.setItem("cacheTimestamp", Date.now().toString());
-      } catch (err) {
-        console.error("Error preloading data:", err);
+export const dynamic = "force-dynamic";
+export default async function HomePage() {
+  const [
+    headerRes,
+    heroRes,
+    advRes,
+    prodRes,
+    whyRes,
+    testRes,
+    faqRes,
+    contactRes,
+    footerRes,
+    projDropdownRes,
+  ] = await Promise.all([
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/header/getHeader`,
+      {
+        cache: "force-cache",
       }
-    }
-    preload();
-  }, []);
-
+    ),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/hero`, {
+      cache: "force-cache",
+    }),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/advantages`, {
+      cache: "force-cache",
+    }),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/products`, {
+      cache: "force-cache",
+    }),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/whychooseus`, {
+      cache: "force-cache",
+    }),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/testimonials`, {
+      cache: "force-cache",
+    }),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/faqs`, {
+      cache: "force-cache",
+    }),
+    fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL || ""
+      }/api/users/contactus/form-config`,
+      {
+        cache: "force-cache",
+      }
+    ),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/footer`, {
+      cache: "force-cache",
+    }),
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/productsDropdown`,
+      {
+        cache: "force-cache",
+      }
+    ),
+  ]);
+  const [
+    header,
+    heroRaw,
+    advantagesData,
+    products,
+    whyChoose,
+    testimonials,
+    faqs,
+    contactForm,
+    footer,
+    projectsDropdown,
+  ] = await Promise.all([
+    headerRes.json(),
+    heroRes.json(),
+    advRes.json(),
+    prodRes.json(),
+    whyRes.json(),
+    testRes.json(),
+    faqRes.json(),
+    contactRes.json(),
+    footerRes.json(),
+    projDropdownRes.json(),
+  ]);
+  const hero = heroRaw.map((s) => ({
+    ...s,
+    image: `/uploads/${s.image.split("/").pop()}`,
+  }));
+  const advantages = advantagesData?.advantages ?? [];
+  const mainTitle = advantagesData?.main_title ?? "The Reckonext Advantages";
   return (
     <main>
-      <Home />
+      <Home
+        header={{
+          logo: header?.logo
+            ? `/uploads/${header.logo}`
+            : "/assets/images/Reckonext-logo.png",
+          phone: header?.phone ?? "+91 88860 77745",
+        }}
+        hero={hero}
+        advantages={advantages}
+        mainTitle={mainTitle}
+        products={products}
+        whyChoose={whyChoose}
+        testimonials={testimonials}
+        faqs={faqs}
+        contactForm={contactForm}
+        footer={footer}
+        projectsDropdown={projectsDropdown}
+      />
     </main>
   );
 }

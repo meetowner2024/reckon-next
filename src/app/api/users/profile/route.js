@@ -10,7 +10,6 @@ const deleteFile = (filePath) => {
   if (fs.existsSync(fullPath)) {
     try {
       fs.unlinkSync(fullPath);
-      console.log("Deleted old image:", fullPath);
     } catch (err) {
       console.warn("Failed to delete:", fullPath, err);
     }

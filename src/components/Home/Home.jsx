@@ -1,5 +1,8 @@
 "use client";
+import { HeroSkeleton } from "@/utils/Skeletons/HeroSkeleton";
+import { SectionSkeleton } from "@/utils/Skeletons/SectionSkeleton";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 const HeaderSection = dynamic(() => import("@/components/pages/HeaderSection"));
 const HeroSection = dynamic(() => import("@/components/pages/HeroSection"));
 const AdvantagesSection = dynamic(() =>
@@ -19,21 +22,54 @@ const ContactSection = dynamic(() =>
   import("@/components/pages/ContactSection")
 );
 const Footer = dynamic(() => import("@/components/pages/Footer"));
-export default function Home() {
+export default function Home({
+  header,
+  hero,
+  advantages,
+  mainTitle,
+  products,
+  whyChoose,
+  testimonials,
+  faqs,
+  contactForm,
+  footer,
+  projectsDropdown,
+}) {
   return (
     <main className="w-full overflow-hidden">
-      <HeaderSection />
+      <HeaderSection
+        logo={header.logo}
+        phone={header.phone}
+        projectsDropdown={projectsDropdown}
+      />
 
-      <HeroSection />
+      <Suspense fallback={<HeroSkeleton />}>
+        <HeroSection slides={hero} />
+      </Suspense>
 
-      <AdvantagesSection />
+      <Suspense fallback={<SectionSkeleton />}>
+        <AdvantagesSection advantages={advantages} mainTitle={mainTitle} />
+      </Suspense>
 
-      <OurproductsSection />
-      <WhyChooseuSection />
-      <TestimonialsSection />
-      <FAQSection />
-      <ContactSection />
-      <Footer />
+      <OurproductsSection products={products} />
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <WhyChooseuSection features={whyChoose} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <TestimonialsSection testimonials={testimonials} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <FAQSection faqs={faqs} />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <ContactSection formConfig={contactForm} />
+      </Suspense>
+
+      <Footer footer={footer} projects={projectsDropdown} />
     </main>
   );
 }

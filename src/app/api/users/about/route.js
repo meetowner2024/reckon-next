@@ -15,7 +15,6 @@ function deleteFileIfExists(filePath) {
   if (fs.existsSync(fullPath)) {
     try {
       fs.unlinkSync(fullPath);
-      console.log("Deleted:", fullPath);
     } catch (e) {
       console.warn("Failed to delete:", fullPath, e);
     }

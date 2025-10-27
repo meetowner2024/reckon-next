@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import * as LucideIcons from "lucide-react";
-const AdvantagesSection = () => {
-  const [advantages, setAdvantages] = useState([]);
-  const [title, setTitle] = useState("The Reckonext Advantages");
+const AdvantagesSection = ({ advantages }) => {
   const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef(null);
   const iconMap = {
@@ -47,21 +45,7 @@ const AdvantagesSection = () => {
     const fallbackName = fallbackIcons[index % fallbackIcons.length];
     return LucideIcons[fallbackName] || LucideIcons.HelpCircle;
   };
-  useEffect(() => {
-    const fetchAdvantages = async () => {
-      try {
-        const res = await fetch("/api/users/advantages");
-        const data = await res.json();
-        if (data.advantages?.length) {
-          setAdvantages(data.advantages);
-          setTitle(data.main_title || "Our Advantages");
-        }
-      } catch (err) {
-        console.error("Error fetching advantages:", err);
-      }
-    };
-    fetchAdvantages();
-  }, []);
+
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
@@ -82,7 +66,7 @@ const AdvantagesSection = () => {
   return (
     <section className="w-full bg-gray-50 pt-12 pb-4">
       <h3 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-[#000000] mb-4">
-        {title.split(" ").map((word, i) =>
+        {advantages.title?.split(" ").map((word, i) =>
           word.toLowerCase().includes("reckonext") ? (
             <span key={i} className="text-[#1e3a8a]">
               {word}{" "}

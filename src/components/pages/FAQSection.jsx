@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -6,28 +5,9 @@ import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import FadeUp from "@/components/pages/FadeUp";
 
-const FAQSection = () => {
-  const [faqs, setFaqs] = useState([]);
+const FAQSection = ({ faqs, loading }) => {
   const [openId, setOpenId] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchFaqs = async () => {
-      try {
-        const res = await fetch("/api/users/faqs");
-        if (!res.ok) throw new Error("Failed to fetch FAQs");
-        const data = await res.json();
-        setFaqs(data);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFaqs();
-  }, []);
 
   const toggleFAQ = (id) => {
     setOpenId((prev) => (prev === id ? null : id));

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Star, Quote } from "lucide-react";
 import FadeUp from "./FadeUp";
 import Image from "next/image";
-const TestimonialsSection = () => {
+const TestimonialsSection = ({ testimonials }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [hoveredCardIndex, setHoveredCardIndex] = useState(null);
@@ -10,21 +10,7 @@ const TestimonialsSection = () => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== "undefined" ? window.innerWidth : 1200
   );
-  const [testimonials, setTestimonials] = useState([]);
-  useEffect(() => {
-    const fetchTestimonials = async () => {
-      try {
-        const res = await fetch("/api/users/testimonials", {
-          cache: "no-store",
-        });
-        const data = await res.json();
-        setTestimonials(data);
-      } catch (error) {
-        console.error("Error fetching testimonials:", error);
-      }
-    };
-    fetchTestimonials();
-  }, []);
+
   const intervalRef = useRef(null);
   const containerRef = useRef(null);
   const extendedTestimonials = [

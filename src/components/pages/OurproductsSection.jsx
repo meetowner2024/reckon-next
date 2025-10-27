@@ -61,30 +61,10 @@ const ImageCarousel = ({ images, currentIndex, onDotClick, onScroll }) => {
     </div>
   );
 };
-export default function DoorsAndWindowsGallery() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function DoorsAndWindowsGallery({ products, loading }) {
   const [error, setError] = useState("");
   const [activeIndexes, setActiveIndexes] = useState({});
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        setError("");
-        const res = await fetch("/api/users/products");
-        if (!res.ok) throw new Error("Failed to load products");
-        const data = await res.json();
-        const sorted = data.sort((a, b) => a.title.localeCompare(b.title));
-        setProducts(sorted);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load products. Please try again later.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
+
   const handleDotClick = (productId, index) => {
     setActiveIndexes((prev) => ({
       ...prev,

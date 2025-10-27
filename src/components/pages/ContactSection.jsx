@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   User,
@@ -10,61 +10,50 @@ import {
   CheckCircle,
   Clock,
 } from "lucide-react";
-const iconMap = { User, Phone, Mail, MessageSquare };
 import { v4 as uuidv4 } from "uuid";
-
-const DynamicContactForm = () => {
-  const [formConfig, setFormConfig] = useState(null);
+const iconMap = { User, Phone, Mail, MessageSquare };
+const DynamicContactForm = ({ formConfig, loading }) => {
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [successTimer, setSuccessTimer] = useState(5);
   useEffect(() => {
-    fetch("/api/users/contactus/form-config")
-      .then((res) => res.json())
-      .then((data) => {
-        // Ensure unique IDs for each field
-        const fieldsWithId = data.formFields.map((field, index) => {
-          if (!field.id) {
-            const baseId = field.label
-              .toLowerCase()
-              .replace(/\s+/g, "-")
-              .replace(/[^a-z0-9-]/g, "");
-            return { ...field, id: `${baseId}-${uuidv4().slice(0, 8)}` };
-          }
-          // Ensure no duplicate IDs
-          return { ...field, id: `${field.id}-${uuidv4().slice(0, 8)}` };
-        });
-
-        const updatedConfig = { ...data, formFields: fieldsWithId };
-        setFormConfig(updatedConfig);
-
-        const initialData = {};
-        fieldsWithId.forEach((f) => (initialData[f.id] = ""));
-        setFormData(initialData);
-      })
-      .catch((err) => console.error("❌ Failed to fetch form config:", err));
-  }, []);
-
-  if (!formConfig) return <p>Loading...</p>;
+    if (formConfig && formConfig.formFields) {
+      const fieldsWithId = formConfig.formFields.map((field) => {
+        if (!field.id) {
+          const baseId = field.label
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^a-z0-9-]/g, "");
+          return { ...field, id: `${baseId}-${uuidv4().slice(0, 8)}` };
+        }
+        return { ...field, id: `${field.id}-${uuidv4().slice(0, 8)}` };
+      });
+      formConfig.formFields = fieldsWithId;
+      const initialData = {};
+      fieldsWithId.forEach((f) => (initialData[f.id] = ""));
+      setFormData(initialData);
+    }
+  }, [formConfig]);
+  if (loading || !formConfig) {
+    return (
+      <div className="py-16 text-center text-gray-500 text-lg">
+        Loading contact form...
+      </div>
+    );
+  }
   const handleChange = (e, field) => {
     const value = e.target.value;
-    const id = field.id; // Now guaranteed to exist
-
+    const id = field.id;
     let processedValue = value;
-
-    // Only for mobile fields
     if (id.includes("mobile") || id.includes("phone")) {
       processedValue = value.replace(/\D/g, "").slice(0, field.maxLength || 10);
     }
-
     setFormData((prev) => ({
       ...prev,
       [id]: processedValue,
     }));
-
-    // Clear error
     if (errors[id]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -109,25 +98,19 @@ const DynamicContactForm = () => {
     e.preventDefault();
     if (!validateForm()) return;
     setIsSubmitting(true);
-
     try {
       const submissionPayload = {
         form_id: uuidv4(),
         ...formData,
       };
-
       const res = await fetch("/api/users/contactus/contact-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submissionPayload),
       });
-
       if (!res.ok) throw new Error("Submit failed");
       const result = await res.json();
-
       setSubmitSuccess(true);
-      console.log("✅ Submitted form ID:", result.form_id);
-
       setSuccessTimer(formConfig.formSettings?.successTimer || 5);
       setFormData(
         Object.fromEntries(formConfig.formFields.map((f) => [f.id, ""]))
@@ -138,7 +121,6 @@ const DynamicContactForm = () => {
       setIsSubmitting(false);
     }
   };
-
   const renderField = (field, index) => {
     const Icon = iconMap[field.icon] || null;
     const getHeightStyle = () => {

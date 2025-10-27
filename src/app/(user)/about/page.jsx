@@ -1,6 +1,4 @@
-// app/about/page.js
 "use client";
-
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import PageBanner from "@/components/PageBanner";
@@ -8,18 +6,15 @@ import HeaderSection from "@/components/pages/HeaderSection";
 import FadeUp from "@/components/pages/FadeUp";
 import Footer from "@/components/pages/Footer";
 import Image from "next/image";
-
 const floating = {
   animate: {
     y: [0, -10, 0],
     transition: { duration: 4, repeat: Infinity, ease: "easeInOut" },
   },
 };
-
 export default function AboutPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     fetch("/api/users/about")
       .then((r) => r.json())
@@ -29,7 +24,6 @@ export default function AboutPage() {
       })
       .catch(() => setLoading(false));
   }, []);
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -37,21 +31,17 @@ export default function AboutPage() {
       </div>
     );
   }
-
   if (!data) return null;
-
-  const breadcrumbItems = [{ label: "Home", path: "/" }, { label: "About Us" }];
-
   return (
     <div>
       <HeaderSection />
-
-      {/* Page Banner */}
       <div className="relative">
-        <PageBanner title="About Us" subtitle="Leading the industry with innovation and quality" />
+        <PageBanner
+          title="About Us"
+          subtitle="Leading the industry with innovation and quality"
+        />
       </div>
 
-      {/* About Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -62,13 +52,18 @@ export default function AboutPage() {
                 </h2>
                 <div
                   className="text-lg text-gray-700 space-y-4"
-                  dangerouslySetInnerHTML={{ __html: (data.description || "").replace(/\n/g, "<br/>") }}
+                  dangerouslySetInnerHTML={{
+                    __html: (data.description || "").replace(/\n/g, "<br/>"),
+                  }}
                 />
               </div>
             </FadeUp>
-
             <FadeUp delay={200}>
-              <motion.div className="relative" variants={floating} animate="animate">
+              <motion.div
+                className="relative"
+                variants={floating}
+                animate="animate"
+              >
                 {data.mainImage ? (
                   <Image
                     src={data.mainImage}
@@ -86,7 +81,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission, Vision, Philosophy */}
       <section className="md:py-10 sm:py-6 py-4 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -109,8 +103,12 @@ export default function AboutPage() {
                     <div className="bg-gray-200 h-48" />
                   )}
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold text-black mb-3">{item.title}</h3>
-                    <p className="text-gray-700 leading-relaxed">{item.description}</p>
+                    <h3 className="text-xl font-semibold text-black mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
                 </motion.div>
               </FadeUp>
@@ -119,7 +117,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section – Dynamic */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeUp delay={0}>
@@ -132,17 +129,20 @@ export default function AboutPage() {
                 {data.expertsInputTitle || "Meet Our Experts"}
               </h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                {data.expertsInputDescription || "The dedicated professionals driving innovation and excellence in uPVC manufacturing"}
+                {data.expertsInputDescription ||
+                  "The dedicated professionals driving innovation and excellence in uPVC manufacturing"}
               </p>
             </div>
           </FadeUp>
-
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {(data.experts || []).map((member, index) => (
               <FadeUp key={index} delay={index * 150}>
                 <motion.div
                   className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden group"
-                  whileHover={{ y: -5, boxShadow: "0 20px 40px rgba(0, 0, 0, 0.08)" }}
+                  whileHover={{
+                    y: -5,
+                    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.08)",
+                  }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
                   <div className="relative overflow-hidden aspect-square bg-gray-100">
@@ -181,7 +181,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       <Footer />
     </div>
   );

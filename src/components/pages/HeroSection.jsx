@@ -2,26 +2,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import FadeUp from "./FadeUp";
-const HeroSection = ({ serverSlides }) => {
-  const [slides, setSlides] = useState(serverSlides || []);
+const HeroSection = ({ slides }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  useEffect(() => {
-    async function fetchSlides() {
-      try {
-        const res = await fetch("/api/users/hero", { cache: "force-cache" });
-        const data = await res.json();
-        const slidesWithApiUrl = data.map((slide) => ({
-          ...slide,
-          image: `/uploads/${slide.image.split("/").pop()}`,
-        }));
-        setSlides(slidesWithApiUrl);
-      } catch (err) {
-        console.error("Failed to load hero slides:", err);
-      }
-    }
-    fetchSlides();
-  }, []);
+
   useEffect(() => {
     if (!isAutoPlaying || slides.length === 0) return;
     const interval = setInterval(

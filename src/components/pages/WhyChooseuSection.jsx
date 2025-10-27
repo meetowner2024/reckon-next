@@ -13,8 +13,7 @@ import {
   Rocket,
   CheckCircle,
 } from "lucide-react";
-const WhyChooseuSection = () => {
-  const [features, setFeatures] = useState([]);
+const WhyChooseuSection = ({ features }) => {
   const icons = [
     Factory,
     Wrench,
@@ -28,18 +27,7 @@ const WhyChooseuSection = () => {
     Rocket,
     CheckCircle,
   ];
-  useEffect(() => {
-    const fetchFeatures = async () => {
-      try {
-        const res = await fetch("/api/users/whychooseus");
-        const data = await res.json();
-        setFeatures(data);
-      } catch (err) {
-        console.error("Error fetching Why Choose Us:", err);
-      }
-    };
-    fetchFeatures();
-  }, []);
+
   return (
     <section className="py-12 px-6 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
