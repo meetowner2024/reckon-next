@@ -14,33 +14,25 @@ export async function POST(req) {
     const formData = await req.formData();
 
     const heroFile = formData.get("hero_image");
-    const iconKey = formData.get("icon")?.toString().trim();
     const title = formData.get("title")?.toString().trim();
-    const description = formData.get("description")?.toString().trim();
-    const label = formData.get("label")?.toString().trim() || title;
+
 
     if (!heroFile || !(heroFile instanceof Blob)) {
       return new Response(JSON.stringify({ message: "Hero image required" }), { status: 400 });
     }
-    if (!iconKey) {
-      return new Response(JSON.stringify({ message: "Icon key required" }), { status: 400 });
-    }
+    
     if (!title) {
       return new Response(JSON.stringify({ message: "Title required" }), { status: 400 });
     }
 
-    // Save hero image
     const heroBuffer = Buffer.from(await heroFile.arrayBuffer());
     const heroFilename = `${Date.now()}-${safeName(heroFile)}`;
     fs.writeFileSync(path.join(heroDir, heroFilename), heroBuffer);
 
-    // Save to DB
     const db = await getDB();
     const slide = {
       title,
-      description,
-      label,
-      icon: iconKey,
+      description,   
       image: `/uploads/hero/${heroFilename}`,
       created_at: new Date(),
       updated_at: new Date(),

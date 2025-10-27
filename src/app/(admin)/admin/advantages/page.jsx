@@ -125,7 +125,7 @@ const removeAdvantage = async (index) => {
           <button
             onClick={saveAdvantages}
             disabled={saving}
-            className="flex items-center gap-2 bg-[#48adb9] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold hover:bg-[#3a8a94] transition disabled:opacity-60 text-sm sm:text-base"
+            className="flex cursor-pointer items-center gap-2 bg-[#48adb9] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold hover:bg-[#48a5af] transition disabled:opacity-60 text-sm sm:text-base"
           >
             {saving ? (
               <>
@@ -161,7 +161,7 @@ const removeAdvantage = async (index) => {
             </h2>
             <button
               onClick={addAdvantage}
-              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg font-medium hover:bg-green-700 transition text-sm sm:text-base"
+              className="flex cursor-pointer items-center gap-2 bg-green-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg font-medium hover:bg-green-700 transition text-sm sm:text-base"
             >
               <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
               Add Advantage
@@ -187,7 +187,7 @@ const removeAdvantage = async (index) => {
                     </span>
                     <button
                       onClick={() => removeAdvantage(index)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 p-1.5 sm:p-2 rounded-lg transition"
+                      className="text-red-600 cursor-pointer hover:text-red-700 hover:bg-red-50 p-1.5 sm:p-2 rounded-lg transition"
                     >
                       <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>

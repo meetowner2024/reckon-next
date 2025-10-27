@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
@@ -11,8 +10,6 @@ export default function HeroSlides() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    label: "",
-    icon: "",
     hero_image: null,
     imagePreview: "",
   });
@@ -44,8 +41,6 @@ export default function HeroSlides() {
     setForm({
       title: slide.title || "",
       description: slide.description || "",
-      label: slide.label || "",
-      icon: slide.icon || "",
       hero_image: null,
       imagePreview: slide.image || "",
     });
@@ -58,8 +53,6 @@ export default function HeroSlides() {
     setForm({
       title: "",
       description: "",
-      label: "",
-      icon: "",
       hero_image: null,
       imagePreview: "",
     });
@@ -80,8 +73,6 @@ export default function HeroSlides() {
   const formData = new FormData();
   formData.append("title", form.title);
   formData.append("description", form.description);
-  formData.append("label", form.label || form.title);
-  formData.append("icon", form.icon);
   if (form.hero_image) formData.append("hero_image", form.hero_image);
 
   try {
@@ -110,7 +101,7 @@ export default function HeroSlides() {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      {/* Header */}
+
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold" style={{ color: "#48adb9" }}>
           Hero Slides
@@ -123,7 +114,6 @@ export default function HeroSlides() {
         </a>
       </div>
 
-      {/* Slides Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {slides.map((slide) => (
           <div
@@ -169,13 +159,13 @@ export default function HeroSlides() {
               <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => openEditModal(slide)}
-                  className="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+                  className="flex-1 cursor-pointer bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
                 >
                   Edit
                 </button>
                 <button
                   onClick={() => deleteSlide(slide._id)}
-                  className="flex-1 bg-red-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition"
+                  className="flex-1 cursor-pointer bg-red-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition"
                 >
                   Delete
                 </button>
@@ -185,7 +175,6 @@ export default function HeroSlides() {
         ))}
       </div>
 
-      {/* Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
@@ -194,7 +183,7 @@ export default function HeroSlides() {
             </h2>
 
             <div className="space-y-4">
-              {/* Title */}
+
               <div>
                 <label className="block font-medium text-gray-700 mb-1">
                   Title <span className="text-red-500">*</span>
@@ -208,7 +197,6 @@ export default function HeroSlides() {
                 />
               </div>
 
-              {/* Description */}
               <div>
                 <label className="block font-medium text-gray-700 mb-1">
                   Description
@@ -224,35 +212,6 @@ export default function HeroSlides() {
                 />
               </div>
 
-              {/* Label */}
-              <div>
-                <label className="block font-medium text-gray-700 mb-1">
-                  Label (optional, defaults to title)
-                </label>
-                <input
-                  type="text"
-                  value={form.label}
-                  onChange={(e) => setForm({ ...form, label: e.target.value })}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-[#48adb9]"
-                  placeholder="e.g. New"
-                />
-              </div>
-
-              {/* Icon Key */}
-              <div>
-                <label className="block font-medium text-gray-700 mb-1">
-                  Icon Key <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  value={form.icon}
-                  onChange={(e) => setForm({ ...form, icon: e.target.value })}
-                  className="w-full p-2 border rounded focus:ring-2 focus:ring-[#48adb9]"
-                  placeholder="e.g. zap, shield, rocket"
-                />
-              </div>
-
-              {/* Hero Image */}
               <div>
                 <label className="block font-medium text-gray-700 mb-1">
                   Hero Image {editingSlide && "(optional to replace)"}
@@ -279,13 +238,13 @@ export default function HeroSlides() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={saveSlide}
-                className="flex-1 bg-[#48adb9] text-white py-2.5 rounded-lg font-medium hover:bg-[#3a8a94] transition"
+                className="flex-1 bg-[#48adb9] cursor-pointer text-white py-2.5 rounded-lg font-medium hover:bg-[#3a8a94] transition"
               >
                 {editingSlide ? "Update Slide" : "Add Slide"}
               </button>
               <button
                 onClick={closeModal}
-                className="flex-1 bg-gray-300 text-gray-700 py-2.5 rounded-lg font-medium hover:bg-gray-400 transition"
+                className="flex-1 cursor-pointer bg-gray-300 text-gray-700 py-2.5 rounded-lg font-medium hover:bg-gray-400 transition"
               >
                 Cancel
               </button>

@@ -1,6 +1,4 @@
-// app/admin/faqs/page.jsx
 "use client";
-
 import { useState, useEffect } from "react";
 
 export default function FAQManager() {
@@ -14,14 +12,13 @@ export default function FAQManager() {
     answer: "",
   });
 
-  /* ---------- FETCH ---------- */
   useEffect(() => {
     fetchFAQs();
   }, []);
 
   const fetchFAQs = async () => {
     try {
-      const res = await fetch("/api/users/faqs"); // <-- same endpoint for GET
+      const res = await fetch("/api/users/faqs");
       const data = await res.json();
       setFaqs(data);
     } catch {
@@ -31,7 +28,6 @@ export default function FAQManager() {
     }
   };
 
-  /* ---------- MODAL ---------- */
   const openModal = (faq = null) => {
     setEditingFAQ(faq);
     setForm({
@@ -46,7 +42,6 @@ export default function FAQManager() {
     setEditingFAQ(null);
   };
 
-  /* ---------- SAVE (POST / PUT) ---------- */
   const saveFAQ = async () => {
     if (!form.question.trim() || !form.answer.trim()) {
       alert("Both fields are required");
@@ -60,7 +55,7 @@ export default function FAQManager() {
     };
 
     const res = await fetch("/api/users/faqs", {
-      method: editingFAQ ? "PUT" : "PUT", // both go to PUT (create if no _id)
+      method: editingFAQ ? "PUT" : "PUT", 
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
@@ -75,7 +70,6 @@ export default function FAQManager() {
     fetchFAQs();
   };
 
-  /* ---------- DELETE ---------- */
   const deleteFAQ = async (id) => {
     if (!confirm("Delete this FAQ?")) return;
 
@@ -87,7 +81,7 @@ export default function FAQManager() {
     }
   };
 
-  /* ---------- RENDER ---------- */
+
   if (loading) return <p className="text-center py-10">Loading...</p>;
 
   return (
@@ -96,7 +90,7 @@ export default function FAQManager() {
         <h1 className="text-3xl font-bold text-teal-600">FAQ Manager</h1>
         <button
           onClick={() => openModal()}
-          className="bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 font-medium"
+          className="bg-teal-600 cursor-pointer cursor-pointer text-white px-6 py-2 rounded-lg hover:bg-teal-700 font-medium"
         >
           Add FAQ
         </button>
@@ -116,13 +110,13 @@ export default function FAQManager() {
             <div className="flex gap-2 mt-4">
               <button
                 onClick={() => openModal(faq)}
-                className="flex-1 bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700"
+                className="flex-1  cursor-pointer bg-blue-600 text-white py-2 rounded text-sm font-medium hover:bg-blue-700"
               >
                 Edit
               </button>
               <button
                 onClick={() => deleteFAQ(faq._id)}
-                className="flex-1 bg-red-600 text-white py-2 rounded text-sm font-medium hover:bg-red-700"
+                className="flex-1 cursor-pointer bg-red-600 text-white py-2 rounded text-sm font-medium hover:bg-red-700"
               >
                 Delete
               </button>
@@ -131,7 +125,6 @@ export default function FAQManager() {
         ))}
       </div>
 
-      {/* ---------- MODAL ---------- */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
@@ -169,13 +162,13 @@ export default function FAQManager() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={saveFAQ}
-                className="flex-1 bg-teal-600 text-white py-2.5 rounded font-medium hover:bg-teal-700"
+                className="flex-1 cursor-pointer bg-teal-600 text-white py-2.5 rounded font-medium hover:bg-teal-700"
               >
                 {editingFAQ ? "Update" : "Add"}
               </button>
               <button
                 onClick={closeModal}
-                className="flex-1 bg-gray-300 text-gray-700 py-2.5 rounded font-medium hover:bg-gray-400"
+                className="flex-1 cursor-pointer bg-gray-300 text-gray-700 py-2.5 rounded font-medium hover:bg-gray-400"
               >
                 Cancel
               </button>

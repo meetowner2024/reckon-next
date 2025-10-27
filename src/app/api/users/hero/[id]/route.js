@@ -19,19 +19,15 @@ const objectId = new ObjectId(id);
 
     const title = formData.get("title")?.toString().trim();
     const description = formData.get("description")?.toString().trim();
-    const label = formData.get("label")?.toString().trim() || title;
-    const iconKey = formData.get("icon")?.toString().trim();
     const heroFile = formData.get("hero_image");
 
-    if (!title || !iconKey) {
+    if (!title ) {
       return new Response(JSON.stringify({ message: "Title and icon required" }), { status: 400 });
     }
 
     const updateData = {
       title,
       description,
-      label,
-      icon: iconKey,
       updated_at: new Date(),
     };
 

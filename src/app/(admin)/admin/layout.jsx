@@ -50,7 +50,7 @@ export default function AdminLayout({ children }) {
         {showScrollTop && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-6 right-6 bg-[#48ADB9] text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition"
+            className="fixed bottom-6 right-6 bg-[#48ADB9] text-white p-3 rounded-full shadow-lg hover:bg-[#48a5af] cursor-pointer  transition"
           >
             <ArrowUp size={20} />
           </button>
