@@ -1,10 +1,8 @@
-// app/api/faqs/route.js
+
 import { getDB } from "@/lib/server/mongo";
 import { ObjectId } from "mongodb";
-
 export const runtime = "nodejs";
 
-/* ---------- GET ALL ---------- */
 export async function GET() {
   try {
     const db = await getDB();
@@ -26,7 +24,7 @@ export async function GET() {
   }
 }
 
-/* ---------- BULK POST (seed) ---------- */
+
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -39,7 +37,7 @@ export async function POST(req) {
     }
 
     const db = await getDB();
-    await db.collection("faqs").deleteMany({}); // wipe old seed
+    await db.collection("faqs").deleteMany({}); 
 
     const newFAQs = body.map((faq) => ({
       id: crypto.randomUUID(),
@@ -62,7 +60,7 @@ export async function POST(req) {
   }
 }
 
-/* ---------- CREATE SINGLE ---------- */
+
 export async function PUT(req) {
   try {
     const { _id, question, answer } = await req.json();
@@ -83,12 +81,11 @@ export async function PUT(req) {
 
     let result;
     if (_id) {
-      // ----- UPDATE -----
       result = await db
         .collection("faqs")
         .updateOne({ _id: new ObjectId(_id) }, { $set: payload });
     } else {
-      // ----- INSERT -----
+
       payload.id = crypto.randomUUID();
       payload.created_at = new Date();
       result = await db.collection("faqs").insertOne(payload);
@@ -104,7 +101,7 @@ export async function PUT(req) {
   }
 }
 
-/* ---------- DELETE SINGLE ---------- */
+
 export async function DELETE(req) {
   try {
     const url = new URL(req.url);

@@ -1,28 +1,36 @@
+
 "use client";
+
 import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
-import FadeUp from "./FadeUp";
 import { motion } from "framer-motion";
+import FadeUp from "@/components/pages/FadeUp";
 
 const FAQSection = () => {
   const [faqs, setFaqs] = useState([]);
   const [openId, setOpenId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
         const res = await fetch("/api/users/faqs");
+        if (!res.ok) throw new Error("Failed to fetch FAQs");
         const data = await res.json();
         setFaqs(data);
       } catch (err) {
-        console.error("Error fetching FAQs:", err);
+        console.error(err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
     };
     fetchFaqs();
   }, []);
 
   const toggleFAQ = (id) => {
-    setOpenId(openId === id ? null : id);
+    setOpenId((prev) => (prev === id ? null : id));
   };
 
   return (
@@ -40,8 +48,15 @@ const FAQSection = () => {
               </p>
             </div>
           </FadeUp>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 max-w-5xl mx-auto">
-            {faqs.length > 0 ? (
+            {loading ? (
+              <p className="col-span-2 text-center text-gray-500">
+                Loading FAQs...
+              </p>
+            ) : error ? (
+              <p className="col-span-2 text-center text-red-600">{error}</p>
+            ) : faqs.length > 0 ? (
               faqs.map((faq, index) => (
                 <FadeUp key={faq.id} delay={200 + index * 100}>
                   <div
@@ -51,6 +66,7 @@ const FAQSection = () => {
                         : "border border-gray-200"
                     }`}
                   >
+                    {/* Header */}
                     <button
                       onClick={() => toggleFAQ(faq.id)}
                       className="w-full flex items-center justify-between p-3 sm:p-4 text-left bg-gradient-to-r from-white to-gray-50 hover:from-gray-50 hover:to-gray-100 transition-all duration-300 group"
@@ -66,6 +82,8 @@ const FAQSection = () => {
                         />
                       </span>
                     </button>
+
+                    {/* Body – animated height */}
                     <div
                       className={`grid transition-all duration-500 ease-in-out ${
                         openId === faq.id
@@ -79,6 +97,8 @@ const FAQSection = () => {
                         </div>
                       </div>
                     </div>
+
+                    {/* Subtle animated ring when open */}
                     {openId === faq.id && (
                       <motion.div
                         className="absolute inset-0 rounded-2xl pointer-events-none opacity-10"
@@ -94,7 +114,7 @@ const FAQSection = () => {
                 </FadeUp>
               ))
             ) : (
-              <p className="text-center col-span-2 text-gray-500">
+              <p className="col-span-2 text-center text-gray-500">
                 No FAQs added yet.
               </p>
             )}

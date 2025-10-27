@@ -1,17 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Plus, Trash2, Save, Loader2, ArrowUp } from "lucide-react";
+import { Plus, Trash2, Save, Loader2 } from "lucide-react";
 
 export default function AdvantagesAdmin() {
   const [mainTitle, setMainTitle] = useState("");
   const [advantages, setAdvantages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
   const bottomRef = useRef(null);
-  const topRef = useRef(null); // This will be the scroll target
 
   useEffect(() => {
     fetchAdvantages();
@@ -47,17 +44,32 @@ export default function AdvantagesAdmin() {
   };
 
   const addAdvantage = () => {
-    const newAdv = { title: "", description: "" };
-    setAdvantages((prev) => [...prev, newAdv]);
-
+    setAdvantages((prev) => [...prev, { title: "", description: "" }]);
     setTimeout(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
+const removeAdvantage = async (index) => {
+  if (!confirm("Are you sure you want to delete this advantage?")) return;
 
-  const removeAdvantage = (index) => {
-    setAdvantages(advantages.filter((_, i) => i !== index));
-  };
+  try {
+    const res = await fetch("/api/users/advantages/deleteAdvantage", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ index }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Delete failed");
+
+    alert("Advantage deleted successfully!");
+    fetchAdvantages(); // refresh list from DB
+  } catch (err) {
+    console.error(err);
+    alert("Failed to delete advantage");
+  }
+};
+
 
   const saveAdvantages = async () => {
     if (!mainTitle.trim()) {
@@ -85,7 +97,6 @@ export default function AdvantagesAdmin() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Save failed");
-
       alert("Advantages saved successfully!");
     } catch (err) {
       console.error(err);
@@ -95,65 +106,43 @@ export default function AdvantagesAdmin() {
     }
   };
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-useEffect(() => {
-  const handleScroll = () => {
-    const scrollTop = window.scrollY;
-
-    // Show button after user scrolls 200px from top
-    setShowScrollTop(scrollTop > 200);
-  };
-
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
-
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="w-8 h-8 animate-spin text-[#48adb9]" />
-        <span className="ml-2 text-lg">Loading...</span>
+        <span className="ml-2 text-base sm:text-lg">Loading...</span>
       </div>
     );
   }
 
   return (
     <>
-      {/* TOP ANCHOR - GIVE IT HEIGHT */}
-      <div ref={topRef} className="h-0" />
-
-      <div className="max-w-5xl mx-auto p-6 space-y-10 pb-32">
-        {/* Header */}
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-[#48adb9] tracking-tight">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-32">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#48adb9] tracking-tight">
             Reckonext Advantages
           </h1>
           <button
             onClick={saveAdvantages}
             disabled={saving}
-            className="flex items-center gap-2 bg-[#48adb9] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#3a8a94] transition disabled:opacity-60"
+            className="flex items-center gap-2 bg-[#48adb9] text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-semibold hover:bg-[#3a8a94] transition disabled:opacity-60 text-sm sm:text-base"
           >
             {saving ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                 Saving...
               </>
             ) : (
               <>
-                <Save className="w-5 h-5" />
+                <Save className="w-4 h-4 sm:w-5 sm:h-5" />
                 Save Changes
               </>
             )}
           </button>
         </div>
 
-        {/* Main Title */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border">
-          <label className="block text-lg font-semibold text-gray-800 mb-3">
+        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border">
+          <label className="block text-base sm:text-lg font-semibold text-gray-800 mb-2 sm:mb-3">
             Main Title
           </label>
           <input
@@ -161,28 +150,27 @@ useEffect(() => {
             value={mainTitle}
             onChange={(e) => setMainTitle(e.target.value)}
             placeholder="e.g. Why Choose Reckonext?"
-            className="w-full p-4 text-lg border rounded-lg focus:ring-2 focus:ring-[#48adb9] focus:border-[#48adb9] transition"
+            className="w-full p-3 sm:p-4 text-base border rounded-lg focus:ring-2 focus:ring-[#48adb9] focus:border-[#48adb9] transition"
           />
         </div>
 
-        {/* Advantages */}
         <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold text-[#48adb9]">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+            <h2 className="text-xl sm:text-2xl font-semibold text-[#48adb9]">
               Advantages ({advantages.length})
             </h2>
             <button
               onClick={addAdvantage}
-              className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-green-700 transition"
+              className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg font-medium hover:bg-green-700 transition text-sm sm:text-base"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
               Add Advantage
             </button>
           </div>
 
           {advantages.length === 0 ? (
-            <div className="text-center py-12 bg-gray-50 rounded-xl text-gray-500">
-              <p className="text-lg">
+            <div className="text-center py-10 sm:py-12 bg-gray-50 rounded-xl text-gray-500">
+              <p className="text-base sm:text-lg">
                 No advantages yet. Click “Add Advantage” to start.
               </p>
             </div>
@@ -191,23 +179,23 @@ useEffect(() => {
               {advantages.map((item, index) => (
                 <div
                   key={index}
-                  className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition"
+                  className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border hover:shadow-md transition"
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-sm font-medium text-[#48adb9] bg-[#48adb9]/10 px-3 py-1 rounded-full">
+                  <div className="flex justify-between items-start mb-3 sm:mb-4">
+                    <span className="text-xs sm:text-sm font-medium text-[#48adb9] bg-[#48adb9]/10 px-2 sm:px-3 py-1 rounded-full">
                       Advantage #{index + 1}
                     </span>
                     <button
                       onClick={() => removeAdvantage(index)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 p-2 rounded-lg transition"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 p-1.5 sm:p-2 rounded-lg transition"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-5">
+                  <div className="grid md:grid-cols-2 gap-4 sm:gap-5">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                         Title
                       </label>
                       <input
@@ -217,11 +205,11 @@ useEffect(() => {
                         onChange={(e) =>
                           handleAdvChange(index, "title", e.target.value)
                         }
-                        className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#48adb9] focus:border-[#48adb9]"
+                        className="w-full p-2.5 sm:p-3 border rounded-lg focus:ring-2 focus:ring-[#48adb9] focus:border-[#48adb9]"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                         Description
                       </label>
                       <textarea
@@ -231,7 +219,7 @@ useEffect(() => {
                           handleAdvChange(index, "description", e.target.value)
                         }
                         rows={3}
-                        className="w-full p-3 border rounded-lg resize-y focus:ring-2 focus:ring-[#48adb9] focus:border-[#48adb9]"
+                        className="w-full p-2.5 sm:p-3 border rounded-lg resize-y focus:ring-2 focus:ring-[#48adb9] focus:border-[#48adb9]"
                       />
                     </div>
                   </div>
@@ -241,50 +229,7 @@ useEffect(() => {
             </div>
           )}
         </div>
-
-        {/* Mobile Save Button */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg z-40">
-          <button
-            onClick={saveAdvantages}
-            disabled={saving}
-            className="w-full flex items-center justify-center gap-2 bg-[#48adb9] text-white py-3 rounded-lg font-bold hover:bg-[#3a8a94] transition disabled:opacity-60"
-          >
-            {saving ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              <>
-                <Save className="w-5 h-5" />
-                Save Changes
-              </>
-            )}
-          </button>
-        </div>
       </div>
-
-   <button
-  onClick={scrollToTop}
-  className={`
-    fixed 
-    bottom-24 
-    right-6 
-    bg-[#48adb9] text-white 
-    p-4 
-    rounded-full 
-    shadow-2xl 
-    hover:bg-[#3a8a94] 
-    transition-all duration-300 
-    z-[9999] 
-    flex items-center justify-center
-    ${showScrollTop ? "opacity-100 scale-100" : "opacity-0 scale-50 pointer-events-none"}
-  `}
-  aria-label="Scroll to top"
->
-  <ArrowUp className="w-6 h-6" />
-</button>
-
     </>
   );
 }

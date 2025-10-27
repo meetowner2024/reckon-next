@@ -8,10 +8,10 @@ export default function HeaderForm() {
   const [preview, setPreview] = useState(null);
   const [existingLogoName, setExistingLogoName] = useState(null);
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Fetch existing header
   useEffect(() => {
     const fetchHeader = async () => {
       try {
@@ -23,9 +23,12 @@ export default function HeaderForm() {
         if (data.logo) {
           const fullPath = `/uploads/${data.logo}`;
           setPreview(fullPath);
-
-          // Extract filename from path: header/1761219537219-Reckonext-logo.png → Reckonext-logo.png
-          const filename = data.logo.split("/").pop()?.split("-").slice(1).join("-");
+          const filename = data.logo
+            .split("/")
+            .pop()
+            ?.split("-")
+            .slice(1)
+            .join("-");
           setExistingLogoName(filename || "logo.png");
         }
       } catch (err) {
@@ -41,7 +44,7 @@ export default function HeaderForm() {
     setLogo(file);
     if (file) {
       setPreview(URL.createObjectURL(file));
-      setExistingLogoName(null); // New file selected → hide old name
+      setExistingLogoName(null);
     }
   };
 
@@ -51,8 +54,32 @@ export default function HeaderForm() {
     setExistingLogoName(null);
   };
 
+  const validatePhone = (value) => {
+    const cleaned = value.trim();
+    const phoneRegex = /^(\+91)?[6-9]\d{9}$/;
+    if (!phoneRegex.test(cleaned)) {
+      setPhoneError(
+        "Enter a valid 10-digit mobile number (with or without +91)."
+      );
+    } else {
+      setPhoneError("");
+    }
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    setPhone(value);
+    validatePhone(value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (phoneError || !phone) {
+      setMessage("Please enter a valid phone number.");
+      return;
+    }
+
     setLoading(true);
     setMessage("");
 
@@ -72,7 +99,12 @@ export default function HeaderForm() {
         setMessage(data.message || "Header updated successfully");
         if (data.logo) {
           setPreview(`/uploads/${data.logo}`);
-          const filename = data.logo.split("/").pop()?.split("-").slice(1).join("-");
+          const filename = data.logo
+            .split("/")
+            .pop()
+            ?.split("-")
+            .slice(1)
+            .join("-");
           setExistingLogoName(filename || "logo.png");
         } else {
           setExistingLogoName(null);
@@ -94,7 +126,6 @@ export default function HeaderForm() {
       <h2 className="text-2xl font-bold mb-6 text-center">Update Header</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Logo */}
         <div className="flex flex-col items-center">
           {preview ? (
             <div className="relative w-48 h-48 mb-3">
@@ -116,14 +147,12 @@ export default function HeaderForm() {
             <p className="text-white text-sm mb-2">No logo uploaded</p>
           )}
 
-          {/* Show filename if exists (and no new file selected) */}
           {existingLogoName && !logo && (
             <p className="text-sm text-white mb-2 italic">
               Current: <span className="font-medium">{existingLogoName}</span>
             </p>
           )}
 
-          {/* Show selected file name */}
           {logo && (
             <p className="text-sm text-white mb-2 italic">
               Selected: <span className="font-medium">{logo.name}</span>
@@ -137,23 +166,25 @@ export default function HeaderForm() {
             className="w-full border-2 border-white rounded-md p-2 text-black bg-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white file:text-[#48ADB9] hover:file:bg-gray-100"
           />
         </div>
-
-        {/* Phone */}
         <div>
           <label className="block mb-2 font-semibold">Phone Number</label>
           <input
             type="text"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="Enter phone number"
-            className="w-full p-3 rounded-md border-2 border-white text-black font-medium"
+            onChange={handlePhoneChange}
+            placeholder="e.g. +919876543210 or 9876543210"
+            className={`w-full p-3 rounded-md border-2 text-black font-medium ${
+              phoneError ? "border-red-500" : "border-white"
+            }`}
           />
+          {phoneError && (
+            <p className="text-sm text-red-200 mt-1">{phoneError}</p>
+          )}
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || phoneError}
           className="w-full bg-white text-[#48ADB9] p-3 rounded-md font-bold hover:bg-gray-100 disabled:opacity-60 transition"
         >
           {loading ? "Updating..." : "Update Header"}
@@ -161,7 +192,13 @@ export default function HeaderForm() {
       </form>
 
       {message && (
-        <p className={`mt-4 text-center font-semibold ${message.includes("success") ? "text-green-300" : "text-red-300"}`}>
+        <p
+          className={`mt-4 text-center font-semibold ${
+            message.toLowerCase().includes("success")
+              ? "text-green-300"
+              : "text-red-300"
+          }`}
+        >
           {message}
         </p>
       )}

@@ -6,25 +6,21 @@ import { ChevronRight, ChevronDown } from "lucide-react";
 export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [openSubmenus, setOpenSubmenus] = useState({
-    hero: false,
-    products: false,
-  });
+
+  const [openSubmenu, setOpenSubmenu] = useState(null);
+
   const toggleSubmenu = (key) => {
-    setOpenSubmenus((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+    setOpenSubmenu((prev) => (prev === key ? null : key));
   };
+
   useEffect(() => {
-    const updated = { ...openSubmenus };
-    if (pathname.startsWith("/admin/hero") && !updated.hero) {
-      updated.hero = true;
+    if (pathname.startsWith("/admin/hero")) {
+      setOpenSubmenu("hero");
+    } else if (pathname.startsWith("/admin/products")) {
+      setOpenSubmenu("products");
+    } else {
+      setOpenSubmenu(null);
     }
-    if (pathname.startsWith("/admin/products") && !updated.products) {
-      updated.products = true;
-    }
-    setOpenSubmenus(updated);
   }, [pathname]);
   const navItems = [
     { href: "/admin", label: "Dashboard" },
@@ -80,7 +76,6 @@ export default function Sidebar() {
   ];
   return (
     <>
-      {}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-[#48ADB9] text-white rounded shadow-lg hover:bg-[#3d8f99] transition"
         onClick={() => setIsOpen(!isOpen)}
@@ -99,7 +94,7 @@ export default function Sidebar() {
           />
         </svg>
       </button>
-      {}
+
       <div
         className={`w-64 bg-[#48ADB9] text-white h-screen fixed transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -112,33 +107,32 @@ export default function Sidebar() {
               <li key={item.href}>
                 {item.submenu ? (
                   <>
-                    {}
                     <button
                       onClick={() => toggleSubmenu(item.submenuKey)}
                       className={`w-full text-left p-2 rounded flex justify-between items-center transition-all duration-200 ${
                         pathname.startsWith(item.href)
-                          ? "bg-gray-700 font-medium"
-                          : "hover:bg-gray-700"
+                          ? "bg-white text-[#48ADB9] font-semibold"
+                          : "hover:bg-[#3d8f99]"
                       }`}
                     >
                       <span>{item.label}</span>
-                      {openSubmenus[item.submenuKey] ? (
+                      {openSubmenu === item.submenuKey ? (
                         <ChevronDown className="w-4 h-4 transition-transform" />
                       ) : (
                         <ChevronRight className="w-4 h-4 transition-transform" />
                       )}
                     </button>
-                    {}
-                    {openSubmenus[item.submenuKey] && (
-                      <ul className="p-1 mt-1 space-y-1 bg-gray-800 rounded-md overflow-hidden">
+
+                    {openSubmenu === item.submenuKey && (
+                      <ul className="p-1 mt-1 space-y-1 bg-[#3a8a94] rounded-md overflow-hidden">
                         {item.submenu.map((sub) => (
                           <li key={sub.href}>
                             <Link
                               href={sub.href}
                               className={`block p-2 rounded text-sm transition-colors ${
                                 pathname === sub.href
-                                  ? "bg-gray-600  text-white font-medium"
-                                  : "hover:bg-gray-600"
+                                  ? "bg-white text-[#48ADB9] font-semibold"
+                                  : "hover:bg-[#60c3cf]"
                               }`}
                               onClick={() => setIsOpen(false)}
                             >
@@ -154,8 +148,8 @@ export default function Sidebar() {
                     href={item.href}
                     className={`block p-2 rounded transition-colors ${
                       pathname === item.href
-                        ? "bg-gray-700 font-medium"
-                        : "hover:bg-gray-700"
+                        ? "bg-white text-[#48ADB9] font-semibold"
+                        : "hover:bg-[#3d8f99]"
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
@@ -167,7 +161,7 @@ export default function Sidebar() {
           </ul>
         </div>
       </div>
-      {}
+
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
