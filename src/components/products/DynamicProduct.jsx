@@ -5,7 +5,6 @@ import Advantages from "./Dynamic/Advantages";
 import Faqs from "./Dynamic/Faqs";
 
 export default function DynamicProduct({ product }) {
-  console.log("product: ", product);
   return (
     <div className="bg-gradient-to-br from-white via-[#f8fbff]/50 to-[#e6f0ff]/50">
       <Banner title={product.title} subtitle={product.subtitle} />

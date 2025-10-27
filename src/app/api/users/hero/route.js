@@ -1,4 +1,3 @@
-
 import { getDB } from "@/lib/server/mongo";
 
 export const runtime = "nodejs";
@@ -12,7 +11,7 @@ export async function GET() {
       .sort({ created_at: -1 })
       .toArray();
 
-    const serialized = slides.map(s => ({
+    const serialized = slides.map((s) => ({
       ...s,
       _id: s._id.toString(),
     }));
@@ -21,14 +20,18 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-      
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
       },
     });
   } catch (err) {
     console.error("GET /api/hero error:", err);
-    return new Response(
-      JSON.stringify({ message: "Failed to fetch slides" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({ message: "Failed to fetch slides" }), {
+      status: 500,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
+    });
   }
 }

@@ -20,8 +20,20 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className= {`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <link
+          rel="preload"
+          href="/api/users/header/getHeader"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/api/users/hero"
+          as="fetch"
+          crossOrigin="anonymous"
+        />
         {children}
       </body>
     </html>

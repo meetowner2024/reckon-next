@@ -1,14 +1,11 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import * as LucideIcons from "lucide-react";
-
 const AdvantagesSection = () => {
   const [advantages, setAdvantages] = useState([]);
-  const [title, setTitle] = useState("Our Advantages");
+  const [title, setTitle] = useState("The Reckonext Advantages");
   const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef(null);
-
-  // Keyword-based icon mapping
   const iconMap = {
     leak: "Droplet",
     water: "Droplet",
@@ -27,7 +24,6 @@ const AdvantagesSection = () => {
     seal: "Lock",
     sustainable: "Recycle",
   };
-
   const fallbackIcons = [
     "ShieldCheck",
     "Leaf",
@@ -40,22 +36,17 @@ const AdvantagesSection = () => {
     "Cube",
     "Sparkles",
   ];
-
-
   const getIconByTitle = (title, index) => {
     if (!title) return LucideIcons.HelpCircle;
     const lower = title.toLowerCase();
-
     for (const [keyword, iconName] of Object.entries(iconMap)) {
       if (lower.includes(keyword) && LucideIcons[iconName]) {
         return LucideIcons[iconName];
       }
     }
-
     const fallbackName = fallbackIcons[index % fallbackIcons.length];
     return LucideIcons[fallbackName] || LucideIcons.HelpCircle;
   };
-
   useEffect(() => {
     const fetchAdvantages = async () => {
       try {
@@ -71,11 +62,9 @@ const AdvantagesSection = () => {
     };
     fetchAdvantages();
   }, []);
-
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
-
     let animationFrame;
     const scrollSpeed = 1;
     const scroll = () => {
@@ -87,23 +76,22 @@ const AdvantagesSection = () => {
       }
       animationFrame = requestAnimationFrame(scroll);
     };
-
     animationFrame = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationFrame);
   }, [isPaused]);
-
   return (
     <section className="w-full bg-gray-50 pt-12 pb-4">
       <h3 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-[#000000] mb-4">
         {title.split(" ").map((word, i) =>
           word.toLowerCase().includes("reckonext") ? (
-            <span key={i} className="text-[#1e3a8a]">{word} </span>
+            <span key={i} className="text-[#1e3a8a]">
+              {word}{" "}
+            </span>
           ) : (
             word + " "
           )
         )}
       </h3>
-
       <div className="max-w-[1180px] md:px-0 px-4 mx-auto">
         <style>{`
           .carousel-container {
@@ -125,7 +113,6 @@ const AdvantagesSection = () => {
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
           }
         `}</style>
-
         <div
           ref={scrollRef}
           className="carousel-container flex gap-4 sm:gap-6 md:gap-5 py-3 px-4 sm:px-6 md:px-8"
@@ -151,5 +138,4 @@ const AdvantagesSection = () => {
     </section>
   );
 };
-
 export default AdvantagesSection;

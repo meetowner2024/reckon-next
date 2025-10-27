@@ -22,6 +22,7 @@ const AboutSection = ({ product }) => {
   const title = product?.title || "Product";
   const subtitle = product?.subtitle || "Premium quality for modern living.";
   const aboutTitle = about.title || `About ${title}`;
+
   const description =
     about.description ||
     `Discover the elegance and durability of our ${title}.`;

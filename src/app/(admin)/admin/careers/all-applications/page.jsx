@@ -119,7 +119,6 @@ export default function CareersSubmissionsPage() {
               {applications.length === 1 ? "application" : "applications"} total
             </p>
           </div>
-
           <button
             onClick={fetchApplications}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 text-sm font-medium text-[#0e55a1] rounded-lg hover:bg-[#0e55a1]/5 hover:border-[#0e55a1] transition-all ml-auto"
@@ -128,7 +127,6 @@ export default function CareersSubmissionsPage() {
             Refresh
           </button>
         </div>
-
         <div className=" overflow-hidden rounded-2xl shadow-lg border border-gray-200 bg-white">
           <table className="w-full">
             <thead>
@@ -193,7 +191,6 @@ export default function CareersSubmissionsPage() {
                     <td className="px-6 py-7 text-sm font-mono text-gray-600 font-medium">
                       {idx + 1}
                     </td>
-
                     {Object.keys(app)
                       .filter(
                         (k) =>
@@ -224,7 +221,6 @@ export default function CareersSubmissionsPage() {
                           </td>
                         );
                       })}
-
                     <td className="px-6 py-7 text-sm">
                       {app.resume ? (
                         <a
@@ -240,7 +236,6 @@ export default function CareersSubmissionsPage() {
                         <span className="text-gray-400">—</span>
                       )}
                     </td>
-
                     <td className="px-6 py-7 text-sm text-gray-600">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-gray-400" />
@@ -249,7 +244,6 @@ export default function CareersSubmissionsPage() {
                         </span>
                       </div>
                     </td>
-
                     <td className="px-6 py-7 text-left">
                       <div className="flex items-center ">
                         <button
@@ -272,7 +266,6 @@ export default function CareersSubmissionsPage() {
             </tbody>
           </table>
         </div>
-
         <div className="md:hidden space-y-5">
           {applications.map((app, idx) => (
             <motion.div
@@ -303,7 +296,6 @@ export default function CareersSubmissionsPage() {
                   </button>
                 </div>
               </div>
-
               <div className="space-y-4">
                 {Object.keys(app)
                   .filter(
@@ -324,7 +316,6 @@ export default function CareersSubmissionsPage() {
                     </div>
                   ))}
               </div>
-
               {app.resume && (
                 <a
                   href={app.resume}
@@ -336,7 +327,6 @@ export default function CareersSubmissionsPage() {
                   View Resume
                 </a>
               )}
-
               <div className="flex items-center gap-1.5 text-xs text-gray-500 pt-3 border-t border-gray-100">
                 <Calendar className="w-3.5 h-3.5" />
                 <span className="font-medium">

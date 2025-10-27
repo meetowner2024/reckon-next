@@ -57,8 +57,8 @@ export default function AddProduct() {
   const removeBannerImage = (index) => {
     setBannerImages((prev) => prev.filter((_, i) => i !== index));
   };
-  const addAboutSection = () =>
-    setAboutSections((prev) => [...prev, { title: "", description: "" }]);
+  // const addAboutSection = () =>
+  //   setAboutSections((prev) => [...prev, { title: "", description: "" }]);
   const updateAboutSection = (i, field, val) =>
     setAboutSections((prev) =>
       prev.map((x, idx) => (idx === i ? { ...x, [field]: val } : x))
@@ -119,7 +119,6 @@ export default function AddProduct() {
       const result = await res.json();
       if (res.ok) {
         setMsg(isEdit ? "Product updated!" : "Product added!");
-        setTimeout(() => router.push("/admin/products"), 1500);
       } else {
         setMsg(result.message || "Save failed");
       }
@@ -214,13 +213,13 @@ export default function AddProduct() {
         <div className="space-y-4">
           <div className="flex justify-between">
             <h3 className="text-xl font-bold text-green-700">About Sections</h3>
-            <button
+            {/* <button
               type="button"
               onClick={addAboutSection}
               className="text-green-600 flex items-center gap-1"
             >
               <Plus size={20} /> Add
-            </button>
+            </button> */}
           </div>
           {aboutSections.map((s, i) => (
             <div

@@ -440,7 +440,6 @@ export default function CareersAdmin() {
             </div>
           ))}
         </div>
-
         {}
         <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-lg z-40">
           <button

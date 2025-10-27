@@ -22,7 +22,11 @@ export async function GET(req) {
     const products = await db.collection("products").find(query).toArray();
     return new Response(JSON.stringify(products), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
     });
   } catch (error) {
     console.error("GET Error:", error);

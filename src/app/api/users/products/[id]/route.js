@@ -13,7 +13,14 @@ export async function GET(req, context) {
         status: 404,
       });
     }
-    return new Response(JSON.stringify(product), { status: 200 });
+    return new Response(JSON.stringify(product), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
+    });
   } catch (error) {
     console.error("GET ONE Error:", error);
     return new Response(JSON.stringify({ message: "Error fetching product" }), {
