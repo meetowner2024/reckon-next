@@ -1,15 +1,6 @@
 import Home from "@/components/Home/Home";
 export const dynamic = "force-dynamic";
 export default async function HomePage() {
-  function getBaseUrl() {
-    if (process.env.NODE_ENV === "development") {
-      return "http://localhost:10000";
-    }
-    return (
-      process.env.RENDER_EXTERNAL_URL || "https://reckon-next.onrender.com"
-    );
-  }
-  const baseUrl = getBaseUrl();
   const [
     headerRes,
     heroRes,
@@ -22,36 +13,47 @@ export default async function HomePage() {
     footerRes,
     projDropdownRes,
   ] = await Promise.all([
-    fetch(`${baseUrl}/api/users/header/getHeader`, {
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/header/getHeader`,
+      {
+        cache: "force-cache",
+      }
+    ),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/hero`, {
       cache: "force-cache",
     }),
-    fetch(`${baseUrl}/api/users/hero`, {
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/advantages`, {
       cache: "force-cache",
     }),
-    fetch(`${baseUrl}/api/users/advantages`, {
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/products`, {
       cache: "force-cache",
     }),
-    fetch(`${baseUrl}/api/users/products`, {
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/whychooseus`, {
       cache: "force-cache",
     }),
-    fetch(`${baseUrl}/api/users/whychooseus`, {
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/testimonials`, {
       cache: "force-cache",
     }),
-    fetch(`${baseUrl}/api/users/testimonials`, {
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/faqs`, {
       cache: "force-cache",
     }),
-    fetch(`${baseUrl}/api/users/faqs`, {
+    fetch(
+      `${
+        process.env.NEXT_PUBLIC_BASE_URL || ""
+      }/api/users/contactus/form-config`,
+      {
+        cache: "force-cache",
+      }
+    ),
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/footer`, {
       cache: "force-cache",
     }),
-    fetch(`${baseUrl}/api/users/contactus/form-config`, {
-      cache: "force-cache",
-    }),
-    fetch(`${baseUrl}/api/users/footer`, {
-      cache: "force-cache",
-    }),
-    fetch(`${baseUrl}/api/users/productsDropdown`, {
-      cache: "force-cache",
-    }),
+    fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/productsDropdown`,
+      {
+        cache: "force-cache",
+      }
+    ),
   ]);
   const [
     header,
