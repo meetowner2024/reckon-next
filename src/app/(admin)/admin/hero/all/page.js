@@ -104,7 +104,7 @@ export default function HeroSlides() {
 
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold" style={{ color: "#48adb9" }}>
-          Hero Slides
+         Banners 
         </h1>
         <a
           href="/hero/add"
@@ -177,8 +177,8 @@ export default function HeroSlides() {
 
       {isModalOpen && (
         <div className="fixed inset-0 backdrop-blur bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
-            <h2 className="text-2xl font-bold mb-4 text-[#48adb9]">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 hide-scrollbar">
+            <h2 className="text-2xl font-bold text-center mb-4 text-[#48adb9]">
               {editingSlide ? "Edit Slide" : "Add New Slide"}
             </h2>
 

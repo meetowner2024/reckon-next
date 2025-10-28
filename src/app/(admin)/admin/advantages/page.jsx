@@ -63,7 +63,7 @@ const removeAdvantage = async (index) => {
     if (!res.ok) throw new Error(data.message || "Delete failed");
 
     alert("Advantage deleted successfully!");
-    fetchAdvantages(); // refresh list from DB
+    fetchAdvantages(); 
   } catch (err) {
     console.error(err);
     alert("Failed to delete advantage");

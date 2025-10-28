@@ -101,7 +101,7 @@ export default function Sidebar() {
       <div
         className={`w-64 bg-[#48ADB9] text-white h-screen fixed transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 z-40 overflow-y-auto`}
+        } lg:translate-x-0 z-40 overflow-y-auto hide-scrollbar`}
       >
         <div className="p-4">
           <h2 className="text-xl font-bold text-center mb-6">Admin Panel</h2>

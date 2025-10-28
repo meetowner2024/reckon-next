@@ -242,7 +242,7 @@ export default function FooterAdmin() {
                 <img
                   src={logoPreview || footer.logo}
                   alt="Logo"
-                  className="h-20 w-auto border-2 border-gray-300 rounded-lg object-contain bg-white"
+                  className="h-20 w-auto border-2 border-gray-500 rounded-lg object-contain bg-white"
                 />
                 <button
                   onClick={clearLogo}
@@ -271,7 +271,7 @@ export default function FooterAdmin() {
               onChange={setField}
               placeholder="Footer description..."
               rows={3}
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full p-3 border border-gray-500 rounded-lg focus:ring-2  outline-none resize-none"
             />
           </section>
 
@@ -284,14 +284,14 @@ export default function FooterAdmin() {
                   placeholder="Type (e.g. PLANT LOCATION)"
                   value={loc.type}
                   onChange={e => setLoc(i, "type", e.target.value)}
-                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 p-2 border border-gray-500 rounded-md focus:ring-2  outline-none"
                 />
                 <input
                   type="text"
                   placeholder="Address"
                   value={loc.address}
                   onChange={e => setLoc(i, "address", e.target.value)}
-                  className="flex-[2] p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="flex-[2] p-2 border border-gray-500 rounded-md focus:ring-2  outline-none"
                 />
                 <button
                   onClick={() => removeLocation(i)}
@@ -323,14 +323,14 @@ export default function FooterAdmin() {
                   placeholder="Link text"
                   value={link.title}
                   onChange={e => setQL(i, "title", e.target.value)}
-                  className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 p-2 border border-gray-500 rounded-md focus:ring-2  outline-none"
                 />
                 <input
                   type="url"
                   placeholder="https://..."
                   value={link.url}
                   onChange={e => setQL(i, "url", e.target.value)}
-                  className="flex-[2] p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  className="flex-[2] p-2 border border-gray-500 rounded-md focus:ring-2  outline-none"
                 />
                 <button
                   onClick={() => removeQuickLink(i)}
@@ -352,7 +352,7 @@ export default function FooterAdmin() {
               Add Quick Link
             </button>
             {footer.quickLinks.some(l => l.title.trim() && l.url.trim()) && (
-              <div className="mt-5 p-4 bg-gray-100 rounded-lg border border-dashed border-gray-300">
+              <div className="mt-5 p-4 bg-gray-100 rounded-lg border border-dashed border-gray-500">
                 <strong className="block mb-2 text-gray-700">Preview:</strong>
                 <ul className="list-disc list-inside space-y-1">
                   {footer.quickLinks
@@ -382,7 +382,7 @@ export default function FooterAdmin() {
                     value={plat}
                     onChange={e => setSocial(plat, "platform", e.target.value)}
                     disabled={isDefault}
-                    className={`w-36 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 ${
+                    className={`w-36 p-2 border rounded-md focus:ring-2  outline-none ${
                       isDefault ? "bg-gray-100 cursor-not-allowed" : "bg-white"
                     }`}
                     title={isDefault ? "Default – cannot rename" : ""}
@@ -392,7 +392,7 @@ export default function FooterAdmin() {
                     placeholder="https://..."
                     value={url}
                     onChange={e => setSocial(plat, "url", e.target.value)}
-                    className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 p-2 border border-gray-500 rounded-md focus:ring-2  outline-none"
                   />
                   {!isEmpty && (
                     <button

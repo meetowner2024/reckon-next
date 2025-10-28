@@ -43,7 +43,7 @@ export default function AdminLayout({ children }) {
 
       <div
         ref={contentRef}
-        className="flex-1 p-6 overflow-auto relative lg:ml-64"
+        className="flex-1 p-6 overflow-auto relative lg:ml-64 hide-scrollbar"
       >
         {children}
 

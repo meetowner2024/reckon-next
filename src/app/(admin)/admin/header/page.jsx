@@ -9,7 +9,6 @@ export default function HeaderForm() {
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchHeader = async () => {
@@ -75,12 +74,13 @@ export default function HeaderForm() {
     e.preventDefault();
 
     if (phoneError || !phone) {
-      setMessage("Please enter a valid phone number.");
+     alert("Please enter a valid phone number.");
       return;
     }
 
     setLoading(true);
-    setMessage("");
+   
+    
 
     try {
       const formData = new FormData();
@@ -95,7 +95,7 @@ export default function HeaderForm() {
 
       const data = await res.json();
       if (res.ok) {
-        setMessage(data.message || "Header updated successfully");
+        alert(data.message || "Header updated successfully");
         if (data.logo) {
           setPreview(`/uploads/${data.logo}`);
           const filename = data.logo
@@ -110,11 +110,11 @@ export default function HeaderForm() {
         }
         setLogo(null);
       } else {
-        setMessage(data.message || "Update failed");
+        alert(data.message || "Update failed");
       }
     } catch (err) {
       console.error("Error submitting form:", err);
-      setMessage("Something went wrong");
+     alert("Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -172,8 +172,8 @@ export default function HeaderForm() {
             value={phone}
             onChange={handlePhoneChange}
             placeholder="e.g. +919876543210 or 9876543210"
-            className={`w-full p-3 rounded-md border-2 text-black font-medium ${
-              phoneError ? "border-red-500" : "border-white"
+            className={`w-full p-3 rounded-md border  border-black solid-balck-1px  focus:ring-2 outline-none  text-black font-medium ${
+              phoneError ? "border-red-500" : ""
             }`}
           />
           {phoneError && (
@@ -190,17 +190,7 @@ export default function HeaderForm() {
         </button>
       </form>
 
-      {message && (
-        <p
-          className={`mt-4 text-center font-semibold ${
-            message.toLowerCase().includes("success")
-              ? "text-green-300"
-              : "text-red-300"
-          }`}
-        >
-          {message}
-        </p>
-      )}
+      
     </div>
   );
 }

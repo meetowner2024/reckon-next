@@ -11,7 +11,6 @@ export default function AddProduct() {
     { title: "", description: "" },
   ]);
   const [faqs, setFaqs] = useState([{ question: "", answer: "" }]);
-  const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [productId, setProductId] = useState(null);
@@ -43,7 +42,7 @@ export default function AddProduct() {
         product.banner?.map((url) => ({ url, preview: url })) || []
       );
     } catch (err) {
-      setMsg("Failed to load product");
+      alert("Failed to load product");
     }
   };
   const handleBannerImages = (e) => {
@@ -87,11 +86,10 @@ export default function AddProduct() {
   const submit = async (e) => {
     e.preventDefault();
     if (!title || bannerImages.length === 0) {
-      setMsg("Title and at least one image required");
+      alert("Title and at least one image required");
       return;
     }
     setLoading(true);
-    setMsg("");
     try {
       const newImageUrls = await Promise.all(
         bannerImages
@@ -118,12 +116,12 @@ export default function AddProduct() {
       });
       const result = await res.json();
       if (res.ok) {
-        setMsg(isEdit ? "Product updated!" : "Product added!");
+        alert(isEdit ? "Product updated!" : "Product added!");
       } else {
-        setMsg(result.message || "Save failed");
+        alert(result.message || "Save failed");
       }
     } catch (err) {
-      setMsg(err.message || "Error");
+      alert(err.message || "Error");
     } finally {
       setLoading(false);
     }
@@ -313,17 +311,7 @@ export default function AddProduct() {
           <Upload size={20} />
         </button>
       </form>
-      {msg && (
-        <div
-          className={`mt-6 p-4 rounded-lg text-center text-sm font-medium ${
-            msg.includes("success") || msg.includes("updated")
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
-          }`}
-        >
-          {msg}
-        </div>
-      )}
+    
     </div>
   );
 }
