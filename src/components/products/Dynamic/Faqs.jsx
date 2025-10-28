@@ -137,6 +137,7 @@ export default function Faqs({ product }) {
             );
           })}
         </div>
+      
       </div>
     </section>
   );
