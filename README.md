@@ -1,5 +1,8 @@
+# RECKON
+
 ## Getting Started
-Development Run:
+
+## Development Run:
 1.First install dependicies:
 npm install 
 2.run the development server:
