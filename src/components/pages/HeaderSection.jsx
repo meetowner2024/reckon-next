@@ -12,18 +12,18 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
   const closeTimeoutRef = useRef(null);
   const formatPhone = (num) => {
     if (!num) return "";
-    const clean = num.replace(/\D/g, ""); // remove non-digits
+    const clean = num.replace(/\D/g, "");
     if (clean.startsWith("91")) {
       const national = clean.slice(2);
       return `+91 ${national.slice(0, 5)} ${national.slice(5)}`;
     } else if (clean.length === 10) {
       return `+91 ${clean.slice(0, 5)} ${clean.slice(5)}`;
     }
-    return `+${clean}`; // fallback
+    return `+${clean}`;
   };
-
   const formatted = formatPhone(phone);
   const handleNavigation = (path) => {
+    if (!path) return;
     router.push(path);
     window.scrollTo({ top: 0, behavior: "smooth" });
     setOpenSubmenu(null);
