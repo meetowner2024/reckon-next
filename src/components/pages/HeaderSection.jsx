@@ -4,42 +4,48 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X, Phone } from "lucide-react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-
 const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const closeTimeoutRef = useRef(null);
+  const formatPhone = (num) => {
+    if (!num) return "";
+    const clean = num.replace(/\D/g, ""); // remove non-digits
+    if (clean.startsWith("91")) {
+      const national = clean.slice(2);
+      return `+91 ${national.slice(0, 5)} ${national.slice(5)}`;
+    } else if (clean.length === 10) {
+      return `+91 ${clean.slice(0, 5)} ${clean.slice(5)}`;
+    }
+    return `+${clean}`; // fallback
+  };
 
+  const formatted = formatPhone(phone);
   const handleNavigation = (path) => {
     router.push(path);
     window.scrollTo({ top: 0, behavior: "smooth" });
     setOpenSubmenu(null);
     setMobileMenuOpen(false);
   };
-
   const handleMouseEnter = (itemName) => {
     if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setOpenSubmenu(itemName);
   };
-
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => setOpenSubmenu(null), 300);
   };
-
   const handleMainItemClick = (item) => {
     if (item.submenu) {
       if (openSubmenu === item.name) handleNavigation(item.path);
       else setOpenSubmenu(item.name);
     } else handleNavigation(item.path);
   };
-
   const wobbleAnimation = {
     rotate: [0, -10, 10, -10, 10, 0],
     transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
   };
-
   const navItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -56,7 +62,6 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
     { name: "Careers", path: "/careers" },
     { name: "Contact", path: "/contact" },
   ];
-
   return (
     <motion.header
       initial={{ y: -50, opacity: 0 }}
@@ -66,7 +71,7 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 relative">
-          {/* Logo */}
+          {}
           <div
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => handleNavigation("/")}
@@ -80,8 +85,7 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
               unoptimized
             />
           </div>
-
-          {/* Desktop Menu */}
+          {}
           <div className="hidden lg:flex absolute left-1/2 transform -translate-x-1/2 items-center space-x-8">
             {navItems.map((item) => (
               <div
@@ -109,7 +113,6 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
                     />
                   )}
                 </motion.button>
-
                 <AnimatePresence>
                   {item.submenu?.length > 0 && openSubmenu === item.name && (
                     <motion.div
@@ -141,8 +144,7 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
               </div>
             ))}
           </div>
-
-          {/* Phone */}
+          {}
           <div className="hidden lg:flex items-center gap-2 text-[#0e55a1] font-medium">
             <a
               href={`tel:${phone}`}
@@ -151,11 +153,10 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
               <motion.div animate={wobbleAnimation}>
                 <Phone className="w-4 h-4 text-[#0e55a1]" />
               </motion.div>
-              {phone}
+              {formatted}
             </a>
           </div>
-
-          {/* Mobile Menu Button */}
+          {}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 rounded-md text-[#7c7978] hover:text-[#0e55a1] hover:bg-gray-100"
@@ -163,8 +164,7 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
-
-        {/* Mobile Menu */}
+        {}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -196,7 +196,6 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
                         />
                       )}
                     </motion.button>
-
                     {item.submenu?.length > 0 && openSubmenu === item.name && (
                       <motion.div
                         initial={{ height: 0, opacity: 0 }}
@@ -220,7 +219,6 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
                     )}
                   </div>
                 ))}
-
                 <div className="mt-4 w-full border-t pt-3">
                   <a
                     href={`tel:${phone}`}
@@ -229,7 +227,7 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
                     <motion.div animate={wobbleAnimation}>
                       <Phone className="w-5 h-5 text-[#0e55a1]" />
                     </motion.div>
-                    {phone}
+                    {formatted}
                   </a>
                 </div>
               </div>
@@ -240,5 +238,4 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
     </motion.header>
   );
 };
-
 export default HeaderSection;
