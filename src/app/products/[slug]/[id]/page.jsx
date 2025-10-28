@@ -4,11 +4,13 @@ import { useParams } from "next/navigation";
 import HeaderSection from "@/components/pages/HeaderSection";
 import Footer from "@/components/pages/Footer";
 import DynamicProduct from "@/components/products/DynamicProduct";
+import { useSelector } from "react-redux";
 export default function ProductPage() {
   const { id, slug } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-
+ const projectsDropdown = useSelector((state) => state.projects.projectsDropdown);
+    const header=useSelector((state)=>state.header.header)
   useEffect(() => {
     async function fetchProduct() {
       try {
@@ -24,7 +26,7 @@ export default function ProductPage() {
 
     if (id) fetchProduct();
   }, [id]);
-
+ 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -43,7 +45,8 @@ export default function ProductPage() {
   }
   return (
     <div>
-      <HeaderSection />
+      <HeaderSection projectsDropdown={projectsDropdown}   
+        phone={header.phone} />
       <DynamicProduct product={product} />
       <Footer />
     </div>

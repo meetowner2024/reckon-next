@@ -5,6 +5,7 @@ import HeaderSection from "@/components/pages/HeaderSection";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 export default function Career() {
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,6 +13,9 @@ export default function Career() {
   const [submitMsg, setSubmitMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+   const footer = useSelector((state) => state.footer);
+    const projects=useSelector((state)=>state.projects.projectsDropdown)
+        const header=useSelector((state)=>state.header.header)
   useEffect(() => {
     fetch("/api/users/careers")
       .then((r) => r.json())
@@ -89,7 +93,8 @@ export default function Career() {
   } = config;
   return (
     <div className="min-h-screen bg-white">
-      <HeaderSection />
+      <HeaderSection projectsDropdown={projects}   logo={header.logo}
+        phone={header.phone}/>
       <PageBanner
         title="Careers"
         subtitle="Leading the industry with innovation and quality"
@@ -234,7 +239,7 @@ export default function Career() {
           </motion.div>
         </div>
       </section>
-      <Footer />
+     <Footer footer={footer.footerData} projects={projects}/>
     </div>
   );
 }

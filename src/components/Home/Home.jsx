@@ -2,7 +2,11 @@
 import { HeroSkeleton } from "@/utils/Skeletons/HeroSkeleton";
 import { SectionSkeleton } from "@/utils/Skeletons/SectionSkeleton";
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setProjectsDropdown } from "../store/slices/projectsSlice";
+import { setFooterData } from "../store/slices/footerSlice";
+import { setHeader } from "../store/slices/headerSlice";
 const HeaderSection = dynamic(() => import("@/components/pages/HeaderSection"));
 const HeroSection = dynamic(() => import("@/components/pages/HeroSection"));
 const AdvantagesSection = dynamic(() =>
@@ -35,7 +39,20 @@ export default function Home({
   footer,
   projectsDropdown,
 }) {
+ const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (projectsDropdown?.length) {
+      dispatch(setProjectsDropdown(projectsDropdown));
+    } if (footer) {
+      dispatch(setFooterData(footer));
+    }
+    if (header){
+      dispatch(setHeader(header))
+    }
+  }, [dispatch, projectsDropdown,footer,header]);
   return (
+    
     <main className="w-full overflow-hidden">
       <HeaderSection
         logo={header.logo}
