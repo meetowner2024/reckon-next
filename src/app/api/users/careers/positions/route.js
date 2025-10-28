@@ -11,7 +11,11 @@ export async function GET() {
       .toArray();
     return new Response(JSON.stringify(careers), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
     });
   } catch (error) {
     console.error("Error fetching careers:", error);

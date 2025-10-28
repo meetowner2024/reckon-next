@@ -26,7 +26,14 @@ export async function GET() {
   try {
     const db = await getDB();
     const doc = await db.collection("about").findOne({});
-    return NextResponse.json(doc || {});
+    return NextResponse.json(doc || {},{
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
+    });
   } catch (err) {
     return NextResponse.json({ error: "Failed to fetch" }, { status: 500 });
   }

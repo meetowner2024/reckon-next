@@ -93,7 +93,14 @@ export async function GET() {
       .findOne({}, { sort: { updated_at: -1 } });
     return new Response(
       JSON.stringify(config || { banner: null, sections: [] }),
-      { status: 200 }
+     {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
+    }
     );
   } catch (error) {
     console.error("Profile fetch error:", error);

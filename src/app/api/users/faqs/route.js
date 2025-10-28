@@ -14,7 +14,11 @@ export async function GET() {
 
     return new Response(JSON.stringify(faqs), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
     });
   } catch (error) {
     console.error("GET FAQs error:", error);

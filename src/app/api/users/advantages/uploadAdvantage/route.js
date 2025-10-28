@@ -7,7 +7,6 @@ export async function POST(req) {
     const body = await req.json();
     const { main_title, advantages } = body;
 
-    // Validate required fields
     if (
       !main_title ||
       !Array.isArray(advantages) ||
