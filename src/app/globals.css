@@ -19,6 +19,25 @@
   }
 }
 
+.swiper-pagination {
+  bottom: 24px !important;
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  margin: 0 4px !important;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background: white;
+  width: 24px;
+  border-radius: 6px;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -16,7 +16,7 @@ export default function Faqs({ product }) {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-5 py-2 bg-linear-to-r from-blue-600 to-indigo-700 text-White rounded-full text-sm font-bold shadow-lg mb-6"
+            className="inline-flex items-center gap-2 px-5 py-2 bg-linear-to-r from-blue-600 to-indigo-700 text-white rounded-full text-sm font-bold shadow-lg mb-6"
           >
             <HelpCircle className="w-4 h-4" />
             FAQ
@@ -137,22 +137,6 @@ export default function Faqs({ product }) {
             );
           })}
         </div>
-        {}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-center mt-16"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="group inline-flex items-center gap-3 px-8 py-4 bg-linear-to-r from-blue-600 to-indigo-700 text-white font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300"
-          >
-            Still Have Questions?
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </motion.button>
-        </motion.div>
       </div>
     </section>
   );

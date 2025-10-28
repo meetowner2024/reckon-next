@@ -18,7 +18,10 @@ export default function Career() {
   const projects = useSelector((state) => state.projects.projectsDropdown);
   const header = useSelector((state) => state.header.header);
   useEffect(() => {
-    fetch("/api/users/careers")
+    fetch("/api/users/careers", {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    })
       .then((r) => r.json())
       .then((data) => {
         setConfig(data);
@@ -27,7 +30,10 @@ export default function Career() {
       .catch(() => setLoadingConfig(false));
   }, []);
   useEffect(() => {
-    fetch("/api/users/careers/positions")
+    fetch("/api/users/careers/positions", {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    })
       .then((r) => r.json())
       .then((data) => {
         setPositions(data);

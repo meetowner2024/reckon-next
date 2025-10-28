@@ -13,40 +13,23 @@ const PageBanner = ({
   isProductSubpage = false,
 }) => {
   const [slide, setSlide] = useState(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!pageTitle) {
-      setLoading(false);
       return;
     }
 
-    fetch("/api/users/hero")
-      .then((r) => r.json())
+    fetch(`/api/users/hero/page-banner?title=${pageTitle}`, {
+      cache: "force-cache",
+      next: { revalidate: 300 },
+    })
+      .then((r) => r.json(setSlide))
       .then((slides) => {
-        if (Array.isArray(slides)) {
-          const match = slides.find(
-            (s) =>
-              s.title && s.title.trim().toLowerCase() === pageTitle.trim().toLowerCase()
-          );
-          setSlide(match || null);
-        }
+        setSlide(slides || null);
       })
-      .catch(() => setSlide(null))
-      .finally(() => setLoading(false));
+      .catch(() => setSlide(null));
   }, [pageTitle]);
 
-
-  // if (loading) {
-  //   return (
-  //     <div className="relative w-full h-[260px] sm:h-[350px] bg-gradient-to-b from-gray-300 to-gray-500 animate-pulse rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center">
-  //       <p className="text-white text-lg font-medium">Loading banner...</p>
-  //     </div>
-  //   );
-  // }
-
-
- 
   const imageUrl = slide?.image.startsWith("http")
     ? slide?.image
     : `/${slide?.image.replace(/^\/+/, "")}`;
@@ -54,15 +37,17 @@ const PageBanner = ({
   const title = slide?.title;
   const subtitle = slide?.description || pageSubtitle;
 
-  const breadcrumbItemsFinal = breadcrumbItems.length > 0
-    ? breadcrumbItems
-    : [
-        { label: "Home", path: "/", icon: "home" },
-        ...(isProductSubpage ? [{ label: "Products", path: "/products", icon: "products" }] : []),
-        { label: title, icon: "default" },
-      ];
+  const breadcrumbItemsFinal =
+    breadcrumbItems.length > 0
+      ? breadcrumbItems
+      : [
+          { label: "Home", path: "/", icon: "home" },
+          ...(isProductSubpage
+            ? [{ label: "Products", path: "/products", icon: "products" }]
+            : []),
+          { label: title, icon: "default" },
+        ];
 
-  
   if (!slide) {
     return (
       <div className="relative w-full h-[260px] sm:h-[350px] bg-gray rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center text-center p-6">
@@ -70,7 +55,9 @@ const PageBanner = ({
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
             {pageTitle || "Page"}
           </h1>
-          {pageSubtitle && <p className="text-xl text-white/80">{pageSubtitle}</p>}
+          {pageSubtitle && (
+            <p className="text-xl text-white/80">{pageSubtitle}</p>
+          )}
         </div>
       </div>
     );

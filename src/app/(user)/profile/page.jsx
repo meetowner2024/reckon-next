@@ -130,7 +130,10 @@ export default function ProfilePage() {
   const projects = useSelector((state) => state.projects.projectsDropdown);
   const header = useSelector((state) => state.header?.header);
   useEffect(() => {
-    fetch("/api/users/profile")
+    fetch("/api/users/profile", {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    })
       .then((r) => r.json())
       .then((data) => {
         setSections(data.sections || []);

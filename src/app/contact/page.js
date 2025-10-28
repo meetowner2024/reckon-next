@@ -15,7 +15,10 @@ export default function Contact() {
   const projects = useSelector((state) => state.projects.projectsDropdown);
   const header = useSelector((state) => state.header.header);
   useEffect(() => {
-    fetch("/api/users/contactus/contact")
+    fetch("/api/users/contactus/contact", {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    })
       .then((res) => res.json())
       .then((json) => {
         setData(json);

@@ -20,7 +20,10 @@ export default function AboutPage() {
   const projects = useSelector((state) => state.projects.projectsDropdown);
   const header = useSelector((state) => state.header.header);
   useEffect(() => {
-    fetch("/api/users/about")
+    fetch("/api/users/about", {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    })
       .then((r) => r.json())
       .then((d) => {
         setData(d);
@@ -44,9 +47,7 @@ export default function AboutPage() {
         phone={header.phone}
       />
       <div className="relative">
-        <PageBanner
-          title="About Us"
-        />
+        <PageBanner title="About Us" />
       </div>
 
       <section className="py-20 bg-white">

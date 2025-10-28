@@ -22,6 +22,7 @@ export default function Gallery() {
           return;
         }
         const res = await fetch("/api/users/gallery", {
+          cache: "force-cache",
           next: { revalidate: 300 },
         });
         if (!res.ok) throw new Error("Failed to fetch");

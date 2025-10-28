@@ -47,29 +47,15 @@ const colors = [
   "#ec4899",
   "#14b8a6",
 ];
-export default function Advantages({ product }) {
-  const [advantages, setAdvantages] = useState([]);
+export default function Advantages({ product, advantages = [], loading }) {
   const [mainTitle, setMainTitle] = useState("Our Advantages");
   const [activeIndex, setActiveIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const fetchAdvantages = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch("/api/users/advantages");
-        const data = await res.json();
-        if (data.advantages && Array.isArray(data.advantages)) {
-          setAdvantages(data.advantages);
-          setMainTitle(`Advantages of ${product.title}` || "Our Advantages");
-        }
-      } catch (err) {
-        console.error("Error fetching advantages:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAdvantages();
-  }, []);
+    if (product?.title) {
+      setMainTitle(`Advantages of ${product.title}`);
+    }
+  }, [product]);
   const nextSlide = () => setActiveIndex((i) => (i + 1) % advantages.length);
   const prevSlide = () =>
     setActiveIndex((i) => (i - 1 + advantages.length) % advantages.length);
