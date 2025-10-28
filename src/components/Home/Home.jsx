@@ -39,6 +39,7 @@ export default function Home({
   footer,
   projectsDropdown,
 }) {
+  console.log("hero",hero)
  const dispatch = useDispatch();
 
   useEffect(() => {

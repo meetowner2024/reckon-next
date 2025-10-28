@@ -8,6 +8,7 @@ export default function AddHeroSlide() {
   const [heroPrev, setHeroPrev] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const [location, setLocation] = useState("");   
   const [loading, setLoading] = useState(false);
   const [titleError, setTitleError] = useState("");
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function AddHeroSlide() {
     }
   };
 
-  // Debounced title check
+
   const checkTitle = async (value) => {
     if (!value.trim()) return;
     setTitleError("");
@@ -40,18 +41,15 @@ export default function AddHeroSlide() {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!heroImg || !title.trim() || !desc.trim()) {
+    if (!heroImg || !title.trim() || !desc.trim() || !location) {
       alert("All fields are required");
       return;
     }
 
-    // Final check before submit
     const res = await fetch(`/api/users/hero/check?title=${encodeURIComponent(title)}`);
     const { exists } = await res.json();
-    if (exists) {
-      if (!confirm("A slide with this title already exists. Continue? Only the first one will be shown.")) {
-        return;
-      }
+    if (exists && !confirm("A slide with this title already exists. Continue? Only the first one will be shown.")) {
+      return;
     }
 
     setLoading(true);
@@ -59,12 +57,10 @@ export default function AddHeroSlide() {
     form.append("hero_image", heroImg);
     form.append("title", title);
     form.append("description", desc);
+    form.append("location", location);   
 
     try {
-      const res = await fetch("/api/users/hero/upload", {
-        method: "POST",
-        body: form,
-      });
+      const res = await fetch("/api/users/hero/upload", { method: "POST", body: form });
       const data = await res.json();
       if (res.ok) {
         alert("Banner added successfully!");
@@ -90,62 +86,45 @@ export default function AddHeroSlide() {
           <label className="block font-semibold mb-2">Hero Image *</label>
           {heroPrev && (
             <div className="mb-3 border rounded-lg overflow-hidden">
-              <Image
-                src={heroPrev}
-                alt="Hero"
-                width={600}
-                height={300}
-                className="w-full h-64 object-cover"
-              />
+              <Image src={heroPrev} alt="Hero" width={600} height={300} className="w-full h-64 object-cover" />
             </div>
           )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleHero}
-            required
-            className="w-full cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:bg-[#48ADB9] file:text-white"
-          />
+          <input type="file" accept="image/*" onChange={handleHero} required
+            className="w-full cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:bg-[#48ADB9] file:text-white" />
         </div>
+
 
         <div>
           <label className="block font-semibold mb-2">Title *</label>
-          <input
-            type="text"
-            value={title}
+          <input type="text" value={title} required placeholder="e.g. About Us"
             onChange={(e) => {
               setTitle(e.target.value);
               setTitleError("");
-              // Optional: debounce check
               clearTimeout(window.titleCheckTimeout);
               window.titleCheckTimeout = setTimeout(() => checkTitle(e.target.value), 500);
             }}
-            required
-            placeholder="e.g. About Us"
-            className="w-full p-3 border rounded-lg"
-          />
-          {titleError && (
-            <p className="text-red-500 text-sm mt-1">{titleError}</p>
-          )}
+            className="w-full p-3 border rounded-lg" />
+          {titleError && <p className="text-red-500 text-sm mt-1">{titleError}</p>}
         </div>
 
         <div>
           <label className="block font-semibold mb-2">Description *</label>
-          <textarea
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-            rows={3}
-            required
-            placeholder="Leading the industry..."
-            className="w-full p-3 border rounded-lg"
-          />
+          <textarea value={desc} onChange={(e) => setDesc(e.target.value)} rows={3} required
+            placeholder="Leading the industry..." className="w-full p-3 border rounded-lg" />
         </div>
 
-        <button
-          type="submit"
-          disabled={loading || !!titleError}
-          className="w-full cursor-pointer bg-[#48ADB9] text-white font-bold py-3 rounded-lg hover:bg-[#3a8a94] disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
-        >
+        <div>
+          <label className="block font-semibold mb-2">Location to Display *</label>
+          <select value={location} onChange={(e) => setLocation(e.target.value)} required
+            className="w-full p-3 border rounded-lg">
+            <option value="">Select location</option>
+            <option value="main-slider">Main Slider</option>
+            <option value="except-main-slider">Except Main Slider</option>
+          </select>
+        </div>
+
+        <button type="submit" disabled={loading || !!titleError}
+          className="w-full bg-[#48ADB9] text-white font-bold py-3 rounded-lg hover:bg-[#3a8a94] disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2">
           {loading ? (
             <>
               <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
@@ -154,9 +133,7 @@ export default function AddHeroSlide() {
               </svg>
               Submitting...
             </>
-          ) : (
-            "Submit"
-          )}
+          ) : "Submit"}
         </button>
       </form>
     </div>

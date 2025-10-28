@@ -15,14 +15,14 @@ export async function POST(req) {
 
     const heroFile = formData.get("hero_image");
     const title = formData.get("title")?.toString().trim();
-const description=formData.get("description")?.toString().trim();
+    const description = formData.get("description")?.toString().trim();
+    const location = formData.get("location")?.toString().trim();   
 
     if (!heroFile || !(heroFile instanceof Blob)) {
       return new Response(JSON.stringify({ message: "Hero image required" }), { status: 400 });
     }
-    
-    if (!title) {
-      return new Response(JSON.stringify({ message: "Title required" }), { status: 400 });
+    if (!title || !location) {
+      return new Response(JSON.stringify({ message: "Title and location required" }), { status: 400 });
     }
 
     const heroBuffer = Buffer.from(await heroFile.arrayBuffer());
@@ -32,7 +32,8 @@ const description=formData.get("description")?.toString().trim();
     const db = await getDB();
     const slide = {
       title,
-      description,   
+      description,
+      location,                    
       image: `/uploads/hero/${heroFilename}`,
       created_at: new Date(),
       updated_at: new Date(),
@@ -41,7 +42,7 @@ const description=formData.get("description")?.toString().trim();
     const result = await db.collection("hero_slides").insertOne(slide);
 
     return new Response(
-      JSON.stringify({ message: "Slide added successfully", slideId: result.insertedId.toString() }),
+      JSON.stringify({ message: "Slide added", slideId: result.insertedId.toString() }),
       { status: 201 }
     );
   } catch (err) {

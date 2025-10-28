@@ -36,36 +36,23 @@ const PageBanner = ({
       .finally(() => setLoading(false));
   }, [pageTitle]);
 
-  // LOADING
-  if (loading) {
-    return (
-      <div className="relative w-full h-[260px] sm:h-[350px] bg-gradient-to-b from-gray-300 to-gray-500 animate-pulse rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center">
-        <p className="text-white text-lg font-medium">Loading banner...</p>
-      </div>
-    );
-  }
 
-  // NO MATCH → Show clean placeholder (no image)
-  if (!slide) {
-    return (
-      <div className="relative w-full h-[260px] sm:h-[350px] bg-gradient-to-b from-gray-800 to-black rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center text-center p-6">
-        <div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
-            {pageTitle || "Page"}
-          </h1>
-          {pageSubtitle && <p className="text-xl text-white/80">{pageSubtitle}</p>}
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="relative w-full h-[260px] sm:h-[350px] bg-gradient-to-b from-gray-300 to-gray-500 animate-pulse rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center">
+  //       <p className="text-white text-lg font-medium">Loading banner...</p>
+  //     </div>
+  //   );
+  // }
 
-  // DYNAMIC IMAGE URL
-  const imageUrl = slide.image.startsWith("http")
-    ? slide.image
-    : `/${slide.image.replace(/^\/+/, "")}`;
 
-  const title = slide.title;
-  const subtitle = slide.description || pageSubtitle;
+ 
+  const imageUrl = slide?.image.startsWith("http")
+    ? slide?.image
+    : `/${slide?.image.replace(/^\/+/, "")}`;
+
+  const title = slide?.title;
+  const subtitle = slide?.description || pageSubtitle;
 
   const breadcrumbItemsFinal = breadcrumbItems.length > 0
     ? breadcrumbItems
@@ -75,6 +62,19 @@ const PageBanner = ({
         { label: title, icon: "default" },
       ];
 
+  
+  if (!slide) {
+    return (
+      <div className="relative w-full h-[260px] sm:h-[350px] bg-gray rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center text-center p-6">
+        <div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
+            {pageTitle || "Page"}
+          </h1>
+          {pageSubtitle && <p className="text-xl text-white/80">{pageSubtitle}</p>}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="relative p-5 w-full sm:h-[350px] h-[260px] sm:rounded-b-3xl rounded-b-2xl flex items-center justify-center overflow-hidden">
       <Image
