@@ -1,12 +1,26 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { ChevronRight, ChevronDown } from "lucide-react";
-export default function Sidebar() {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+import {
+  ChevronRight,
+  ChevronDown,
+  LayoutDashboard,
+  Heading,
+  CheckSquare,
+  Package,
+  HelpCircle,
+  User,
+  Info,
+  Mail,
+  Briefcase,
+  LucideKanbanSquare,
+  GalleryHorizontal,
+} from "lucide-react";
 
+export default function Sidebar({ isOpen, setIsOpen }) {
+  const pathname = usePathname();
   const [openSubmenu, setOpenSubmenu] = useState(null);
 
   const toggleSubmenu = (key) => {
@@ -14,160 +28,151 @@ export default function Sidebar() {
   };
 
   useEffect(() => {
-    if (pathname.startsWith("/admin/hero")) {
-      setOpenSubmenu("hero");
-    } else if (pathname.startsWith("/admin/products")) {
-      setOpenSubmenu("products");
-    } else {
-      setOpenSubmenu(null);
-    }
+    if (pathname.startsWith("/admin/hero")) setOpenSubmenu("hero");
+    else if (pathname.startsWith("/admin/products")) setOpenSubmenu("products");
+    else if (pathname.startsWith("/admin/contact-us"))
+      setOpenSubmenu("contact");
+    else if (pathname.startsWith("/admin/careers")) setOpenSubmenu("careers");
+    else setOpenSubmenu(null);
   }, [pathname]);
+
   const navItems = [
-    { href: "/admin", label: "Dashboard" },
-    { href: "/admin/header", label: "Header" },
+    { href: "/admin", label: "Dashboard", icon: <LayoutDashboard size={20} /> },
+    { href: "/admin/header", label: "Header", icon: <Heading size={20} /> },
     {
       href: "/admin/hero",
       label: "Banner",
+      icon: <GalleryHorizontal size={20} />,
       submenuKey: "hero",
       submenu: [
         { href: "/admin/hero/all", label: "All Banners" },
         { href: "/admin/hero", label: "Add Banner" },
       ],
     },
-    { href: "/admin/advantages", label: "Reckonext Advantages" },
+    {
+      href: "/admin/advantages",
+      label: "Advantages",
+      icon: <CheckSquare size={20} />,
+    },
     {
       href: "/admin/products",
       label: "Products",
+      icon: <Package size={20} />,
       submenuKey: "products",
       submenu: [
         { href: "/admin/products/all", label: "All Products" },
-        { href: "/admin/products/add", label: "Add Products" },
+        { href: "/admin/products/add", label: "Add Product" },
       ],
     },
-    { href: "/admin/faqs", label: "Frequently Asked Questions" },
-    { href: "/admin/profile", label: "Profile" },
-     { href: "/admin/about", label: "About" },
+    { href: "/admin/faqs", label: "FAQs", icon: <HelpCircle size={20} /> },
+    { href: "/admin/profile", label: "Profile", icon: <User size={20} /> },
+    { href: "/admin/about", label: "About", icon: <Info size={20} /> },
     {
       href: "/admin/contact-us",
       label: "Contact Us",
+      icon: <Mail size={20} />,
       submenuKey: "contact",
       submenu: [
-        { href: "/admin/contact-us/all-contacted", label: "All Contacted" },
-        { href: "/admin/contact-us", label: "Edit Contact Page" },
-        {
-          href: "/admin/contact-us/edit-contact-form",
-          label: "Edit Contact Form",
-        },
+        { href: "/admin/contact-us/all-contacted", label: "All Messages" },
+        { href: "/admin/contact-us", label: "Edit Page" },
+        { href: "/admin/contact-us/edit-contact-form", label: "Edit Form" },
       ],
     },
     {
       href: "/admin/careers",
       label: "Careers",
+      icon: <Briefcase size={20} />,
       submenuKey: "careers",
       submenu: [
-        {
-          href: "/admin/careers/all-applications",
-          label: "All Careers Applications",
-        },
-        {
-          href: "/admin/careers/edit-careers-form",
-          label: "Edit Careers Form",
-        },
+        { href: "/admin/careers/all-applications", label: "Applications" },
+        { href: "/admin/careers/edit-careers-form", label: "Edit Form" },
       ],
     },
-    { href: "/admin/footer", label: "Footer" },
+    {
+      href: "/admin/footer",
+      label: "Footer",
+      icon: <LucideKanbanSquare size={20} />,
+    },
   ];
+
   return (
     <>
-      <button
-        className="lg:hidden cursor-pointer  fixed top-4 left-4 z-50 p-2 bg-[#48ADB9] text-white rounded shadow-lg hover:bg-[#3d8f99] transition"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M4 6h16M4 12h16m-7 6h7"
-          />
-        </svg>
-      </button>
-
-      <div
-        className={`w-64 bg-[#48ADB9] text-white h-screen fixed transition-transform duration-300 ease-in-out ${
+      <aside
+        className={`fixed inset-y-0 left-0 w-64 bg-linear-to-b from-[#48ADB9] to-[#3a8a94] text-white transform transition-transform duration-300 ease-in-out z-40 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 z-40 overflow-y-auto`}
+        } lg:translate-x-0 lg:static lg:inset-0`}
       >
-        <div className="p-4">
-          <h2 className="text-xl font-bold text-center mb-6">Admin Panel</h2>
-          <ul className="space-y-2">
+        <div className="h-full flex flex-col">
+          <div className="p-6 border-b border-white/10">
+            <h2 className="text-2xl font-bold text-center">Reckonext</h2>
+          </div>
+
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             {navItems.map((item) => (
-              <li key={item.href}>
+              <div key={item.href}>
                 {item.submenu ? (
                   <>
                     <button
                       onClick={() => toggleSubmenu(item.submenuKey)}
-                      className={`w-full text-left cursor-pointer  p-2 rounded flex justify-between items-center transition-all duration-200 ${
+                      className={`w-full flex items-center justify-between p-3 rounded-lg transition-all duration-200 ${
                         pathname.startsWith(item.href)
-                          ? "bg-white text-[#48ADB9] font-semibold"
-                          : "hover:bg-[#3d8f99]"
+                          ? "bg-white text-[#48ADB9] font-semibold shadow-md"
+                          : "hover:bg-white/10"
                       }`}
                     >
-                      <span>{item.label}</span>
+                      <span className="flex items-center">
+                        <span className="mr-3">{item.icon}</span>
+                        {item.label}
+                      </span>
                       {openSubmenu === item.submenuKey ? (
-                        <ChevronDown className="w-4 h-4 transition-transform" />
+                        <ChevronDown size={18} />
                       ) : (
-                        <ChevronRight className="w-4 h-4 transition-transform" />
+                        <ChevronRight size={18} />
                       )}
                     </button>
 
                     {openSubmenu === item.submenuKey && (
-                      <ul className="p-1 mt-1 space-y-1 bg-[#3a8a94] rounded-md overflow-hidden">
+                      <div className="ml-6 mt-2 space-y-1">
                         {item.submenu.map((sub) => (
-                          <li key={sub.href}>
-                            <Link
-                              href={sub.href}
-                              className={`block p-2 rounded text-sm transition-colors ${
-                                pathname === sub.href
-                                  ? "bg-white text-[#48ADB9] font-semibold"
-                                  : "hover:bg-[#60c3cf]"
-                              }`}
-                              onClick={() => setIsOpen(false)}
-                            >
-                              {sub.label}
-                            </Link>
-                          </li>
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            onClick={() => setIsOpen(false)}
+                            className={`block py-2 px-4 rounded-md text-sm transition-colors ${
+                              pathname === sub.href
+                                ? "bg-white text-[#48ADB9] font-medium"
+                                : "hover:bg-white/20"
+                            }`}
+                          >
+                            {sub.label}
+                          </Link>
                         ))}
-                      </ul>
+                      </div>
                     )}
                   </>
                 ) : (
                   <Link
                     href={item.href}
-                    className={`block p-2 rounded transition-colors ${
-                      pathname === item.href
-                        ? "bg-white text-[#48ADB9] font-semibold"
-                        : "hover:bg-[#3d8f99]"
-                    }`}
                     onClick={() => setIsOpen(false)}
+                    className={`flex items-center p-3 rounded-lg transition-all duration-200 ${
+                      pathname === item.href
+                        ? "bg-white text-[#48ADB9] font-semibold shadow-md"
+                        : "hover:bg-white/10"
+                    }`}
                   >
+                    <span className="mr-3">{item.icon}</span>
                     {item.label}
                   </Link>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
+          </nav>
         </div>
-      </div>
+      </aside>
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
