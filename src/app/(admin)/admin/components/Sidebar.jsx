@@ -17,6 +17,7 @@ import {
   Briefcase,
   LucideKanbanSquare,
   GalleryHorizontal,
+  GalleryThumbnails,
 } from "lucide-react";
 
 export default function Sidebar({ isOpen, setIsOpen }) {
@@ -53,6 +54,11 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       href: "/admin/advantages",
       label: "Advantages",
       icon: <CheckSquare size={20} />,
+    },
+    {
+      href: "/admin/gallery",
+      label: "Gallery",
+      icon: <GalleryThumbnails size={20} />,
     },
     {
       href: "/admin/products",

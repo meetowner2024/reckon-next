@@ -1,97 +1,35 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-const ImageCarousel = ({ images, currentIndex, onDotClick, onScroll }) => {
-  const carouselRef = useRef(null);
-  useEffect(() => {
-    const el = carouselRef.current;
-    if (!el) return;
-    const handleWheel = (e) => {
-      e.preventDefault();
-      onScroll(e.deltaY);
-    };
-    el.addEventListener("wheel", handleWheel, { passive: false });
-    return () => el.removeEventListener("wheel", handleWheel);
-  }, [onScroll]);
-  if (!images || images.length === 0) {
-    return (
-      <div className="h-55 bg-gray-200 flex items-center justify-center rounded-t-2xl">
-        <span className="text-gray-500">No images</span>
-      </div>
-    );
-  }
-  return (
-    <div className="relative" ref={carouselRef}>
-      <div className="overflow-hidden rounded-t-2xl">
-        <div
-          className="flex transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-        >
-          {images.map((image, index) => (
-            <div key={index} className="w-full flex-shrink-0">
-              <Image
-                src={image}
-                alt={`Product image ${index + 1}`}
-                className="w-full h-55 object-cover"
-                loading="lazy"
-                width={500}
-                height={300}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-      {images.length > 1 && (
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2 pointer-events-none">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => onDotClick(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 pointer-events-auto ${
-                index === currentIndex
-                  ? "bg-[#0e55a1] scale-125"
-                  : "bg-[#f0f9ff] hover:bg-white/75"
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+import { useEffect, useState, useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Mousewheel } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+const generateSlug = (title) =>
+  "/" +
+  title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 export default function DoorsAndWindowsGallery({ products, loading }) {
-  const [error, setError] = useState("");
-  const [activeIndexes, setActiveIndexes] = useState({});
-
-  const handleDotClick = (productId, index) => {
-    setActiveIndexes((prev) => ({
-      ...prev,
-      [productId]: index,
-    }));
-  };
-  const handleScroll = (productId, deltaY, totalImages) => {
-    setActiveIndexes((prev) => {
-      const current = prev[productId] || 0;
-      let newIndex = current;
-      if (deltaY > 0) {
-        newIndex = current + 1 >= totalImages ? 0 : current + 1;
-      } else {
-        newIndex = current - 1 < 0 ? totalImages - 1 : current - 1;
-      }
-      return { ...prev, [productId]: newIndex };
-    });
-  };
-  const generateSlug = (title) => {
-    return (
-      "/" +
-      title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "")
-    );
-  };
+  const [cachedProducts, setCachedProducts] = useState([]);
+  const hasCached = useRef(false);
+  useEffect(() => {
+    if (hasCached.current || loading) return;
+    const cacheKey = "cached_products_v1";
+    const cached = sessionStorage.getItem(cacheKey);
+    if (cached) {
+      setCachedProducts(JSON.parse(cached));
+    } else {
+      const cloned = JSON.parse(JSON.stringify(products));
+      setCachedProducts(cloned);
+      sessionStorage.setItem(cacheKey, JSON.stringify(cloned));
+    }
+    hasCached.current = true;
+  }, [products, loading]);
+  const displayProducts = hasCached.current ? cachedProducts : products;
   if (loading) {
     return (
       <section className="px-6 py-12 bg-gray-50 min-h-screen">
@@ -118,11 +56,11 @@ export default function DoorsAndWindowsGallery({ products, loading }) {
       </section>
     );
   }
-  if (error) {
+  if (displayProducts.length === 0) {
     return (
       <section className="px-6 py-12 bg-gray-50 min-h-screen">
         <div className="max-w-6xl mx-auto text-center">
-          <p className="text-red-600 font-medium">{error}</p>
+          <p className="text-gray-500">No products available.</p>
         </div>
       </section>
     );
@@ -134,58 +72,79 @@ export default function DoorsAndWindowsGallery({ products, loading }) {
           Our <span className="text-[#1e3a8a]">Products</span>
         </h2>
         <p className="text-gray-600 text-center text-lg md:text-lg font-200 mb-8">
-          Scroll or click dots to navigate images. Hover to reveal view button.
+          Swipe, scroll, or click dots to navigate images. Hover to reveal view
+          button.
         </p>
-        {products.length === 0 ? (
-          <p className="text-center text-gray-500 col-span-full">
-            No products available.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => {
-              const currentIndex = activeIndexes[product._id] || 0;
-              const images = product.banner || [];
-              const slug = generateSlug(product.title);
-              return (
-                <article
-                  key={product._id}
-                  className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
-                >
-                  <div className="relative">
-                    <ImageCarousel
-                      images={images}
-                      currentIndex={currentIndex}
-                      onDotClick={(index) => handleDotClick(product._id, index)}
-                      onScroll={(deltaY) =>
-                        handleScroll(product._id, deltaY, images.length)
-                      }
-                    />
-                    <div className="absolute inset-0 flex items-end justify-center p-4 pointer-events-none">
-                      <Link
-                        href={`/products/${slug}/${product._id}`}
-                        className="pointer-events-auto mb-2 opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out"
-                        aria-label={`Open ${product.title} page`}
-                      >
-                        <button className="bg-[#f0f9ff]/75 text-[#044182] backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400">
-                          View {product.title}
-                        </button>
-                      </Link>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {displayProducts.map((product) => {
+            const images = product.banner || [];
+            const slug = generateSlug(product.title);
+            return (
+              <article
+                key={product._id}
+                className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="relative">
+                  {images.length > 0 ? (
+                    <Swiper
+                      modules={[Navigation, Pagination, Mousewheel]}
+                      spaceBetween={0}
+                      slidesPerView={1}
+                      loop={images.length > 1}
+                      pagination={{
+                        clickable: true,
+                        bulletActiveClass: "swiper-pagination-bullet-active",
+                        bulletClass: "swiper-pagination-bullet",
+                      }}
+                      mousewheel={{ forceToAxis: true }}
+                      className="h-55"
+                    >
+                      {images.map((image, index) => (
+                        <SwiperSlide key={index}>
+                          <Image
+                            src={image}
+                            alt={`${product.title} - image ${index + 1}`}
+                            width={500}
+                            height={300}
+                            className="w-full h-55 object-cover"
+                            loading="lazy"
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                          />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  ) : (
+                    <div className="h-55 bg-gray-200 flex items-center justify-center rounded-t-2xl">
+                      <span className="text-gray-500">No images</span>
                     </div>
+                  )}
+                  {}
+                  <div className="absolute inset-0 flex items-end justify-center p-4 pointer-events-none">
+                    <Link
+                      href={`/products/${slug}/${product._id}`}
+                      className="pointer-events-auto mb-2 opacity-0 transform translate-y-3 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out"
+                      aria-label={`Open ${product.title} page`}
+                    >
+                      <button className="bg-[#f0f9ff]/75 text-[#044182] backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium shadow-sm hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                        View {product.title}
+                      </button>
+                    </Link>
                   </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {product.title}
-                    </h3>
-                    <p className="text-gray-600 mt-2 text-sm line-clamp-2">
-                      {product.subtitle ||
-                        "Premium quality product with modern design and durability."}
-                    </p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        )}
+                </div>
+                {}
+                <div className="p-4">
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {product.title}
+                  </h3>
+                  <p className="text-gray-600 mt-2 text-sm line-clamp-2">
+                    {product.subtitle ||
+                      "Premium quality product with modern design and durability."}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

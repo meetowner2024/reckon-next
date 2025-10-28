@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { setProjectsDropdown } from "../store/slices/projectsSlice";
 import { setFooterData } from "../store/slices/footerSlice";
 import { setHeader } from "../store/slices/headerSlice";
+import Gallery from "../pages/Gallery";
 const HeaderSection = dynamic(() => import("@/components/pages/HeaderSection"));
 const HeroSection = dynamic(() => import("@/components/pages/HeroSection"));
 const AdvantagesSection = dynamic(() =>
@@ -39,20 +40,20 @@ export default function Home({
   footer,
   projectsDropdown,
 }) {
- const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (projectsDropdown?.length) {
       dispatch(setProjectsDropdown(projectsDropdown));
-    } if (footer) {
+    }
+    if (footer) {
       dispatch(setFooterData(footer));
     }
-    if (header){
-      dispatch(setHeader(header))
+    if (header) {
+      dispatch(setHeader(header));
     }
-  }, [dispatch, projectsDropdown,footer,header]);
+  }, [dispatch, projectsDropdown, footer, header]);
   return (
-    
     <main className="w-full overflow-hidden">
       <HeaderSection
         logo={header.logo}
@@ -72,6 +73,9 @@ export default function Home({
 
       <Suspense fallback={<SectionSkeleton />}>
         <WhyChooseuSection features={whyChoose} />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Gallery />
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton />}>

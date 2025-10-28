@@ -1,5 +1,4 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import {
   Factory,
   Wrench,
@@ -31,7 +30,7 @@ const WhyChooseuSection = ({ features }) => {
   return (
     <section className="py-12 px-6 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-[#000000] mb-10">
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-[#000000] mb-15">
           Why Choose Us
         </h2>
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
