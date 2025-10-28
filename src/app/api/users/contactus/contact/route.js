@@ -8,7 +8,11 @@ export async function GET() {
     const contact = await db.collection("contact").findOne({});
     return new Response(JSON.stringify(contact || {}), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
     });
   } catch (error) {
     console.error("Error fetching contact:", error);

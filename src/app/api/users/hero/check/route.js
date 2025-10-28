@@ -18,7 +18,14 @@ export async function GET(request) {
       title: { $regex: `^${title.trim()}$`, $options: "i" } 
     });
 
-    return NextResponse.json({ exists: !!existing });
+    return NextResponse.json({ exists: !!existing },{
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
+    });
   } catch (err) {
     console.error("Title check error:", err);
     return NextResponse.json({ exists: false }, { status: 500 });

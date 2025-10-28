@@ -17,7 +17,9 @@ export async function GET() {
     return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
-        "Cache-Control": "public, max-age=3600, stale-while-revalidate",
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
       },
     });
   } catch (err) {

@@ -4,14 +4,18 @@ import fs from "fs";
 
 export const runtime = "nodejs";
 
-/* ---------- GET ---------- */
+
 export async function GET() {
   try {
     const db = await getDB();
     const footer = await db.collection("footer").findOne({});
     return new Response(JSON.stringify(footer || {}), {
       status: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
     });
   } catch (error) {
     console.error("Error fetching footer:", error);
@@ -21,13 +25,11 @@ export async function GET() {
   }
 }
 
-/* ---------- POST (full update) ---------- */
 export async function POST(req) {
   try {
     const body = await req.json();
     const db = await getDB();
 
-    // ----- LOGO -----
     if (body.logoBase64) {
       const uploadsDir = path.join(process.cwd(), "public", "uploads");
       if (!fs.existsSync(uploadsDir))
@@ -60,7 +62,6 @@ export async function POST(req) {
   }
 }
 
-/* ---------- DELETE (single item) ---------- */
 export async function DELETE(req) {
   try {
     const { type, index, key } = await req.json();

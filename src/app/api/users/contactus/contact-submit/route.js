@@ -17,9 +17,13 @@ export async function GET() {
         data: forms,
       }),
       {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control":
+          "public, s-maxage=86400, max-age=3600, stale-while-revalidate=60",
+      },
+    }
     );
   } catch (err) {
     console.error("❌ GET /contact-submit error:", err);
