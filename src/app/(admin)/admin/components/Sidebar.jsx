@@ -84,6 +84,7 @@ export default function Sidebar({ isOpen, setIsOpen }) {
       icon: <Briefcase size={20} />,
       submenuKey: "careers",
       submenu: [
+        { href: "/admin/careers/all-positions", label: "Open Positions" },
         { href: "/admin/careers/all-applications", label: "Applications" },
         { href: "/admin/careers/edit-careers-form", label: "Edit Form" },
       ],
