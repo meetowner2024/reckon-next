@@ -1,65 +1,116 @@
-import React from "react";
-import careerImg from "../../public/assets/images/CareerpageBG.jpg";
-import contactImg from "../../public/assets/images/CareerpageBG.jpg";
-import aboutImg from "../../public/assets/images/About-Page.jpg";
-import defaultImg from "../../public/assets/images/PageBannerDefault.jpg";
-import FadeUp from "./pages/FadeUp";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Breadcrumb from "./Breadcrumb";
 import Image from "next/image";
+import FadeUp from "./pages/FadeUp";
+
 const PageBanner = ({
-  title,
-  subtitle,
+  title: pageTitle,
+  subtitle: pageSubtitle,
   children,
   breadcrumbItems = [],
-
   isProductSubpage = false,
 }) => {
-  const bannerImages = {
-    Careers: careerImg,
-    "Contact Us": contactImg,
-    "About Us": aboutImg,
-  };
-  const bannerImage = bannerImages[title] || defaultImg;
-  const defaultBreadcrumbItems = [
-    { label: "Home", path: "/", icon: "home" },
-    ...(isProductSubpage
-      ? [{ label: "Products", path: "/products", icon: "products" }]
-      : []),
-    ...(title ? [{ label: title, icon: "default" }] : []),
-  ];
-  const items =
-    breadcrumbItems.length > 0 ? breadcrumbItems : defaultBreadcrumbItems;
-  return (
-    <>
-      <div className="relative p-5 w-full sm:h-[350px] h-[260px] sm:rounded-b-3xl rounded-b-2xl flex items-center justify-center overflow-hidden">
-        <Image
-          src={bannerImage?.src}
-          alt={`${title} Banner`}
-          className="absolute inset-0 w-full h-full object-cover"
-          width={600}
-          height={100}
-        />
-        <div className="absolute inset-0 bg-linear-to-b from-black/30 to-black/60"></div>
-        <div className="relative z-10 text-center">
-          <FadeUp>
-            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-              {title}
-            </h1>
-          </FadeUp>
-          {subtitle && (
-            <FadeUp delay={200}>
-              <p className="text-xl text-white/90">{subtitle}</p>
-            </FadeUp>
-          )}
-        </div>
-        {children && (
-          <div className="absolute bottom-6 left-6 z-10">{children}</div>
-        )}
-        <div className="absolute bottom-6 left-6 z-10">
-          <Breadcrumb items={items} />
+  const [slide, setSlide] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!pageTitle) {
+      setLoading(false);
+      return;
+    }
+
+    fetch("/api/users/hero")
+      .then((r) => r.json())
+      .then((slides) => {
+        if (Array.isArray(slides)) {
+          const match = slides.find(
+            (s) =>
+              s.title && s.title.trim().toLowerCase() === pageTitle.trim().toLowerCase()
+          );
+          setSlide(match || null);
+        }
+      })
+      .catch(() => setSlide(null))
+      .finally(() => setLoading(false));
+  }, [pageTitle]);
+
+  // LOADING
+  if (loading) {
+    return (
+      <div className="relative w-full h-[260px] sm:h-[350px] bg-gradient-to-b from-gray-300 to-gray-500 animate-pulse rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center">
+        <p className="text-white text-lg font-medium">Loading banner...</p>
+      </div>
+    );
+  }
+
+  // NO MATCH → Show clean placeholder (no image)
+  if (!slide) {
+    return (
+      <div className="relative w-full h-[260px] sm:h-[350px] bg-gradient-to-b from-gray-800 to-black rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center text-center p-6">
+        <div>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
+            {pageTitle || "Page"}
+          </h1>
+          {pageSubtitle && <p className="text-xl text-white/80">{pageSubtitle}</p>}
         </div>
       </div>
-    </>
+    );
+  }
+
+  // DYNAMIC IMAGE URL
+  const imageUrl = slide.image.startsWith("http")
+    ? slide.image
+    : `/${slide.image.replace(/^\/+/, "")}`;
+
+  const title = slide.title;
+  const subtitle = slide.description || pageSubtitle;
+
+  const breadcrumbItemsFinal = breadcrumbItems.length > 0
+    ? breadcrumbItems
+    : [
+        { label: "Home", path: "/", icon: "home" },
+        ...(isProductSubpage ? [{ label: "Products", path: "/products", icon: "products" }] : []),
+        { label: title, icon: "default" },
+      ];
+
+  return (
+    <div className="relative p-5 w-full sm:h-[350px] h-[260px] sm:rounded-b-3xl rounded-b-2xl flex items-center justify-center overflow-hidden">
+      <Image
+        src={imageUrl}
+        alt={`${title} Banner`}
+        fill
+        className="object-cover"
+        priority
+        sizes="100vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70" />
+
+      <div className="relative z-10 text-center max-w-4xl px-4">
+        <FadeUp>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+            {title}
+          </h1>
+        </FadeUp>
+        {subtitle && (
+          <FadeUp delay={200}>
+            <p className="text-lg sm:text-xl text-white/90 drop-shadow-md">
+              {subtitle}
+            </p>
+          </FadeUp>
+        )}
+      </div>
+
+      {children && (
+        <div className="absolute bottom-6 left-6 z-10">{children}</div>
+      )}
+
+      <div className="absolute bottom-6 left-6 z-10">
+        <Breadcrumb items={breadcrumbItemsFinal} />
+      </div>
+    </div>
   );
 };
+
 export default PageBanner;

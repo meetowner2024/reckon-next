@@ -6,6 +6,7 @@ export default function HeroSlides() {
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [editingSlide, setEditingSlide] = useState(null);
   const [form, setForm] = useState({
     title: "",
@@ -33,7 +34,7 @@ export default function HeroSlides() {
   const deleteSlide = async (id) => {
     if (!confirm("Delete this slide?")) return;
     await fetch(`/api/users/hero/${id}`, { method: "DELETE" });
-   await fetchSlides();
+    await fetchSlides();
   };
 
   const openEditModal = (slide) => {
@@ -70,44 +71,52 @@ export default function HeroSlides() {
   };
 
   const saveSlide = async () => {
-  const formData = new FormData();
-  formData.append("title", form.title);
-  formData.append("description", form.description);
-  if (form.hero_image) formData.append("hero_image", form.hero_image);
+    if (!form.title.trim()) {
+      alert("Title is required!");
+      return;
+    }
 
-  try {
-    const url = editingSlide
-      ? `/api/users/hero/${editingSlide._id}`   
-      : "/api/users/hero";                      
+    setSaving(true);
 
-    const method = editingSlide ? "PUT" : "POST";
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("description", form.description);
+    if (form.hero_image) formData.append("hero_image", form.hero_image);
 
-    const res = await fetch(url, { method, body: formData });
-    const result = await res.json();
+    try {
+      const url = editingSlide
+        ? `/api/users/hero/${editingSlide._id}`
+        : "/api/users/hero";
 
-    if (!res.ok) throw new Error(result.message || "Failed");
+      const method = editingSlide ? "PUT" : "POST";
 
-    alert(editingSlide ? "Slide updated!" : "Slide added!");
-    closeModal();
-    fetchSlides();
-  } catch (err) {
-    console.error(err);
-    alert("Error: " + (err.message || "Unknown"));
-  }
-};
+      const res = await fetch(url, { method, body: formData });
+      const result = await res.json();
+
+      if (!res.ok) throw new Error(result.message || "Failed");
+
+      alert(editingSlide ? "Slide updated!" : "Slide added!");
+      closeModal();
+      fetchSlides();
+    } catch (err) {
+      console.error(err);
+      alert("Error: " + (err.message || "Unknown"));
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (loading)
     return <p className="text-center mt-20 text-gray-600">Loading slides...</p>;
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold" style={{ color: "#48adb9" }}>
-         Banners 
+          Banners
         </h1>
         <a
-          href="/hero/add"
+          href="/admin/hero"
           className="bg-[#48adb9] text-white px-6 py-2 rounded-lg hover:bg-[#3a8a94] transition font-medium"
         >
           Add New Slide
@@ -150,11 +159,6 @@ export default function HeroSlides() {
                   {slide.label}
                 </span>
               )}
-              <div>
-                <code className="text-xs text-gray-600 font-mono">
-                  Icon: {slide.icon}
-                </code>
-              </div>
 
               <div className="flex gap-2 mt-4">
                 <button
@@ -183,7 +187,6 @@ export default function HeroSlides() {
             </h2>
 
             <div className="space-y-4">
-
               <div>
                 <label className="block font-medium text-gray-700 mb-1">
                   Title <span className="text-red-500">*</span>
@@ -238,9 +241,34 @@ export default function HeroSlides() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={saveSlide}
-                className="flex-1 bg-[#48adb9] cursor-pointer text-white py-2.5 rounded-lg font-medium hover:bg-[#3a8a94] transition"
+                disabled={saving}
+                className="flex-1 bg-[#48adb9] text-white py-2.5 rounded-lg font-medium transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#3a8a94]"
               >
-                {editingSlide ? "Update Slide" : "Add Slide"}
+                {saving ? (
+                  <>
+                    <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                    Saving...
+                  </>
+                ) : editingSlide ? (
+                  "Update Slide"
+                ) : (
+                  "Add Slide"
+                )}
               </button>
               <button
                 onClick={closeModal}

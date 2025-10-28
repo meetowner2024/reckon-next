@@ -15,7 +15,7 @@ export async function POST(req) {
 
     const heroFile = formData.get("hero_image");
     const title = formData.get("title")?.toString().trim();
-
+const description=formData.get("description")?.toString().trim();
 
     if (!heroFile || !(heroFile instanceof Blob)) {
       return new Response(JSON.stringify({ message: "Hero image required" }), { status: 400 });
