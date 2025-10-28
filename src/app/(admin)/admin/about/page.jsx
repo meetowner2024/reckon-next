@@ -142,7 +142,7 @@ export default function AddCompanyForm({ onSuccess }) {
 
       <div className="space-y-4">
         <input type="text" placeholder="Main Title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border rounded-lg p-3 focus:ring-2  outline-none" />
-        <textarea placeholder="Main Description..."  value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="w-full border rounded-lg p-3 focus:ring-2  outline-none" />
+        <textarea placeholder="Main Description..."  value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className="w-full custom-scrollbar border rounded-lg p-3 focus:ring-2  outline-none" />
         <div>
           <label className="block font-bold mb-1 text-black">Main Image</label>
           <input type="file" accept="image/*"

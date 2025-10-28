@@ -46,7 +46,6 @@ export default function AboutPage() {
       <div className="relative">
         <PageBanner
           title="About Us"
-          subtitle="Leading the industry with innovation and quality"
         />
       </div>
 

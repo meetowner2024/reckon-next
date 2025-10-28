@@ -82,6 +82,9 @@ export default async function HomePage() {
     ...s,
     image: `/uploads/${s.image.split("/").pop()}`,
   }));
+  const filterhero = hero
+  .map((e) => e) 
+  .filter((e) => e.location === "main-slider"); 
   const advantages = advantagesData?.advantages ?? [];
   const mainTitle = advantagesData?.main_title ?? "The Reckonext Advantages";
   return (
@@ -93,7 +96,7 @@ export default async function HomePage() {
             : "/assets/images/Reckonext-logo.png",
           phone: header?.phone ?? "+91 88860 77745",
         }}
-        hero={hero}
+        hero={filterhero }
         advantages={advantages}
         mainTitle={mainTitle}
         products={products}

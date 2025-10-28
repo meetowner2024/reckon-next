@@ -8,42 +8,32 @@ const safeName = (file) => file.name.replace(/[^a-zA-Z0-9.]/g, "_");
 
 export async function PUT(req, { params }) {
   try {
-    const { id } =await  params;
+    const { id } =await params;
+    if (!ObjectId.isValid(id)) return new Response(JSON.stringify({ message: "Invalid ID" }), { status: 400 });
+    const objectId = new ObjectId(id);
 
-    if (!ObjectId.isValid(id)) {
-  return new Response(JSON.stringify({ message: "Invalid ID format" }), { status: 400 });
-}
-
-const objectId = new ObjectId(id);
     const formData = await req.formData();
-
     const title = formData.get("title")?.toString().trim();
     const description = formData.get("description")?.toString().trim();
+    const location = formData.get("location")?.toString().trim();   // ← NEW
     const heroFile = formData.get("hero_image");
 
-    if (!title ) {
-      return new Response(JSON.stringify({ message: "Title and icon required" }), { status: 400 });
+    if (!title || !location) {
+      return new Response(JSON.stringify({ message: "Title and location required" }), { status: 400 });
     }
 
-    const updateData = {
-      title,
-      description,
-      updated_at: new Date(),
-    };
-
-    let newImagePath = null;
+    const updateData = { title, description, location, updated_at: new Date() };
 
     if (heroFile && heroFile instanceof Blob) {
       const buffer = Buffer.from(await heroFile.arrayBuffer());
       const filename = `${Date.now()}-${safeName(heroFile)}`;
       fs.writeFileSync(path.join(heroDir, filename), buffer);
-      newImagePath = `/uploads/hero/${filename}`;
-      updateData.image = newImagePath;
+      updateData.image = `/uploads/hero/${filename}`;
     }
 
     const db = await getDB();
     const result = await db.collection("hero_slides").updateOne(
-      { _id: objectId},
+      { _id: objectId },
       { $set: updateData }
     );
 
@@ -51,10 +41,7 @@ const objectId = new ObjectId(id);
       return new Response(JSON.stringify({ message: "Slide not found" }), { status: 404 });
     }
 
-    return new Response(
-      JSON.stringify({ message: "Slide updated", image: newImagePath }),
-      { status: 200 }
-    );
+    return new Response(JSON.stringify({ message: "Slide updated" }), { status: 200 });
   } catch (err) {
     console.error("Update error:", err);
     return new Response(JSON.stringify({ message: "Update failed" }), { status: 500 });
