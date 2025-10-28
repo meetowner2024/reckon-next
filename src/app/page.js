@@ -3,7 +3,7 @@ export const dynamic = "force-dynamic";
 export default async function HomePage() {
   function getBaseUrl() {
     if (process.env.NODE_ENV === "development") {
-      return "http://localhost:10000";
+      return "http://localhost:3000";
     }
     return (
       process.env.RENDER_EXTERNAL_URL || "https://reckon-next.onrender.com"

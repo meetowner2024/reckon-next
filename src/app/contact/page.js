@@ -7,9 +7,13 @@ import Footer from "@/components/pages/Footer";
 import ContactSection from "@/components/pages/ContactSection";
 import FadeUp from "@/components/pages/FadeUp";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 export default function Contact() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const footer = useSelector((state) => state.footer);
+  const projects = useSelector((state) => state.projects.projectsDropdown);
+  const header = useSelector((state) => state.header.header);
   useEffect(() => {
     fetch("/api/users/contactus/contact")
       .then((res) => res.json())
@@ -57,7 +61,11 @@ export default function Contact() {
   const firstEmail = emails[0];
   return (
     <div className="relative overflow-hidden">
-      <HeaderSection />
+      <HeaderSection
+        projectsDropdown={projects}
+        logo={header.logo}
+        phone={header.phone}
+      />
       <PageBanner title="Contact Us" subtitle="Get in touch with us today" />
       {}
       <section className="relative py-8 sm:py-12 md:py-16 lg:py-18 overflow-hidden bg-white text-gray-900">
@@ -238,7 +246,7 @@ export default function Contact() {
           />
         </div>
       </section>
-      <Footer />
+      <Footer footer={footer.footerData} projects={projects} />
     </div>
   );
 }

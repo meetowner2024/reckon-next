@@ -6,6 +6,7 @@ import HeaderSection from "@/components/pages/HeaderSection";
 import FadeUp from "@/components/pages/FadeUp";
 import Footer from "@/components/pages/Footer";
 import Image from "next/image";
+import { useSelector } from "react-redux";
 const floating = {
   animate: {
     y: [0, -10, 0],
@@ -15,6 +16,9 @@ const floating = {
 export default function AboutPage() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const footer = useSelector((state) => state.footer);
+  const projects = useSelector((state) => state.projects.projectsDropdown);
+  const header = useSelector((state) => state.header.header);
   useEffect(() => {
     fetch("/api/users/about")
       .then((r) => r.json())
@@ -34,7 +38,11 @@ export default function AboutPage() {
   if (!data) return null;
   return (
     <div>
-      <HeaderSection />
+      <HeaderSection
+        projectsDropdown={projects}
+        logo={header.logo}
+        phone={header.phone}
+      />
       <div className="relative">
         <PageBanner
           title="About Us"
@@ -181,7 +189,7 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer footer={footer.footerData} projects={projects} />
     </div>
   );
 }

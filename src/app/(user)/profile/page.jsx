@@ -6,6 +6,7 @@ import HeaderSection from "@/components/pages/HeaderSection";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
+import { useSelector } from "react-redux";
 const ProfileSection = ({ title, diagrams }) => {
   const [selected, setSelected] = useState(null);
   return (
@@ -125,6 +126,9 @@ const ProfileSection = ({ title, diagrams }) => {
 export default function ProfilePage() {
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
+  const footer = useSelector((state) => state.footer);
+  const projects = useSelector((state) => state.projects.projectsDropdown);
+  const header = useSelector((state) => state.header?.header);
   useEffect(() => {
     fetch("/api/users/profile")
       .then((r) => r.json())
@@ -141,7 +145,11 @@ export default function ProfilePage() {
     );
   return (
     <div className="bg-gradient-to-br from-gray-50 to-white min-h-screen">
-      <HeaderSection />
+      <HeaderSection
+        projectsDropdown={projects}
+        logo={header.logo}
+        phone={header.phone}
+      />
       <PageBanner
         title="Profile"
         subtitle="Leading the industry with innovation and quality"
@@ -159,7 +167,7 @@ export default function ProfilePage() {
           </motion.div>
         ))}
       </div>
-      <Footer />
+      <Footer footer={footer.footerData} projects={projects} />
     </div>
   );
 }
