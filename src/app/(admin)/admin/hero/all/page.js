@@ -25,13 +25,30 @@ export default function HeroSlides() {
       setSlides(data);
     } catch { } finally { setLoading(false); }
   };
+const deleteSlide = async (id) => {
+  if (!confirm("Are you sure you want to delete this slide?")) return;
+
+  try {
+    const res = await fetch(`/api/users/hero/${id}`, {
+      method: "DELETE",
+    });
+    const result = await res.json();
+
+    if (!res.ok) throw new Error(result.message || "Failed to delete");
+
+    alert("Slide deleted successfully!");
+    fetchSlides(); // refresh slides
+  } catch (err) {
+    alert("Error deleting slide: " + (err.message || "Unknown error"));
+  }
+};
 
   const openEditModal = (slide) => {
     setEditingSlide(slide);
     setForm({
       title: slide.title || "",
       description: slide.description || "",
-      location: slide.location || "",      // ← NEW
+      location: slide.location || "",      
       hero_image: null,
       imagePreview: slide.image || "",
     });
@@ -65,7 +82,7 @@ export default function HeroSlides() {
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("description", form.description);
-    formData.append("location", form.location);   // ← SEND
+    formData.append("location", form.location);   
     if (form.hero_image) formData.append("hero_image", form.hero_image);
 
     try {
