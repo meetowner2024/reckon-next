@@ -35,8 +35,8 @@ COPY --from=builder /app/next.config.js ./next.config.js
 # COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
 # Cloud Run expects app to listen on $PORT
-EXPOSE 8080
-ENV PORT=8080
+EXPOSE 3000
+ENV PORT=3000
 ENV NODE_ENV=production
 
 # Start your Next.js app
