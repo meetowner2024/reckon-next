@@ -8,6 +8,7 @@ import { setProjectsDropdown } from "../store/slices/projectsSlice";
 import { setFooterData } from "../store/slices/footerSlice";
 import { setHeader } from "../store/slices/headerSlice";
 import Gallery from "../pages/Gallery";
+import { setContactData } from "../store/slices/contactSlice";
 const HeaderSection = dynamic(() => import("@/components/pages/HeaderSection"));
 const HeroSection = dynamic(() => import("@/components/pages/HeroSection"));
 const AdvantagesSection = dynamic(() =>
@@ -52,9 +53,12 @@ export default function Home({
     if (header) {
       dispatch(setHeader(header));
     }
-  }, [dispatch, projectsDropdown, footer, header]);
+    if(contactForm){
+      dispatch(setContactData(contactForm))
+    }
+  }, [dispatch, projectsDropdown, footer, header,contactForm]);
   return (
-    <main className="w-full overflow-hidden">
+    <main className="w-full  overflow-hidden">
       <HeaderSection
         logo={header.logo}
         phone={header.phone}

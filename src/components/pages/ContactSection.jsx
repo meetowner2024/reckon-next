@@ -12,31 +12,38 @@ import {
 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 const iconMap = { User, Phone, Mail, MessageSquare };
-const DynamicContactForm = ({ formConfig, loading }) => {
+const DynamicContactForm = ({ formConfig}) => {
+  console.log("formConfig",formConfig)
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [successTimer, setSuccessTimer] = useState(5);
-  useEffect(() => {
-    if (formConfig && formConfig.formFields) {
-      const fieldsWithId = formConfig.formFields.map((field) => {
-        if (!field.id) {
-          const baseId = field.label
-            .toLowerCase()
-            .replace(/\s+/g, "-")
-            .replace(/[^a-z0-9-]/g, "");
-          return { ...field, id: `${baseId}-${uuidv4().slice(0, 8)}` };
-        }
-        return { ...field, id: `${field.id}-${uuidv4().slice(0, 8)}` };
-      });
-      formConfig.formFields = fieldsWithId;
-      const initialData = {};
-      fieldsWithId.forEach((f) => (initialData[f.id] = ""));
-      setFormData(initialData);
-    }
-  }, [formConfig]);
-  if (loading || !formConfig) {
+ const [localConfig, setLocalConfig] = useState(formConfig);
+
+useEffect(() => {
+  if (formConfig && formConfig.formFields) {
+    const fieldsWithId = formConfig.formFields.map((field) => {
+      if (!field.id) {
+        const baseId = field.label
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-]/g, "");
+        return { ...field, id: `${baseId}-${uuidv4().slice(0, 8)}` };
+      }
+      return { ...field, id: `${field.id}-${uuidv4().slice(0, 8)}` };
+    });
+
+    const updatedConfig = { ...formConfig, formFields: fieldsWithId };
+    setLocalConfig(updatedConfig);
+
+    const initialData = {};
+    fieldsWithId.forEach((f) => (initialData[f.id] = ""));
+    setFormData(initialData);
+  }
+}, [formConfig]);
+
+  if ( !formConfig) {
     return (
       <div className="py-16 text-center text-gray-500 text-lg">
         Loading contact form...
@@ -276,7 +283,7 @@ const DynamicContactForm = ({ formConfig, loading }) => {
           )}
         </AnimatePresence>
         <form onSubmit={handleSubmit} className="space-y-6">
-          {formConfig.formFields.map((f, idx) => renderField(f, idx))}
+          {(localConfig?.formFields || []).map((f, idx) => renderField(f, idx))}
           {errors.submit && <p className="text-red-600">{errors.submit}</p>}
           <motion.button
             whileHover={{ scale: 1.02, y: -2 }}

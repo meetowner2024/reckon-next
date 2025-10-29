@@ -82,7 +82,8 @@ export default async function HomePage() {
     ...s,
     image: `/uploads/${s.image.split("/").pop()}`,
   }));
-  const filterhero = hero
+
+  const filterhero = hero 
   .map((e) => e) 
   .filter((e) => e.location === "main-slider"); 
   const advantages = advantagesData?.advantages ?? [];

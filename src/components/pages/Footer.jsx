@@ -106,8 +106,8 @@ const Footer = ({ footer, projects }) => {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/products" className="hover:underline">
-                    Products
+                  <Link href="/profile" className="hover:underline">
+                    Profile
                   </Link>
                 </li>
                 <li>
@@ -118,11 +118,6 @@ const Footer = ({ footer, projects }) => {
                 <li>
                   <Link href="/contact" className="hover:underline">
                     Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privacy-policy" className="hover:underline">
-                    Privacy Policy
                   </Link>
                 </li>
                 {}

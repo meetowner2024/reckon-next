@@ -3,7 +3,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  footerData: null, // can be object or array based on your footer API
+  footerData: null, 
 };
 
 const footerSlice = createSlice({

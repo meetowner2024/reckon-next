@@ -14,6 +14,9 @@ export default function Contact() {
   const footer = useSelector((state) => state.footer);
   const projects = useSelector((state) => state.projects.projectsDropdown);
   const header = useSelector((state) => state.header.header);
+   const contact = useSelector((state) => state.contact?.
+contactData
+);
   useEffect(() => {
     fetch("/api/users/contactus/contact", {
       cache: "force-cache",
@@ -231,7 +234,7 @@ export default function Contact() {
         <div className="mb-10 max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeUp delay={200}>
             <div className="w-full max-w-7xl">
-              <ContactSection />
+              <ContactSection formConfig={contact} />
             </div>
           </FadeUp>
         </div>
