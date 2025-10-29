@@ -53,7 +53,7 @@ export async function GET() {
     const response = NextResponse.json(images);
     response.headers.set(
       "Cache-Control",
-      "public, s-maxage=300, stale-while-revalidate=3600"
+      "public, s-maxage=300"
     );
     const etag = `"${images.length}-${Date.now()}"`;
     response.headers.set("ETag", etag);

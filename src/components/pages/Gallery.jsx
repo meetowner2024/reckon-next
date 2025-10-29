@@ -10,27 +10,17 @@ import "swiper/css/effect-fade";
 export default function Gallery() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const hasFetched = useRef(false);
   useEffect(() => {
-    if (hasFetched.current) return;
     const fetchImages = async () => {
       try {
-        const cached = sessionStorage.getItem("gallery_cache");
-        if (cached) {
-          setImages(JSON.parse(cached));
-          setLoading(false);
-          return;
-        }
         const res = await fetch("/api/users/gallery");
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         setImages(data);
-        sessionStorage.setItem("gallery_cache", JSON.stringify(data));
       } catch (error) {
         console.error("Failed to load gallery:", error);
       } finally {
         setLoading(false);
-        hasFetched.current = true;
       }
     };
     fetchImages();
@@ -79,7 +69,7 @@ export default function Gallery() {
                   fill
                   className="object-cover"
                   sizes="100vw"
-                  priority={index < 2}
+                  unoptimized
                   loading={index < 2 ? "eager" : "lazy"}
                 />
               </div>
