@@ -38,6 +38,8 @@ COPY --from=builder /app/next.config.js ./next.config.js
 EXPOSE 3000
 ENV PORT=3000
 ENV NODE_ENV=production
+ARG MONGODB_URI
+ENV MONGODB_URI=${MONGODB_URI}
 
 # Start your Next.js app
 CMD ["npm", "start"]
