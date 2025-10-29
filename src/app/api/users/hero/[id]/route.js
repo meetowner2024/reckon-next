@@ -15,7 +15,7 @@ export async function PUT(req, { params }) {
     const formData = await req.formData();
     const title = formData.get("title")?.toString().trim();
     const description = formData.get("description")?.toString().trim();
-    const location = formData.get("location")?.toString().trim();   // ← NEW
+    const location = formData.get("location")?.toString().trim();   
     const heroFile = formData.get("hero_image");
 
     if (!title || !location) {
@@ -26,7 +26,7 @@ export async function PUT(req, { params }) {
 
     if (heroFile && heroFile instanceof Blob) {
       const buffer = Buffer.from(await heroFile.arrayBuffer());
-      const filename = `${Date.now()}-${safeName(heroFile)}`;
+    const filename = `${Date.now()}-${safeName(heroFile.name)}`;
       fs.writeFileSync(path.join(heroDir, filename), buffer);
       updateData.image = `/uploads/hero/${filename}`;
     }

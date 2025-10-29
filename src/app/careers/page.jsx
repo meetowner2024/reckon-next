@@ -108,7 +108,7 @@ export default function Career() {
       />
       <PageBanner
         title="Careers"
-        subtitle="Leading the industry with innovation and quality"
+     
       />
       {}
       <section className="py-16 bg-gray-50">

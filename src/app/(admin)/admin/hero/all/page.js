@@ -11,7 +11,7 @@ export default function HeroSlides() {
   const [form, setForm] = useState({
     title: "",
     description: "",
-    location: "",          // ← NEW
+    location: "",         
     hero_image: null,
     imagePreview: "",
   });
