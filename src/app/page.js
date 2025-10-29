@@ -1,6 +1,11 @@
 import Home from "@/components/Home/Home";
 export const dynamic = "force-dynamic";
 export default async function HomePage() {
+  const BASE_URL =
+    typeof window === "undefined"
+      ? process.env.INTERNAL_API_URL
+      : process.env.NEXT_PUBLIC_BASE_URL;
+
   const [
     headerRes,
     heroRes,
@@ -13,47 +18,36 @@ export default async function HomePage() {
     footerRes,
     projDropdownRes,
   ] = await Promise.all([
-    fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/header/getHeader`,
-      {
-        cache: "force-cache",
-      }
-    ),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/hero`, {
+    fetch(`${BASE_URL}/api/users/header/getHeader`, {
       cache: "force-cache",
     }),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/advantages`, {
+    fetch(`${BASE_URL}/api/users/hero`, {
       cache: "force-cache",
     }),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/products`, {
+    fetch(`${BASE_URL}/api/users/advantages`, {
       cache: "force-cache",
     }),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/whychooseus`, {
+    fetch(`${BASE_URL}/api/users/products`, {
       cache: "force-cache",
     }),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/testimonials`, {
+    fetch(`${BASE_URL}/api/users/whychooseus`, {
       cache: "force-cache",
     }),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/faqs`, {
+    fetch(`${BASE_URL}/api/users/testimonials`, {
       cache: "force-cache",
     }),
-    fetch(
-      `${
-        process.env.NEXT_PUBLIC_BASE_URL || ""
-      }/api/users/contactus/form-config`,
-      {
-        cache: "force-cache",
-      }
-    ),
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/footer`, {
+    fetch(`${BASE_URL}/api/users/faqs`, {
       cache: "force-cache",
     }),
-    fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL || ""}/api/users/productsDropdown`,
-      {
-        cache: "force-cache",
-      }
-    ),
+    fetch(`${BASE_URL}/api/users/contactus/form-config`, {
+      cache: "force-cache",
+    }),
+    fetch(`${BASE_URL}/api/users/footer`, {
+      cache: "force-cache",
+    }),
+    fetch(`${BASE_URL}/api/users/productsDropdown`, {
+      cache: "force-cache",
+    }),
   ]);
   const [
     header,
@@ -83,9 +77,9 @@ export default async function HomePage() {
     image: `/uploads/${s.image.split("/").pop()}`,
   }));
 
-  const filterhero = hero 
-  .map((e) => e) 
-  .filter((e) => e.location === "main-slider"); 
+  const filterhero = hero
+    .map((e) => e)
+    .filter((e) => e.location === "main-slider");
   const advantages = advantagesData?.advantages ?? [];
   const mainTitle = advantagesData?.main_title ?? "The Reckonext Advantages";
   return (
@@ -97,7 +91,7 @@ export default async function HomePage() {
             : "/assets/images/Reckonext-logo.png",
           phone: header?.phone ?? "+91 88860 77745",
         }}
-        hero={filterhero }
+        hero={filterhero}
         advantages={advantages}
         mainTitle={mainTitle}
         products={products}
