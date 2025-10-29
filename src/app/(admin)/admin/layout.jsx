@@ -8,7 +8,7 @@ import LoadingAuth from "@/utils/LoadingAuth";
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const contentRef = useRef(null);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -21,25 +21,25 @@ export default function AdminLayout({ children }) {
     if (el) el.addEventListener("scroll", handleScroll);
     return () => el?.removeEventListener("scroll", handleScroll);
   }, []);
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch("/api/auth/me", {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error();
-        setLoading(false);
-      } catch {
-        router.push("/login");
-      }
-    };
-    checkAuth();
-  }, [router]);
+  // useEffect(() => {
+  //   const checkAuth = async () => {
+  //     try {
+  //       const res = await fetch("/api/auth/me", {
+  //         credentials: "include",
+  //       });
+  //       if (!res.ok) throw new Error();
+  //       setLoading(false);
+  //     } catch {
+  //       router.push("/login");
+  //     }
+  //   };
+  //   checkAuth();
+  // }, [router]);
 
-  if (loading) return <LoadingAuth />;
-  const scrollToTop = () => {
-    contentRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // if (loading) return <LoadingAuth />;
+  // const scrollToTop = () => {
+  //   contentRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  // };
   return (
     <div className="flex h-screen bg-gray-50">
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
