@@ -35,8 +35,8 @@ COPY --from=builder /app/next.config.mjs ./next.config.mjs
 # COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 # Cloud Run expects your app to listen on $PORT
-EXPOSE 3000
-ENV PORT=3000
+EXPOSE 8080
+ENV PORT=8080
 ENV NODE_ENV=production
 
 # Define build-time ARG for Mongo URI (optional, but not required when using Cloud Run secrets)
