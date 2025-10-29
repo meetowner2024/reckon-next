@@ -1,16 +1,9 @@
 "use client";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Mail,
-  Phone,
-  Lock,
-  Loader2, AlertCircle
-} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Mail, Phone, Lock, Loader2, AlertCircle } from "lucide-react";
 export default function LoginPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/admin";
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -27,7 +20,7 @@ export default function LoginPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        router.push(redirectTo);
+        router.push("/admin");
       } else {
         setError(data.message || "Invalid credentials");
       }
@@ -42,7 +35,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#48ADB9]/10 via-white to-[#48ADB9]/5 px-4">
       <div className="w-full max-w-md">
-        {}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-linear-to-br from-[#48ADB9] to-[#3d8f99] text-white text-2xl font-bold shadow-lg mb-4">
             R
@@ -50,10 +42,9 @@ export default function LoginPage() {
           <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
           <p className="text-gray-600 mt-2">Sign in with mobile or email</p>
         </div>
-        {}
+
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <form onSubmit={handleSubmit} className="space-y-5">
-            {}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Mobile or Email
@@ -82,7 +73,7 @@ export default function LoginPage() {
                 Enter 10-digit mobile or valid email
               </p>
             </div>
-            {}
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
@@ -100,14 +91,14 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-            {}
+
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm flex items-center gap-2 animate-pulse">
                 <AlertCircle className="h-5 w-5" />
                 <span>{error}</span>
               </div>
             )}
-            {}
+
             <button
               type="submit"
               disabled={loading}
@@ -123,7 +114,7 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-          {}
+
           <div className="mt-6 text-center text-sm text-gray-600">
             <p>
               Don't have an account?{" "}
