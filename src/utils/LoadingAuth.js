@@ -4,7 +4,7 @@ export default function LoadingAuth() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
       <Image
-        src="/assets/images/Loading 40 _ Paperplane.gif"
+        src="/assets/images/Paperplane.gif"
         alt="Checking authentication"
         width={120}
         height={120}
