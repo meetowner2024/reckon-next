@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getDB } from "@/lib/server/mongo";
+import { ObjectId } from "mongodb";
 const JWT_SECRET = process.env.JWT_SECRET;
 export async function GET(request) {
   try {
-    const token = request.headers
-      .get("cookie")
-      ?.split("; ")
-      ?.find((row) => row.startsWith("admin_token="))
-      ?.split("=")[1];
+    const token = request.cookies.get("admin_token")?.value;
     if (!token) {
       return NextResponse.json(
         { message: "Unauthorized: No token" },
@@ -26,7 +23,7 @@ export async function GET(request) {
     }
     const db = await getDB();
     const user = await db.collection("admins").findOne({
-      _id: require("mongodb").ObjectId.createFromHexString(decoded.sub),
+      _id: new ObjectId(decoded.sub),
     });
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });

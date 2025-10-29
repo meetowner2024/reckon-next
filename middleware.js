@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-const JWT_SECRET = process.env.JWT_SECRET || "Reckonext8886077745";
+const JWT_SECRET = process.env.JWT_SECRET;
 export function middleware(req) {
   const { pathname } = req.nextUrl;
   if (pathname.startsWith("/admin")) {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("admin_token")?.value;
     if (!token) {
       return NextResponse.redirect(new URL("/", req.url));
     }
