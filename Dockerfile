@@ -1,36 +1,43 @@
 # ---------- Step 1: Build the Next.js app ----------
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
+
+# Set working directory
 WORKDIR /app
 
-# Copy dependency files first (for better caching)
+# Copy only package files first for better layer caching
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies (clean, reproducible)
 RUN npm ci
 
-# Copy the rest of the source code
+# Copy the rest of your source code
 COPY . .
 
-# Build the Next.js app
+# Build the Next.js production bundle
 RUN npm run build
 
 
-# ---------- Step 2: Run the optimized app ----------
-FROM node:20-alpine AS runner
+# ---------- Step 2: Run the production build ----------
+FROM node:22-alpine AS runner
+
 WORKDIR /app
 
-# Copy only required files from builder
+# Copy only the necessary files for runtime
 COPY --from=builder /app/package*.json ./
 RUN npm ci --omit=dev
 
-# Copy the production build output and assets
+# Copy build output and static assets from builder stage
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./next.config.js
 
-# If you use next.config.mjs instead of .js, copy that instead:
+# Copy Next.js config file (use .mjs if you have that)
+COPY --from=builder /app/next.config.js ./next.config.js
 # COPY --from=builder /app/next.config.mjs ./next.config.mjs
 
+# Cloud Run expects app to listen on $PORT
 EXPOSE 8080
 ENV PORT=8080
+ENV NODE_ENV=production
+
+# Start your Next.js app
 CMD ["npm", "start"]

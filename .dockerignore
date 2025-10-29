@@ -1,4 +1,3 @@
-node_modules
-npm-debug.log
-.git
-.next/cache
+node_modules;
+
+npm - debug.log.next / cache.git.DS_Store;
