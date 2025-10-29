@@ -29,7 +29,6 @@ export async function GET(req) {
       status: 200,
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=86400, immutable",
       },
     });
   } catch (err) {
