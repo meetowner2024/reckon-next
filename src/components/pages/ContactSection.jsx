@@ -13,7 +13,6 @@ import {
 import { v4 as uuidv4 } from "uuid";
 const iconMap = { User, Phone, Mail, MessageSquare };
 const DynamicContactForm = ({ formConfig}) => {
-  console.log("formConfig",formConfig)
   const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
