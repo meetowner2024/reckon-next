@@ -21,10 +21,7 @@ export default function Gallery() {
           setLoading(false);
           return;
         }
-        const res = await fetch("/api/users/gallery", {
-          cache: "force-cache",
-          next: { revalidate: 300 },
-        });
+        const res = await fetch("/api/users/gallery");
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
         setImages(data);

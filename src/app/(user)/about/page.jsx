@@ -20,10 +20,7 @@ export default function AboutPage() {
   const projects = useSelector((state) => state.projects.projectsDropdown);
   const header = useSelector((state) => state.header.header);
   useEffect(() => {
-    fetch("/api/users/about", {
-      cache: "force-cache",
-      next: { revalidate: 3600 },
-    })
+    fetch("/api/users/about")
       .then((r) => r.json())
       .then((d) => {
         setData(d);

@@ -18,36 +18,16 @@ export default async function HomePage() {
     footerRes,
     projDropdownRes,
   ] = await Promise.all([
-    fetch(`${BASE_URL}/api/users/header/getHeader`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/hero`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/advantages`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/products`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/whychooseus`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/testimonials`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/faqs`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/contactus/form-config`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/footer`, {
-      cache: "force-cache",
-    }),
-    fetch(`${BASE_URL}/api/users/productsDropdown`, {
-      cache: "force-cache",
-    }),
+    fetch(`${BASE_URL}/api/users/header/getHeader`),
+    fetch(`${BASE_URL}/api/users/hero`),
+    fetch(`${BASE_URL}/api/users/advantages`),
+    fetch(`${BASE_URL}/api/users/products`),
+    fetch(`${BASE_URL}/api/users/whychooseus`),
+    fetch(`${BASE_URL}/api/users/testimonials`),
+    fetch(`${BASE_URL}/api/users/faqs`),
+    fetch(`${BASE_URL}/api/users/contactus/form-config`),
+    fetch(`${BASE_URL}/api/users/footer`),
+    fetch(`${BASE_URL}/api/users/productsDropdown`),
   ]);
   const [
     header,

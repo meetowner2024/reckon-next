@@ -17,10 +17,7 @@ export default function ProductPage() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`/api/users/products?id=${id}`, {
-          cache: "force-cache",
-          next: { revalidate: 3600 },
-        });
+        const res = await fetch(`/api/users/products?id=${id}`);
         const data = await res.json();
         if (data.length > 0) setProduct(data[0]);
       } catch (err) {
@@ -35,10 +32,7 @@ export default function ProductPage() {
   useEffect(() => {
     async function fetchAdvantages() {
       try {
-        const res = await fetch("/api/users/advantages", {
-          cache: "force-cache",
-          next: { revalidate: 3600 },
-        });
+        const res = await fetch("/api/users/advantages");
         const data = await res.json();
         if (data.advantages && Array.isArray(data.advantages)) {
           setAdvantages(data.advantages);

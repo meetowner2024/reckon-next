@@ -18,10 +18,7 @@ export default function Contact() {
 contactData
 );
   useEffect(() => {
-    fetch("/api/users/contactus/contact", {
-      cache: "force-cache",
-      next: { revalidate: 3600 },
-    })
+    fetch("/api/users/contactus/contact")
       .then((res) => res.json())
       .then((json) => {
         setData(json);

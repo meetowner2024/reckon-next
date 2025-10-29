@@ -19,10 +19,7 @@ const PageBanner = ({
       return;
     }
 
-    fetch(`/api/users/hero/page-banner?title=${pageTitle}`, {
-      cache: "force-cache",
-      next: { revalidate: 300 },
-    })
+    fetch(`/api/users/hero/page-banner?title=${pageTitle}`)
       .then((r) => r.json(setSlide))
       .then((slides) => {
         setSlide(slides || null);
