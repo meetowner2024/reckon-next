@@ -119,6 +119,11 @@ const Footer = ({ footer, projects }) => {
                   <Link href="/contact" className="hover:underline">
                     Contact
                   </Link>
+                  <li>
+                  <Link href="/privacy" className="hover:underline">
+                 Privacy & Policy
+                  </Link>
+                </li>
                 </li>
                 {}
                 {footer.quickLinks?.map((link, i) => (

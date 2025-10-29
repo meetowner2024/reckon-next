@@ -8,6 +8,7 @@ import FadeUp from "./pages/FadeUp";
 const PageBanner = ({
   title: pageTitle,
   subtitle: pageSubtitle,
+  image,
   children,
   breadcrumbItems = [],
   isProductSubpage = false,
@@ -15,7 +16,7 @@ const PageBanner = ({
   const [slide, setSlide] = useState(null);
 
   useEffect(() => {
-    if (!pageTitle) {
+    if (image ||!pageTitle) {
       return;
     }
 
@@ -27,11 +28,15 @@ const PageBanner = ({
       .catch(() => setSlide(null));
   }, [pageTitle]);
 
-  const imageUrl = slide?.image.startsWith("http")
-    ? slide?.image
-    : `/${slide?.image.replace(/^\/+/, "")}`;
+  const imageUrl = image
+    ? image
+    : slide?.image?.startsWith("http")
+    ? slide.image
+    : slide?.image
+    ? `/${slide.image.replace(/^\/+/, "")}`
+    : null;
 
-  const title = slide?.title;
+  const title = slide?.title || pageTitle;
   const subtitle = slide?.description || pageSubtitle;
 
   const breadcrumbItemsFinal =
@@ -44,21 +49,6 @@ const PageBanner = ({
             : []),
           { label: title, icon: "default" },
         ];
-
-  if (!slide) {
-    return (
-      <div className="relative w-full h-[260px] sm:h-[350px] bg-gray rounded-b-2xl sm:rounded-b-3xl flex items-center justify-center text-center p-6">
-        <div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-2">
-            {pageTitle || "Page"}
-          </h1>
-          {pageSubtitle && (
-            <p className="text-xl text-white/80">{pageSubtitle}</p>
-          )}
-        </div>
-      </div>
-    );
-  }
   return (
     <div className="relative p-5 w-full sm:h-[350px] h-[260px] sm:rounded-b-3xl rounded-b-2xl flex items-center justify-center overflow-hidden">
       <Image
