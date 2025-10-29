@@ -69,7 +69,7 @@ export default function Contact() {
         logo={header.logo}
         phone={header.phone}
       />
-      <PageBanner title="Contact Us" subtitle="Get in touch with us today" />
+      <PageBanner title="Contact Us"  />
       {}
       <section className="relative py-8 sm:py-12 md:py-16 lg:py-18 overflow-hidden bg-white text-gray-900">
         <motion.div
