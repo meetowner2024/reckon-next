@@ -24,7 +24,9 @@ export default function AdminLayout({ children }) {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch("/api/auth/me");
+        const res = await fetch("/api/auth/me", {
+          credentials: "include",
+        });
         if (!res.ok) throw new Error();
         setLoading(false);
       } catch {

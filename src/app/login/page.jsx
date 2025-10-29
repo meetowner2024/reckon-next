@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Phone, Lock, Loader2, AlertCircle } from "lucide-react";
 export default function LoginPage() {
@@ -8,6 +8,24 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch("/api/auth/me", {
+          credentials: "include",
+        });
+        if (res.ok) {
+          router.replace("/admin");
+        }
+      } catch (err) {
+        console.error("Auth check failed:", err);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -32,6 +50,13 @@ export default function LoginPage() {
   };
   const isMobile = /^\d{10}$/.test(identifier);
   const isEmail = identifier.includes("@") && identifier.includes(".");
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin h-8 w-8 text-[#48ADB9]" />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-[#48ADB9]/10 via-white to-[#48ADB9]/5 px-4">
       <div className="w-full max-w-md">
@@ -42,7 +67,6 @@ export default function LoginPage() {
           <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
           <p className="text-gray-600 mt-2">Sign in with mobile or email</p>
         </div>
-
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -73,7 +97,6 @@ export default function LoginPage() {
                 Enter 10-digit mobile or valid email
               </p>
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Password
@@ -91,14 +114,12 @@ export default function LoginPage() {
                 />
               </div>
             </div>
-
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm flex items-center gap-2 animate-pulse">
                 <AlertCircle className="h-5 w-5" />
                 <span>{error}</span>
               </div>
             )}
-
             <button
               type="submit"
               disabled={loading}
@@ -114,7 +135,6 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
           <div className="mt-6 text-center text-sm text-gray-600">
             <p>
               Don't have an account?{" "}
