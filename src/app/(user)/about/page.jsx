@@ -47,7 +47,7 @@ export default function AboutPage() {
         <PageBanner title="About Us" />
       </div>
 
-      <section className="py-20 bg-white">
+      <section className="md:py-16 sm:py-12 py-8 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <FadeUp>
@@ -56,7 +56,7 @@ export default function AboutPage() {
                   {data.title || "About Company"}
                 </h2>
                 <div
-                  className="text-lg text-gray-700 space-y-4"
+                  className="text-md sm:text-lg text-gray-700 space-y-4"
                   dangerouslySetInnerHTML={{
                     __html: (data.description || "").replace(/\n/g, "<br/>"),
                   }}
@@ -122,7 +122,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
+      <section className="md:py-16 sm:py-12 py-10 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeUp delay={0}>
             <div className="text-center mb-16">
