@@ -80,7 +80,7 @@ const PageBanner = ({
         <div className="absolute bottom-6 left-6 z-10">{children}</div>
       )}
 
-      <div className="absolute bottom-6 left-6 z-10">
+      <div className="absolute bottom-6 left-6 z-10 hidden sm:block">
         <Breadcrumb items={breadcrumbItemsFinal} />
       </div>
     </div>

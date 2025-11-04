@@ -54,7 +54,7 @@ const Footer = ({ footer, projects }) => {
       }}
     >
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-8 sm:gap-6 gap-2 mb-8">
           {}
           <div className="space-y-4">
             <div className="w-auto h-auto flex items-center justify-left p-2">
@@ -93,9 +93,9 @@ const Footer = ({ footer, projects }) => {
             </div>
           </div>
           {}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 sm:gap-6 gap-2 ">
             {}
-            <div className="bg-white/5 p-4 rounded-lg">
+            <div className="bg-white/5 px-4 py-2 rounded-lg">
               <h4 className="text-lg text-[#213147] inline-block border-b border-[#213147] font-semibold mb-4">
                 Quick Links
               </h4>
@@ -141,7 +141,7 @@ const Footer = ({ footer, projects }) => {
               </ul>
             </div>
             {}
-            <div className="bg-white/5 p-4 rounded-lg">
+            <div className="bg-white/5 px-4 py-2 rounded-lg">
               <h4 className="text-lg text-[#213147] inline-block border-b border-[#213147] font-semibold mb-4">
                 Products
               </h4>
@@ -162,7 +162,7 @@ const Footer = ({ footer, projects }) => {
             </div>
           </div>
           {}
-          <div className="bg-white/5 p-4 rounded-lg space-y-6">
+          <div className="bg-white/5 px-4 py-2 rounded-lg space-y-6">
             <h4 className="text-lg text-[#213147] inline-block border-b border-[#213147] font-semibold">
               Get In Touch
             </h4>
@@ -172,10 +172,10 @@ const Footer = ({ footer, projects }) => {
                   size={20}
                   className="mt-1 flex-shrink-0 text-[#044182]"
                 />
-                <div className="text-sm text-[#213147]">
+                <div className="text-sm text-[#213147] w-full">
                   <strong className="text-[#213147]">{loc.type}</strong>
                   <br />
-                  {loc.address.split(", ").map((line, i) => (
+                  {loc.address.split("\n").map((line, i) => (
                     <span key={i}>
                       {line}
                       <br />

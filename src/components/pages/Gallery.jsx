@@ -34,7 +34,7 @@ export default function Gallery() {
   }
   if (images.length === 0) {
     return (
-      <div className="text-center py-20 text-gray-500">
+      <div className="text-center md:py-16 sm:py-12 py-10  text-gray-500">
         No images in gallery yet. Upload from admin panel.
       </div>
     );
