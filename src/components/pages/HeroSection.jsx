@@ -32,7 +32,7 @@ const HeroSection = ({ slides }) => {
           clickable: true,
           bulletClass:
             "swiper-pagination-bullet !bg-white/40 hover:!bg-white/70",
-          bulletActiveClass: "!bg-white !scale-125",
+          bulletActiveClass: "!bg-black/100 !scale-150",
         }}
         speed={1000}
         className="h-full"
@@ -82,6 +82,12 @@ const HeroSection = ({ slides }) => {
           width: 24px;
           border-radius: 6px;
         }
+          .bulletActiveClass {
+            width: 24px;
+            color: #fff;
+            background: #000;
+            border-radius: 10px;
+          }
       `}</style>
     </section>
   );
