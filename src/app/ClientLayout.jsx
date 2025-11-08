@@ -21,7 +21,7 @@ export default function ClientLayout({ children }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Chat on WhatsApp"
-            className="fixed bottom-6 right-6 flex items-center justify-center bg-[#1e3a8a] text-white rounded-full w-12 h-12 shadow-lg hover:bg-[#f0f9ff] hover:text-[#1e3a8a] transition-all duration-300 z-50 animate-bounce hover:scale-110 hover:[#1e3a8a]/50"
+            className="fixed bottom-6 right-6 flex items-center justify-center bg-[#077632] text-white rounded-full w-12 h-12 shadow-lg hover:bg-[#f0f9ff] hover:text-[#1e3a8a] transition-all duration-300 z-50 animate-bounce hover:scale-110 hover:[#1e3a8a]/50"
           >
             <FaWhatsapp size={25} className="drop-shadow-md" />
             <span className="absolute w-full h-full rounded-full bg-[#1e3a8a] opacity-20 animate-ping"></span>
