@@ -1,42 +1,38 @@
 import { getDB } from "@/lib/server/mongo";
-import fs from "fs";
-import path from "path";
+import { put, del } from "@vercel/blob";
 export const runtime = "nodejs";
-const uploadDir = path.join(process.cwd(), "public", "uploads", "header");
 
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 export async function POST(req) {
   try {
     const formData = await req.formData();
     const db = await getDB();
     const existingHeader = await db.collection("header").findOne({});
+        const logoFile = formData.get("logo");
+    const phone = formData.get("phone")?.toString(); 
+
     let updatedFields = {};
     let logoPath = existingHeader?.logo || null;
-    const logoFile = formData.get("logo");
-    const phone = formData.get("phone")?.toString();
-    if (logoFile && logoFile instanceof Blob) {
+   if (logoFile && logoFile instanceof Blob) {
+      const buffer = Buffer.from(await logoFile.arrayBuffer());
+      const filename = `${Date.now()}-${logoFile.name.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+
       if (existingHeader?.logo) {
-        const oldFilePath = path.join(
-          process.cwd(),
-          "public/uploads/header",
-          existingHeader.logo
-        );
-        if (fs.existsSync(oldFilePath)) {
-          try {
-            fs.unlinkSync(oldFilePath);
-          } catch (delErr) {
-            console.error("Failed to delete old logo:", delErr);
-          }
+        try {
+          await del(existingHeader.logo);
+        } catch (err) {
+          console.error("Error deleting old blob:", err);
         }
       }
-      const arrayBuffer = await logoFile.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-      const filename = `${Date.now()}-${logoFile.name}`;
-      const filePath = path.join(uploadDir, filename);
-      fs.writeFileSync(filePath, buffer);
-      logoPath = `header/${filename}`;
-      updatedFields.logo = logoPath;
+
+      const { url } = await put(`header/${filename}`, buffer, {
+        access: "public",
+      });
+
+      logoPath = url;
+      updatedFields.logo = url;
     }
+
+
     if (phone) updatedFields.phone = phone;
     updatedFields.updated_at = new Date();
     await db
