@@ -144,14 +144,6 @@ const TestimonialsSection = ({ testimonials }) => {
                         <Quote className="w-8 sm:w-10 h-8 sm:h-10" />
                       </div>
                       <div className="flex items-start sm:items-center mb-3 sm:mb-4">
-                        <Image
-                          src={testimonial.image}
-                          alt={testimonial.name}
-                          className="w-10 sm:w-14 h-10 sm:h-14 rounded-full object-cover mr-2 sm:mr-3 flex-shrink-0"
-                          width={100}
-                          height={40}
-                          loading="lazy"
-                        />
                         <div className="min-w-0 flex-1">
                           <h4 className="font-semibold text-[#000000] text-sm sm:text-base truncate">
                             {testimonial.name}
