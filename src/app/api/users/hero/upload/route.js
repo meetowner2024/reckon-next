@@ -1,11 +1,6 @@
 import { getDB } from "@/lib/server/mongo";
-import fs from "fs";
-import path from "path";
-
+import { put } from "@vercel/blob";
 export const runtime = "nodejs";
-
-const heroDir = path.join(process.cwd(), "public", "uploads", "hero");
-if (!fs.existsSync(heroDir)) fs.mkdirSync(heroDir, { recursive: true });
 
 const safeName = (file) => file.name.replace(/[^a-zA-Z0-9.]/g, "_");
 
@@ -26,15 +21,17 @@ export async function POST(req) {
     }
 
     const heroBuffer = Buffer.from(await heroFile.arrayBuffer());
-    const heroFilename = `${Date.now()}-${safeName(heroFile)}`;
-    fs.writeFileSync(path.join(heroDir, heroFilename), heroBuffer);
+    const heroFilename = `${Date.now()}-${safeName(heroFile.name)}`;
+    const { url } = await put(`hero/${heroFilename}`, heroBuffer, {
+      access: "public",
+    });
 
     const db = await getDB();
     const slide = {
-      title,
+      title, 
       description,
       location,                    
-      image: `/uploads/hero/${heroFilename}`,
+      image: url,
       created_at: new Date(),
       updated_at: new Date(),
     };
