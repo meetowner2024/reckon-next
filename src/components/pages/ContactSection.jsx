@@ -25,7 +25,7 @@ const DynamicContactForm = ({ formConfig }) => {
     if (submitSuccess) {
       const timer = setTimeout(() => {
         setSubmitSuccess(false);
-      }, 2500); // 2.5 seconds
+      }, 5000); // 5 seconds
       return () => clearTimeout(timer);
     }
   }, [submitSuccess]);
@@ -254,7 +254,7 @@ const DynamicContactForm = ({ formConfig }) => {
           </p>
         </motion.div>
 
-        {/* Success Message - Auto Closes in 2.5s */}
+        {/* Success Message - Auto Closes in 5s */}
         <AnimatePresence>
           {submitSuccess && (
             <motion.div
@@ -272,7 +272,7 @@ const DynamicContactForm = ({ formConfig }) => {
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </motion.div>
               <h3 className="text-lg font-bold text-green-800">
-                Your request has been submitted successfully!
+                Your request has been submitted successfully! <br /> Our team will get back to you soon.
               </h3>
             </motion.div>
           )}

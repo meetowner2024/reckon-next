@@ -160,7 +160,7 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
           </div>
 
           {/* Mobile Button */}
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden p-2 rounded-md">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden p-2 rounded-md text-gray-900">
             {mobileMenuOpen ? <X /> : <Menu />}
           </button>
         </div>
@@ -173,14 +173,14 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.3 }}
-              className="lg:hidden fixed top-16 right-0 w-[75%] h-[calc(100vh-4rem)] bg-white shadow-xl border-l overflow-y-auto z-40"
+              className="lg:hidden fixed top-16 right-0 w-[75%] h-[calc(100vh-4rem)] bg-white shadow-xl border-l overflow-y-auto z-40 text-gray-900"
             >
               <div className="p-4 space-y-1">
                 {navItems.map((item) => (
                   <div key={item.name}>
                     <button
                       onClick={() => handleMainItemClick(item)}
-                      className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium"
+                      className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-900 hover:text-[#0e55a1]"
                     >
                       {item.name}
                       {item.submenu && <ChevronDown className={`w-4 h-4 ${openSubmenu === item.name ? "rotate-180" : ""}`} />}
@@ -192,7 +192,7 @@ const HeaderSection = ({ logo, phone, projectsDropdown = [] }) => {
                           <button
                             key={subItem.path}
                             onClick={() => handleNavigation(subItem.path)}
-                            className="w-full px-3 text-left py-2 text-sm hover:text-[#0e55a1]"
+                            className="w-full px-3 text-left py-2 text-sm text-gray-600 hover:text-[#0e55a1]"
                           >
                             {subItem.name}
                           </button>

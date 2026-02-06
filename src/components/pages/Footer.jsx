@@ -46,7 +46,7 @@ const Footer = ({ footer, projects }) => {
   };
   return (
     <footer
-      className="bg-gray-200 text-[#f0f0f0] rounded-t-3xl pt-12 pb-5 px-4 sm:px-6 lg:px-8"
+      className="bg-gray-200 text-[#f0f0f0] rounded-t-none sm:rounded-t-3xl pt-12 pb-5 px-4 sm:px-6 lg:px-8"
       style={{
         backgroundImage: `url("/assets/images/Footer-BG.png")`,
         backgroundRepeat: "repeat",
@@ -125,7 +125,7 @@ const Footer = ({ footer, projects }) => {
                     Privacy & Policy
                   </Link>
                 </li>
-                {}
+
                 {footer.quickLinks?.map((link, i) => (
                   <li key={i}>
                     <a
