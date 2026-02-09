@@ -12,7 +12,7 @@ const HeroSection = ({ slides }) => {
   if (!slides || slides.length === 0) return null;
   return (
     <section
-      className="relative w-full h-[480px] overflow-hidden"
+      className="relative w-full h-[400px] md:h-[480px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
