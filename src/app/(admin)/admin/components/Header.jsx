@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { LogOut, User, ChevronDown, Menu } from "lucide-react";
+import { LogOut, User, ChevronDown, Menu, Lock } from "lucide-react";
 import Link from "next/link";
 export default function Header({ toggleSidebar, isSidebarOpen }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -52,6 +52,14 @@ export default function Header({ toggleSidebar, isSidebarOpen }) {
               >
                 <User size={16} className="mr-2" />
                 My Profile
+              </Link>
+              <Link
+                href="/admin/profile/change-password"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setDropdownOpen(false)}
+              >
+                <Lock size={16} className="mr-2" />
+                Change Password
               </Link>
               <hr className="my-1 border-gray-200" />
               {isLoggedIn ? (
