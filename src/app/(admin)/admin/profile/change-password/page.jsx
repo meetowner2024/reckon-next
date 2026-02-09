@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Lock, Loader2, CheckCircle, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { Lock, Shield, Loader2, CheckCircle, AlertCircle, Eye, EyeOff } from "lucide-react";
 import FadeUp from "@/components/pages/FadeUp";
 
 export default function ChangePasswordPage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -36,7 +37,7 @@ export default function ChangePasswordPage() {
       const res = await fetch("/api/admin/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentPassword, newPassword }),
+        body: JSON.stringify({ currentPassword, newPassword, adminPassword }),
       });
 
       const data = await res.json();
@@ -46,6 +47,7 @@ export default function ChangePasswordPage() {
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
+        setAdminPassword("");
       } else {
         setError(data.message || "Failed to update password");
       }
@@ -132,6 +134,22 @@ export default function ChangePasswordPage() {
                   {showConfirm ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700">Admin Secret Key</label>
+              <div className="relative">
+                <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
+                <input
+                  type="password"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  className="w-full h-12 pl-10 pr-4 bg-gray-50 border border-red-200 rounded-xl focus:ring-4 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium text-black placeholder-red-200"
+                  placeholder="Enter secret key to authorize"
+                  required
+                />
+              </div>
+              <p className="text-xs text-red-600">This action requires admin authorization</p>
             </div>
 
             <AnimatePresence>

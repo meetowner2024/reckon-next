@@ -4,10 +4,14 @@ import { getDB } from "@/lib/server/mongo";
 
 export async function POST(request) {
   try {
-    const { identifier, newPassword } = await request.json();
+    const { identifier, newPassword, adminPassword } = await request.json();
 
-    if (!identifier || !newPassword) {
-      return NextResponse.json({ message: "Identifier and new password required" }, { status: 400 });
+    if (!identifier || !newPassword || !adminPassword) {
+      return NextResponse.json({ message: "All fields are required" }, { status: 400 });
+    }
+
+    if (adminPassword !== process.env.ADMIN_REGISTRATION_PASSWORD) {
+      return NextResponse.json({ message: "Invalid admin secret key" }, { status: 403 });
     }
 
     const db = await getDB();

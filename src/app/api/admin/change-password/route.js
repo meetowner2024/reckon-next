@@ -23,12 +23,19 @@ export async function POST(request) {
       return NextResponse.json({ message: "Invalid session" }, { status: 401 });
     }
 
-    const { currentPassword, newPassword } = await request.json();
+    const { currentPassword, newPassword, adminPassword } = await request.json();
 
-    if (!currentPassword || !newPassword) {
+    if (!currentPassword || !newPassword || !adminPassword) {
       return NextResponse.json(
-        { message: "Both current and new passwords are required" },
+        { message: "Current password, new password, and secret key are required" },
         { status: 400 }
+      );
+    }
+
+    if (adminPassword !== process.env.ADMIN_REGISTRATION_PASSWORD) {
+      return NextResponse.json(
+        { message: "Invalid admin secret key" },
+        { status: 403 }
       );
     }
 

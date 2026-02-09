@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Mail, Phone, Lock, Loader2, AlertCircle, CheckCircle, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Mail, Phone, Lock, Shield, Loader2, AlertCircle, CheckCircle, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function ForgotPasswordPage() {
@@ -8,6 +8,7 @@ export default function ForgotPasswordPage() {
   const [identifier, setIdentifier] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [adminPassword, setAdminPassword] = useState("");
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,7 @@ export default function ForgotPasswordPage() {
       const res = await fetch("/api/admin/forgot-password/reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, newPassword }),
+        body: JSON.stringify({ identifier, newPassword, adminPassword }),
       });
 
       const data = await res.json();
@@ -178,6 +179,22 @@ export default function ForgotPasswordPage() {
                       {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-gray-700">Admin Secret Key</label>
+                  <div className="relative">
+                    <Shield className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-red-500" />
+                    <input
+                      type="password"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                      className="w-full h-12 pl-10 pr-4 bg-gray-50 border border-red-200 rounded-xl focus:ring-4 focus:ring-red-500/10 focus:border-red-500 transition-all font-medium placeholder-red-200"
+                      placeholder="Enter secret key to reset"
+                      required
+                    />
+                  </div>
+                  <p className="text-xs text-red-600">This action requires authorization</p>
                 </div>
 
                 {error && (
