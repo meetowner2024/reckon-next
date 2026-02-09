@@ -6,9 +6,11 @@ import Image from "next/image";
 export default function AddHeroSlide() {
   const [heroImg, setHeroImg] = useState(null);
   const [heroPrev, setHeroPrev] = useState("");
+  const [mobileImg, setMobileImg] = useState(null);
+  const [mobilePrev, setMobilePrev] = useState("");
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [location, setLocation] = useState("");   
+  const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [titleError, setTitleError] = useState("");
   const router = useRouter();
@@ -18,6 +20,14 @@ export default function AddHeroSlide() {
     if (file) {
       setHeroImg(file);
       setHeroPrev(URL.createObjectURL(file));
+    }
+  };
+
+  const handleMobileHero = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setMobileImg(file);
+      setMobilePrev(URL.createObjectURL(file));
     }
   };
 
@@ -55,9 +65,12 @@ export default function AddHeroSlide() {
     setLoading(true);
     const form = new FormData();
     form.append("hero_image", heroImg);
+    if (mobileImg) {
+      form.append("mobile_image", mobileImg);
+    }
     form.append("title", title);
     form.append("description", desc);
-    form.append("location", location);   
+    form.append("location", location);
 
     try {
       const res = await fetch("/api/users/hero/upload", { method: "POST", body: form });
@@ -83,13 +96,24 @@ export default function AddHeroSlide() {
 
       <form onSubmit={submit} className="space-y-6">
         <div>
-          <label className="block font-semibold mb-2">Hero Image *</label>
+          <label className="block font-semibold mb-2">Hero Image (Desktop) *</label>
           {heroPrev && (
             <div className="mb-3 border rounded-lg overflow-hidden">
               <Image src={heroPrev} alt="Hero" width={600} height={300} className="w-full h-64 object-cover" />
             </div>
           )}
           <input type="file" accept="image/*" onChange={handleHero} required
+            className="w-full cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:bg-[#48ADB9] file:text-white" />
+        </div>
+
+        <div>
+          <label className="block font-semibold mb-2">Hero Image (Mobile)</label>
+          {mobilePrev && (
+            <div className="mb-3 border rounded-lg overflow-hidden">
+              <Image src={mobilePrev} alt="Mobile Hero" width={300} height={300} className="w-full h-64 object-cover" />
+            </div>
+          )}
+          <input type="file" accept="image/*" onChange={handleMobileHero}
             className="w-full cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded file:bg-[#48ADB9] file:text-white" />
         </div>
 

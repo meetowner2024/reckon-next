@@ -40,17 +40,32 @@ const HeroSection = ({ slides }) => {
         {slides.map((slide, index) => (
           <SwiperSlide key={slide._id}>
             <div className="relative h-full">
-              <Image
-                src={slide.image}
-                alt={slide.title || "Hero slide"}
-                fill
-                priority={index === 0}
-                sizes="100vw"
-                className="object-cover object-center"
-              />
-              {}
+              <div className={`absolute inset-0 ${slide.mobileImage ? 'hidden md:block' : 'block'}`}>
+                <Image
+                  src={slide.image}
+                  alt={slide.title || "Hero slide"}
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                  className="object-cover object-center"
+                />
+              </div>
+
+              {slide.mobileImage && (
+                <div className="absolute inset-0 block md:hidden">
+                  <Image
+                    src={slide.mobileImage}
+                    alt={slide.title || "Hero slide"}
+                    fill
+                    priority={index === 0}
+                    sizes="100vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              )}
+              { }
               <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/70" />
-              {}
+              { }
               <div className="relative h-full flex flex-col justify-center items-center text-center px-6">
                 <FadeUp>
                   <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-4">
@@ -67,7 +82,7 @@ const HeroSection = ({ slides }) => {
           </SwiperSlide>
         ))}
       </Swiper>
-      {}
+      { }
       <style jsx global>{`
         .swiper-pagination {
           bottom: 24px !important;

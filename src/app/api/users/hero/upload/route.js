@@ -9,9 +9,10 @@ export async function POST(req) {
     const formData = await req.formData();
 
     const heroFile = formData.get("hero_image");
+    const mobileFile = formData.get("mobile_image");
     const title = formData.get("title")?.toString().trim();
     const description = formData.get("description")?.toString().trim();
-    const location = formData.get("location")?.toString().trim();   
+    const location = formData.get("location")?.toString().trim();
 
     if (!heroFile || !(heroFile instanceof Blob)) {
       return new Response(JSON.stringify({ message: "Hero image required" }), { status: 400 });
@@ -26,12 +27,23 @@ export async function POST(req) {
       access: "public",
     });
 
+    let mobileUrl = null;
+    if (mobileFile && mobileFile instanceof Blob) {
+      const mobileBuffer = Buffer.from(await mobileFile.arrayBuffer());
+      const mobileFilename = `mobile-${Date.now()}-${safeName(mobileFile.name)}`;
+      const { url: mUrl } = await put(`hero/${mobileFilename}`, mobileBuffer, {
+        access: "public",
+      });
+      mobileUrl = mUrl;
+    }
+
     const db = await getDB();
     const slide = {
-      title, 
+      title,
       description,
-      location,                    
+      location,
       image: url,
+      mobile_image: mobileUrl,
       created_at: new Date(),
       updated_at: new Date(),
     };

@@ -102,9 +102,9 @@ export default function Career() {
       />
       <PageBanner
         title="Careers"
-     
+
       />
-      {}
+      { }
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
@@ -112,9 +112,9 @@ export default function Career() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="text-4xl font-bold text-center text-[#0e55a1] mb-12"
+            className="text-4xl font-bold text-center text-[#0e55a1] mb-6"
           >
-            Open Positions
+            Coming Soon
           </motion.h2>
           {positions.length === 0 ? (
             <p className="text-center text-gray-600">
@@ -175,7 +175,7 @@ export default function Career() {
           )}
         </div>
       </section>
-      {}
+      { }
       <section className="py-10 bg-linear-to-b from-[#0e55a1]/5 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.h2
@@ -203,7 +203,7 @@ export default function Career() {
           </motion.div>
         </div>
       </section>
-      {}
+      { }
       <section
         id="application-form"
         className="relative py-24 overflow-hidden bg-linear-to-br from-[#0e55a1]/3 to-transparent"
@@ -247,11 +247,10 @@ export default function Career() {
             </p>
             {submitMsg && (
               <p
-                className={`text-center mb-4 ${
-                  submitMsg.includes("success")
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
+                className={`text-center mb-4 ${submitMsg.includes("success")
+                  ? "text-green-600"
+                  : "text-red-600"
+                  }`}
               >
                 {submitMsg}
               </p>
