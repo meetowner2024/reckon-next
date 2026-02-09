@@ -235,19 +235,21 @@ contactData
             </div>
           </FadeUp>
         </div>
-        <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl mx-auto h-[300px] sm:h-[400px] md:h-[450px]">
-          <iframe
-            src={office?.mapUrl || ""}
-            width="100%"
-            height="100%"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            className="absolute inset-0"
-            title="Company Location Map"
-          />
-        </div>
+        {office?.mapUrl && (
+          <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl max-w-full sm:max-w-4xl md:max-w-5xl lg:max-w-6xl mx-auto h-[300px] sm:h-[400px] md:h-[450px]">
+            <iframe
+              src={office.mapUrl}
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="absolute inset-0"
+              title="Company Location Map"
+            />
+          </div>
+        )}
       </section>
       <Footer footer={footer.footerData} projects={projects} />
     </div>

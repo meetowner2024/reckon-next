@@ -54,8 +54,8 @@ export default async function HomePage() {
   ]);
   const hero = heroRaw.map((s) => ({
     ...s,
-    image: `/uploads/${s.image.split("/").pop()}`,
-    mobileImage: s.mobile_image ? `/uploads/${s.mobile_image.split("/").pop()}` : null,
+    image: s.image,
+    mobileImage: s.mobile_image,
   }));
 
   const filterhero = hero

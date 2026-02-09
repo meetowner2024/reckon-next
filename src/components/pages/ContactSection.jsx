@@ -231,9 +231,9 @@ const DynamicContactForm = ({ formConfig }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/10 py-8 sm:py-12 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-slate-50 via-white to-blue-50/10 py-8 sm:py-12 relative overflow-hidden">
       <div className="max-w-3xl mx-auto px-4 relative z-10">
-        {/* Header */}
+  
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -254,7 +254,7 @@ const DynamicContactForm = ({ formConfig }) => {
           </p>
         </motion.div>
 
-        {/* Success Message - Auto Closes in 5s */}
+       
         <AnimatePresence>
           {submitSuccess && (
             <motion.div
@@ -278,7 +278,7 @@ const DynamicContactForm = ({ formConfig }) => {
           )}
         </AnimatePresence>
 
-        {/* Form */}
+       
         <form onSubmit={handleSubmit} className="space-y-6">
           {localConfig.formFields.map(renderField)}
 

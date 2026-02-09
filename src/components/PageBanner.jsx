@@ -52,7 +52,7 @@ const PageBanner = ({
   return (
     <div className="relative p-5 w-full sm:h-[350px] h-[260px] sm:rounded-b-3xl rounded-b-2xl flex items-center justify-center overflow-hidden">
       <Image
-        src={imageUrl}
+        src={imageUrl || "/assets/images/default-banner.jpg"}
         alt={`${title} Banner`}
         fill
         className="object-cover"

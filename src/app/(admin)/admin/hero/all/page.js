@@ -14,6 +14,9 @@ export default function HeroSlides() {
     location: "",         
     hero_image: null,
     imagePreview: "",
+    mobile_image: null,
+    mobileImagePreview: "",
+    delete_mobile_image: false,
   });
 
   useEffect(() => { fetchSlides(); }, []);
@@ -51,6 +54,9 @@ const deleteSlide = async (id) => {
       location: slide.location || "",      
       hero_image: null,
       imagePreview: slide.image || "",
+      mobile_image: null,
+      mobileImagePreview: slide.mobile_image || "",
+      delete_mobile_image: false,
     });
     setIsModalOpen(true);
   };
@@ -58,7 +64,7 @@ const deleteSlide = async (id) => {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingSlide(null);
-    setForm({ title: "", description: "", location: "", hero_image: null, imagePreview: "" });
+    setForm({ title: "", description: "", location: "", hero_image: null, imagePreview: "", mobile_image: null, mobileImagePreview: "", delete_mobile_image: false });
   };
 
   const handleImageChange = (e) => {
@@ -70,6 +76,27 @@ const deleteSlide = async (id) => {
         imagePreview: URL.createObjectURL(file),
       }));
     }
+  };
+
+  const handleMobileImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setForm((prev) => ({
+        ...prev,
+        mobile_image: file,
+        mobileImagePreview: URL.createObjectURL(file),
+        delete_mobile_image: false,
+      }));
+    }
+  };
+
+  const removeMobileImage = () => {
+    setForm((prev) => ({
+      ...prev,
+      mobile_image: null,
+      mobileImagePreview: "",
+      delete_mobile_image: true,
+    }));
   };
 
   const saveSlide = async () => {
@@ -84,6 +111,8 @@ const deleteSlide = async (id) => {
     formData.append("description", form.description);
     formData.append("location", form.location);   
     if (form.hero_image) formData.append("hero_image", form.hero_image);
+    if (form.mobile_image) formData.append("mobile_image", form.mobile_image);
+    if (form.delete_mobile_image) formData.append("delete_mobile_image", "true");
 
     try {
       const url = editingSlide ? `/api/users/hero/${editingSlide._id}` : "/api/users/hero";
@@ -187,6 +216,29 @@ const deleteSlide = async (id) => {
                   </div>
                 )}
                 <input type="file" accept="image/*" onChange={handleImageChange}
+                  className="w-full p-2 border rounded" />
+              </div>
+
+              <div>
+                <label className="block font-medium text-gray-700 mb-1">
+                  Mobile Image {editingSlide && "(optional to replace)"}
+                </label>
+                {form.mobileImagePreview && (
+                  <div className="mb-2 relative h-48 rounded overflow-hidden border group">
+                    <Image src={form.mobileImagePreview} alt="Device Preview" fill className="object-cover" />
+                    <button
+                      type="button"
+                      onClick={removeMobileImage}
+                      className="absolute top-2 right-2 bg-red-600 text-white p-1 rounded-full shadow-md hover:bg-red-700 transition opacity-0 group-hover:opacity-100"
+                      title="Remove image"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                )}
+                <input type="file" accept="image/*" onChange={handleMobileImageChange}
                   className="w-full p-2 border rounded" />
               </div>
             </div>
